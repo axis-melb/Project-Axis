@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<!-- 引入全局 CSS -->
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="scan-line"></div>
+
+<!-- NAV -->
+<nav>
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      
+      <!-- 桌面端菜单 -->
+      <div class="desktop-nav">
+        <!-- 注意：href 前面加了 / ，这样如果在子网页点击也能跳回主页对应的位置 -->
+        <a href="/#lab"    class="section-label" style="text-decoration:none;transition:opacity 0.2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity=''">LAB</a>
+        <a href="/#log"    class="section-label" style="text-decoration:none;">LOG</a>
+        <a href="/#system" class="section-label" style="text-decoration:none;">SYSTEM</a>
+        <a href="/#access" class="section-label" style="text-decoration:none;">ACCESS</a>
+      </div>
+
+      <!-- 手机端汉堡按钮 -->
+      <button class="mobile-nav-btn" id="mobile-menu-btn" style="background:none;border:none;cursor:pointer;">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:24px;height:24px;color:var(--near-black);">
+          <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 手机端下拉菜单 -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/#lab"    class="section-label" style="text-decoration:none;">LAB</a>
+    <a href="/#log"    class="section-label" style="text-decoration:none;">LOG</a>
+    <a href="/#system" class="section-label" style="text-decoration:none;">SYSTEM</a>
+    <a href="/#access" class="section-label" style="text-decoration:none;">ACCESS</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 32px;max-width:1200px;margin:0 auto;padding-top:100px;position:relative;z-index:1;">
+
+  <!-- Top meta row -->
+  <div class="fade-up delay-1" style="display:flex;align-items:center;gap:32px;margin-bottom:60px;">
+    <span class="coord">37°49'S / 144°57'E — MELBOURNE</span>
+    <div style="flex:1;height:1px;background:var(--line-dark);"></div>
+    <span class="coord">AX-2024.001</span>
+  </div>
+
+  <!-- Main title block -->
+  <div style="position:relative;">
+    <div class="corner-mark tl"></div>
+    <div class="corner-mark tr"></div>
+    <div class="corner-mark bl"></div>
+    <div class="corner-mark br"></div>
+
+    <div style="padding:40px 0;">
+      <div class="hero-title fade-up delay-2">PROJECT<br>AXIS<span class="cursor"></span></div>
+
+      <div class="fade-up delay-3" style="margin-top:32px;display:flex;align-items:center;gap:24px;">
+        <div style="width:32px;height:1px;background:var(--black);"></div>
+        <span class="mono" style="font-size:11px;letter-spacing:0.4em;text-transform:uppercase;color:rgba(29,29,31,0.5);">SYSTEMS // LOGIC // CONSTRUCTION</span>
+      </div>
+
+      <div class="fade-up delay-4" style="margin-top:48px;display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:640px;">
+        <div>
+          <p style="font-size:16px;font-weight:300;line-height:1.5;letter-spacing:0.01em;">Deconstructing complexity into precision.</p>
+        </div>
+        <div style="border-left:1px solid var(--line-dark);padding-left:40px;">
+          <p style="font-size:14px;font-weight:300;line-height:1.6;color:rgba(29,29,31,0.6);">将复杂解构为精准。</p>
+        </div>
+      </div>
+
+      <!-- Axis indicators -->
+      <div class="fade-up delay-5" style="margin-top:64px; display:flex; gap:40px; align-items: flex-start;">
+        <div>
+          <div class="section-label" style="margin-bottom:4px;">DOMAIN / 领域</div>
+          <div style="font-size:12px; font-weight:500; letter-spacing:0.05em;">CROSS-BORDER ARCHITECTURE / 跨境架构</div>
+        </div>
+        
+        <div style="width:1px; height:24px; background:var(--line-dark); margin-top:4px;"></div>
+        
+        <div>
+          <div class="section-label" style="margin-bottom:4px;">MODE / 模式</div>
+          <div style="font-size:12px; font-weight:500;">ANONYMOUS PROFESSIONAL / 匿名专业模式</div>
+        </div>
+        
+        <div style="width:1px; height:24px; background:var(--line-dark); margin-top:4px;"></div>
+        
+        <div>
+          <div class="section-label" style="margin-bottom:4px;">STATUS / 状态</div>
+          <div style="font-size:12px; font-weight:500; display:flex; align-items:center; gap:8px;">
+            <span style="width:6px; height:6px; border-radius:50%; background:#1D1D1F; display:inline-block;"></span>
+            OPERATIONAL / 正常运行
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER BAND -->
+<div style="border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);overflow:hidden;padding:12px 0;position:relative;z-index:1;background:var(--white);">
+  <div class="ticker-inner mono" style="font-size:10px;letter-spacing:0.3em;color:rgba(29,29,31,0.35);">
+    <span style="padding:0 40px;">AS/NZS COMPLIANCE</span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">NCC 2022</span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">BPC REGISTERED</span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">CROSS-BORDER LOGIC  </span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">SUPPLY CHAIN STRATEGY</span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">SIX SIGMA BLACK BELT</span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">HK IA LICENSED</span><span style="padding:0 8px;">—</span>
+    <!-- duplicate for seamless loop -->
+    <span style="padding:0 40px;">AS/NZS COMPLIANCE</span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">NCC 2022</span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">BPC REGISTERED</span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">CROSS-BORDER LOGIC  </span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">SUPPLY CHAIN STRATEGY</span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">SIX SIGMA BLACK BELT</span><span style="padding:0 8px;">—</span>
+    <span style="padding:0 40px;">HK IA LICENSED</span><span style="padding:0 8px;">—</span>
+  </div>
+</div>
+
+<!-- LAB SECTION -->
+<section id="lab" class="section-wrap" style="max-width:1200px;margin:0 auto;padding-left:32px;padding-right:32px;">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
+      <span class="section-label">§02 — LAB / 实验室</span>
+      <div style="flex:1;height:1px;background:var(--line);"></div>
+    </div>
+    <h2 class="mono" style="font-size:28px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;">DIGITAL TOOLS</h2>
+    <p style="margin-top:8px;font-size:13px;color:rgba(29,29,31,0.5);max-width:480px;">Private-by-design utilities built on lean logic. Each tool exists because no external product earned the data trust. / 基于精益逻辑构建的隐私工具。每一个工具的诞生，源于市面产品未能赢得数据信任。</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;border:1px solid var(--line-dark);">
+
+    <!-- Tool 1: Client CRM (由div改为a标签并加入子页面链接) -->
+    <a href="/tools/crm/" class="tool-card" style="min-height:260px;padding:28px;border-right:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);text-decoration:none;color:inherit;display:block;">
+      <div class="tool-card-front">
+        <div class="section-label" style="margin-bottom:20px;">TOOL.001</div>
+        <div class="mono" style="font-size:18px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:12px;">Client CRM</div>
+        <div style="font-size:12px;color:rgba(29,29,31,0.5);margin-bottom:20px;">客户管理系统</div>
+        <div style="height:1px;background:var(--line);margin-bottom:20px;"></div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.45);line-height:1.7;">Secure. Local. Zero third-party exposure.<br>安全。本地化。零第三方数据暴露。</div>
+        <div style="margin-top:24px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;letter-spacing:0.2em;font-family:'Space Mono',monospace;color:rgba(29,29,31,0.3);">CLICK TO ENTER →</span>
+        </div>
+      </div>
+      <div class="tool-card-back">
+        <div class="mono" style="font-size:9px;letter-spacing:0.35em;margin-bottom:16px;color:rgba(255,255,255,0.3);">DESIGN LOGIC / 开发初衷</div>
+        <p style="font-size:12px;line-height:1.75;color:rgba(255,255,255,0.8);">Commercial CRM platforms monetize relationship data. This axis tool keeps client context sovereign — no cloud sync, no behavioral analytics, no vendor lock-in.</p>
+        <p style="font-size:11px;line-height:1.7;margin-top:12px;color:rgba(255,255,255,0.5);">商业CRM将关系数据商品化。本工具确保客户档案的主权归属于使用者本人，无云同步、无行为分析、无供应商绑定。</p>
+      </div>
+    </a>
+
+    <!-- Tool 2: Project Tracker -->
+    <a href="/tools/pm/" class="tool-card" style="min-height:260px;padding:28px;border-right:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);text-decoration:none;color:inherit;display:block;">
+      <div class="tool-card-front">
+        <div class="section-label" style="margin-bottom:20px;">TOOL.002</div>
+        <div class="mono" style="font-size:18px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:12px;">Project Tracker</div>
+        <div style="font-size:12px;color:rgba(29,29,31,0.5);margin-bottom:20px;">项目追踪系统</div>
+        <div style="height:1px;background:var(--line);margin-bottom:20px;"></div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.45);line-height:1.7;">Milestone logic. Compliance checkpoints.<br>里程碑逻辑。合规节点管理。</div>
+        <div style="margin-top:24px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;letter-spacing:0.2em;font-family:'Space Mono',monospace;color:rgba(29,29,31,0.3);">CLICK TO ENTER →</span>
+        </div>
+      </div>
+      <div class="tool-card-back">
+        <div class="mono" style="font-size:9px;letter-spacing:0.35em;margin-bottom:16px;color:rgba(255,255,255,0.3);">DESIGN LOGIC / 开发初衷</div>
+        <p style="font-size:12px;line-height:1.75;color:rgba(255,255,255,0.8);">Project management SaaS layers subscription cost onto complexity. This tool applies Six Sigma gate logic to construction milestones — lean, flat, auditable.</p>
+        <p style="font-size:11px;line-height:1.7;margin-top:12px;color:rgba(255,255,255,0.5);">项目管理SaaS在复杂性之上叠加订阅成本。本工具将六西格玛门控逻辑应用于建筑里程碑——精益、扁平、可审计。</p>
+      </div>
+    </a>
+
+    <!-- Tool 3: Fasting 16:8 -->
+    <a href="/tools/fasting/" class="tool-card" style="min-height:260px;padding:28px;border-bottom:1px solid var(--line-dark);text-decoration:none;color:inherit;display:block;">
+      <div class="tool-card-front">
+        <div class="section-label" style="margin-bottom:20px;">TOOL.003</div>
+        <div class="mono" style="font-size:18px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:12px;">Fasting 16:8</div>
+        <div style="font-size:12px;color:rgba(29,29,31,0.5);margin-bottom:20px;">轻断食控制台</div>
+        <div style="height:1px;background:var(--line);margin-bottom:20px;"></div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.45);line-height:1.7;">Self-optimization. No data extraction.<br>自我管理。零数据采集。</div>
+        <div style="margin-top:24px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;letter-spacing:0.2em;font-family:'Space Mono',monospace;color:rgba(29,29,31,0.3);">CLICK TO ENTER →</span>
+        </div>
+      </div>
+      <div class="tool-card-back">
+        <div class="mono" style="font-size:9px;letter-spacing:0.35em;margin-bottom:16px;color:rgba(255,255,255,0.3);">DESIGN LOGIC / 开发初衷</div>
+        <p style="font-size:12px;line-height:1.75;color:rgba(255,255,255,0.8);">Reason: Privacy &amp; Self-Optimization. Market health tools over-collect personal biometric data. This project establishes a localised, zero-tracking, lean-logic private health axis.</p>
+        <p style="font-size:11px;line-height:1.7;margin-top:12px;color:rgba(255,255,255,0.5);">初衷：隐私安全与自我管理。由于市面工具对个人健康数据采集过度，本项目旨在建立一个本地化、无追踪、符合逻辑精益原则的私人健康轴心。</p>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- LOG SECTION -->
+<section id="log" class="section-wrap" style="max-width:1200px;margin:0 auto;padding-left:32px;padding-right:32px;border-top:1px solid var(--line);">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
+      <span class="section-label">§03 — LOG / 洞察日志</span>
+      <div style="flex:1;height:1px;background:var(--line);"></div>
+    </div>
+    <h2 class="mono" style="font-size:28px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;">INSIGHTS</h2>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+    <!-- Log 1 (由div改为a标签并加入子页面链接) -->
+    <a href="/posts/prefab-housing/" class="log-card" style="text-decoration:none;color:inherit;display:block;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <span class="mono" style="font-size:10px;letter-spacing:0.3em;color:rgba(29,29,31,0.35);">LOG.001</span>
+        <span style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(29,29,31,0.35);">PENDING</span>
+      </div>
+      <div style="height:1px;background:var(--line);margin-bottom:20px;"></div>
+      <h3 class="mono" style="font-size:15px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:10px;">Prefabricated Housing</h3>
+      <p style="font-size:12px;color:rgba(29,29,31,0.5);margin-bottom:8px;">预制建筑合规</p>
+      <p style="font-size:12px;line-height:1.75;color:rgba(29,29,31,0.6);">Navigating the intersection of NCC 2022 volumetric modules and state-level planning overlays. A compliance framework analysis. / NCC 2022 体积模块与州级规划叠加层的交叉合规框架分析。</p>
+      <div style="margin-top:24px;display:flex;align-items:center;gap:12px;">
+        <div style="width:20px;height:1px;background:var(--near-black);"></div>
+        <span class="mono" style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(29,29,31,0.4);">FORTHCOMING</span>
+      </div>
+    </a>
+
+    <!-- Log 2 -->
+    <a href="/posts/risk-liability/" class="log-card" style="text-decoration:none;color:inherit;display:block;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <span class="mono" style="font-size:10px;letter-spacing:0.3em;color:rgba(29,29,31,0.35);">LOG.002</span>
+        <span style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(29,29,31,0.35);">RESEARCHING</span>
+      </div>
+      <div style="height:1px;background:var(--line);margin-bottom:20px;"></div>
+      <h3 class="mono" style="font-size:15px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:10px;">Risk & Liability Architecture</h3>
+      <p style="font-size:12px;color:rgba(29,29,31,0.5);margin-bottom:8px;">风险与责任架构</p>
+      <p style="font-size:12px;line-height:1.75;color:rgba(29,29,31,0.6);">
+        Comparative analysis of Professional Indemnity (PI) structures: From HK's consumer-facing insurance culture to AU's "invisible" institutional mandates in construction. / 
+        职业责任险（PI）架构对比分析：从香港的平民化保险文化，到澳洲建筑业中“隐形”的机构强制体系。
+      </p>
+      <div style="margin-top:24px;display:flex;align-items:center;gap:12px;">
+        <div style="width:20px;height:1px;background:var(--near-black);"></div>
+        <span class="mono" style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(29,29,31,0.4);">UNDER ANALYSIS / 深度分析中</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- SYSTEM SECTION -->
+<section id="system" class="section-wrap" style="max-width:1200px;margin:0 auto;padding-left:32px;padding-right:32px;border-top:1px solid var(--line);">
+  <div style="margin-bottom:48px;">
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
+      <span class="section-label">§04 — SYSTEM / 系统规格</span>
+      <div style="flex:1;height:1px;background:var(--line);"></div>
+    </div>
+    <h2 class="mono" style="font-size:28px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;">SPECIFICATIONS</h2>
+    <p style="margin-top:8px;font-size:13px;color:rgba(29,29,31,0.5);">System credentials &amp; authority index. / 系统资质与权威背书索引。</p>
+  </div>
+
+  <div style="padding:40px; border-right:1px solid var(--line-dark);">
+    <div class="section-label" style="margin-bottom:32px;">ACADEMIC CREDENTIALS / 学术资质</div>
+
+    <div class="spec-row">
+      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:rgba(29,29,31,0.4);text-transform:uppercase;">POSTGRADUATE / 硕士</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">Master of Applied Commerce <span style="font-weight:400;color:rgba(29,29,31,0.6);">(Operations Management)</span></div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.5);margin-top:2px;">University of Melbourne / 墨尔本大学</div>
+      </div>
+    </div>
+
+    <div class="spec-row">
+      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:rgba(29,29,31,0.4);text-transform:uppercase;">MGMT ARCHITECTURE / 管理</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">Graduate Diploma of Management</div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.5);margin-top:2px;">Central Queensland University / 中央昆士兰大学</div>
+      </div>
+    </div>
+
+    <div class="spec-row">
+      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:rgba(29,29,31,0.4);text-transform:uppercase;">ENGINEERING / 工程</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">
+          Bachelor of Construction Management (Honors)
+          <span style="font-size:10px; color:rgba(29,29,31,0.4); margin-left:8px; font-weight:400;">[IN PROGRESS / 在读]</span>
+        </div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.5);margin-top:2px;">Adelaide University / 阿德莱德大学</div>
+      </div>
+    </div>
+
+    <div class="spec-row">
+      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:rgba(29,29,31,0.4);text-transform:uppercase;">SURVEYING / 测量</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">Graduate Certificate in Building Surveying</div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.5);margin-top:2px;">University of South Australia / 南澳大学</div>
+      </div>
+    </div>
+
+    <div class="spec-row">
+      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:rgba(29,29,31,0.4);text-transform:uppercase;">TECHNICAL / 技术</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">Advanced Diploma of Building Surveying</div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.5);margin-top:2px;">Melbourne Polytechnic -TAFE / 墨尔本理工</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:40px;">
+    <div class="section-label" style="margin-bottom:24px;">PROFESSIONAL LICENCES / 专业执照</div>
+    <div class="spec-row">
+      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:rgba(29,29,31,0.4);text-transform:uppercase;">METHODOLOGY</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">Six Sigma Black Belt</div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.5);margin-top:2px;">精益六西格玛黑带</div>
+      </div>
+    </div>
+    <div class="spec-row">
+      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:rgba(29,29,31,0.4);text-transform:uppercase;">AU / VIC</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">Registered Building Surveyor</div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.5);margin-top:2px;">BSU / BPC — Victoria, Australia / 维州注册监理</div>
+      </div>
+    </div>
+    <div class="spec-row">
+      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:rgba(29,29,31,0.4);text-transform:uppercase;">HK</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">IA Full Licences</div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.5);margin-top:2px;">Insurance Authority — Hong Kong / 香港保险业监管局</div>
+      </div>
+    </div>
+
+    <div class="spec-row">
+      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:rgba(29,29,31,0.4);text-transform:uppercase;">AFFILIATION</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">Member of AIBS</div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.5);margin-top:2px;">Australian Institute of Building Surveyors / 澳洲建筑测量师学会</div>
+      </div>
+    </div>
+
+    <div class="spec-row">
+      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:rgba(29,29,31,0.4);text-transform:uppercase;">AFFILIATION</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">Member of AIQS</div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.5);margin-top:2px;">Australian Institute of Quantity Surveyors / 澳洲工料测量师学会</div>
+      </div>
+    </div>
+
+    <div class="spec-row" style="border-bottom:none;">
+      <div class="mono" style="font-size:10px;letter-spacing:0.2em;color:rgba(29,29,31,0.4);text-transform:uppercase;">AFFILIATION</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">Member of AIB</div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.5);margin-top:2px;">Australian Institute of Building / 澳洲建造学会</div>
+      </div>
+    </div>
+  </div>
+  <!-- Expertise tags -->
+  <div style="margin-top:24px;border:1px solid var(--line-dark);padding:28px;">
+    <div class="section-label" style="margin-bottom:16px;">EXPERTISE DOMAINS / 专业领域</div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;">
+      <span style="border:1px solid var(--line-dark);padding:6px 16px;font-size:11px;letter-spacing:0.15em;font-family:'Space Mono',monospace;text-transform:uppercase;">AS/NZS Compliance</span>
+      <span style="border:1px solid var(--line-dark);padding:6px 16px;font-size:11px;letter-spacing:0.15em;font-family:'Space Mono',monospace;text-transform:uppercase;">NCC 2022</span>
+      <span style="border:1px solid var(--line-dark);padding:6px 16px;font-size:11px;letter-spacing:0.15em;font-family:'Space Mono',monospace;text-transform:uppercase;">Global Supply Chain Strategy</span>
+      <span style="border:1px solid var(--line-dark);padding:6px 16px;font-size:11px;letter-spacing:0.15em;font-family:'Space Mono',monospace;text-transform:uppercase;">AU–HK Regulatory Bridge</span>
+      <span style="border:1px solid var(--line-dark);padding:6px 16px;font-size:11px;letter-spacing:0.15em;font-family:'Space Mono',monospace;text-transform:uppercase;">Lean Six Sigma </span>
+      <span style="border:1px solid var(--line-dark);padding:6px 16px;font-size:11px;letter-spacing:0.15em;font-family:'Space Mono',monospace;text-transform:uppercase;">Construction Technology</span>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESS GATEWAY -->
+<section id="access" style="background:var(--black);position:relative;overflow:hidden;z-index:1;">
+  <!-- Blueprint grid on dark -->
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+
+  <div style="max-width:1200px;margin:0 auto;padding:100px 32px;position:relative;z-index:1;">
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:60px;">
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:rgba(255,255,255,0.3);">§05 — ACCESS / 接入</span>
+      <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
+    </div>
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 80px; margin-top: 40px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 40px;">
+          
+          <div>
+              <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                  <div style="width:24px; height:1px; background:rgba(255,255,255,0.3);"></div>
+                  <span style="font-family:monospace; font-size:10px; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.4);">COMMUNICATION / 联络</span>
+              </div>
+              <h2 style="font-size:32px; letter-spacing:0.15em; text-transform:uppercase; font-weight:300; margin:0; color:#FFFFFF;">CONTACT US</h2>
+              <p style="font-size:12px; color:rgba(255,255,255,0.4); margin-top:8px; letter-spacing:0.1em;">联系方式</p>
+          </div>
+
+          <div style="text-align: right;">
+              <p style="font-size:14px; color:rgba(255,255,255,0.6); line-height:1.6; margin-bottom:24px; max-width:400px;">
+                  For professional enquiries or technical collaborations, please reach out via encrypted correspondence.<br>
+                  专业垂询或技术合作，请通过以下方式联系。
+              </p>
+              <a href="mailto:operations@projectaxis.com.au" 
+                 style="text-decoration:none; color:#FFFFFF; font-size:18px; font-weight:500; border-bottom:1px solid rgba(255,255,255,0.5); padding-bottom:4px; transition:all 0.2s;"
+                 onmouseover="this.style.opacity='0.5'; this.style.borderBottomColor='#FFFFFF'" 
+                 onmouseout="this.style.opacity='1'; this.style.borderBottomColor='rgba(255,255,255,0.5)'">
+                  operations@projectaxis.com.au
+              </a>
+              <div style="font-size:9px; color:rgba(255,255,255,0.2); margin-top:40px; letter-spacing:1px; font-family:monospace;">
+                  © 2026 PROJECT AXIS // ALL RIGHTS RESERVED // MELBOURNE, AU
+              </div>
+          </div>
+          
+      </div>
+    </div>
+
+    <!-- Footer rule -->
+    <div style="margin-top:80px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;">
+      <span class="mono" style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.2);">PROJECT AXIS</span>
+      <span class="coord" style="color:rgba(255,255,255,0.2);">AX-2024.001 — ALL RIGHTS RESERVED</span>
+      <span class="coord" style="color:rgba(255,255,255,0.2);">MELBOURNE, AU</span>
+    </div>
+  </div>
+</section>
+
+<!-- 引入全局 JS 以控制手机菜单 -->
+<script src="/main.js"></script>
+</body>
+</html>
