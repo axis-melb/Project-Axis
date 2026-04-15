@@ -1,0 +1,177 @@
+:root {
+  --white: #FFFFFF;
+  --near-black: #1D1D1F;
+  --black: #000000;
+  --line: rgba(29,29,31,0.15);
+  --line-dark: rgba(29,29,31,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--white);
+  color: var(--near-black);
+  font-size: 13px;
+  line-height: 1.6;
+  cursor: crosshair;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(29,29,31,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29,29,31,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 消除 <a> 标签默认样式，使其可以作为卡片包裹器 */
+a { text-decoration: none; color: inherit; }
+
+.mono { font-family: 'Space Mono', monospace; }
+
+.section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(29,29,31,0.4);
+}
+
+.axis-line { width: 100%; height: 1px; background: var(--line-dark); }
+
+@keyframes scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+.scan-line {
+  position: fixed; top: 0; left: 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(29,29,31,0.3), transparent);
+  animation: scan 4s linear infinite; pointer-events: none; z-index: 100;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up { animation: fadeUp 0.7s ease forwards; opacity: 0; }
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.25s; }
+.delay-3 { animation-delay: 0.4s; }
+.delay-4 { animation-delay: 0.55s; }
+.delay-5 { animation-delay: 0.7s; }
+
+.hero-title {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(48px, 9vw, 120px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 0.92;
+  color: var(--black);
+}
+
+/* Tool Card (升级为可点击的 Block) */
+.tool-card {
+  display: block; /* 必须加，因为变成了a标签 */
+  border: 1px solid var(--line-dark);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.25s ease;
+  cursor: pointer;
+}
+
+.tool-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--near-black);
+  transform: translateY(101%);
+  transition: transform 0.35s cubic-bezier(0.76,0,0.24,1);
+  z-index: 0;
+}
+.tool-card:hover::before { transform: translateY(0); }
+.tool-card:hover { border-color: var(--black); }
+
+.tool-card-front, .tool-card-back {
+  transition: opacity 0.3s ease, transform 0.35s ease;
+  position: relative; z-index: 1;
+}
+
+.tool-card-back {
+  position: absolute; inset: 0; padding: 24px; opacity: 0;
+  transform: translateY(8px); display: flex; flex-direction: column;
+  justify-content: center;
+}
+
+.tool-card:hover .tool-card-front { opacity: 0; transform: translateY(-8px); }
+.tool-card:hover .tool-card-back  { opacity: 1; transform: translateY(0); }
+.tool-card-back * { color: rgba(255,255,255,0.85); }
+.tool-card-back .mono { color: rgba(255,255,255,0.4); }
+
+/* Spec row */
+.spec-row {
+  display: grid; grid-template-columns: 200px 1fr;
+  border-bottom: 1px solid var(--line); padding: 14px 0; gap: 24px;
+}
+@media (max-width: 640px) { .spec-row { grid-template-columns: 1fr; gap: 4px; } }
+
+/* Log card (升级为可点击) */
+.log-card {
+  display: block;
+  border: 1px solid var(--line-dark);
+  padding: 28px;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+.log-card:hover { background: rgba(29,29,31,0.03); }
+
+/* 其他样式 */
+.coord { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: rgba(29,29,31,0.25); }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.corner-mark { position: absolute; width: 8px; height: 8px; }
+.corner-mark.tl { top: -1px; left: -1px; border-top: 1px solid var(--black); border-left: 1px solid var(--black); }
+.corner-mark.tr { top: -1px; right: -1px; border-top: 1px solid var(--black); border-right: 1px solid var(--black); }
+.corner-mark.bl { bottom: -1px; left: -1px; border-bottom: 1px solid var(--black); border-left: 1px solid var(--black); }
+.corner-mark.br { bottom: -1px; right: -1px; border-bottom: 1px solid var(--black); border-right: 1px solid var(--black); }
+
+.section-wrap { padding: 80px 0; position: relative; z-index: 1; }
+
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.ticker-inner { animation: ticker 30s linear infinite; white-space: nowrap; display: inline-flex; }
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.cursor { display: inline-block; width: 2px; height: 1em; background: var(--black); vertical-align: text-bottom; animation: blink 1s step-end infinite; margin-left: 2px; }
+
+/* ================= 响应式与汉堡菜单 ================= */
+.desktop-nav { display: flex; gap: 40px; align-items: center; }
+.mobile-nav-btn { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+.mobile-nav-btn svg { width: 24px; height: 24px; }
+
+.mobile-menu {
+  display: none; flex-direction: column;
+  background: rgba(255,255,255,0.98);
+  border-bottom: 1px solid var(--line);
+  padding: 20px 32px; gap: 20px;
+}
+.mobile-menu.active { display: flex; }
+
+@media (max-width: 768px) {
+  .desktop-nav { display: none; }
+  .mobile-nav-btn { display: block; }
+  /* 日志卡片在手机端也变成单列 */
+  #log > div:nth-child(2) { grid-template-columns: 1fr; } 
+}

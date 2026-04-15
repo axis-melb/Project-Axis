@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client CRM - PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<!-- 这里必须加上 / 以确保从根目录拉取 css -->
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<!-- NAV (与首页完全一致) -->
+<nav>
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;">PROJECT AXIS</a>
+      <div class="desktop-nav">
+        <a href="/#lab" class="section-label">LAB</a>
+        <a href="/#log" class="section-label">LOG</a>
+        <a href="/#system" class="section-label">SYSTEM</a>
+        <a href="#access" class="section-label">ACCESS</a>
+      </div>
+      <button class="mobile-nav-btn" id="mobile-menu-btn">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/#lab" class="section-label">LAB</a>
+    <a href="/#log" class="section-label">LOG</a>
+    <a href="/#system" class="section-label">SYSTEM</a>
+    <a href="#access" class="section-label">ACCESS</a>
+  </div>
+</nav>
+
+<!-- 子页面内容区域 -->
+<main style="min-height: 80vh; max-width: 800px; margin: 0 auto; padding: 120px 32px 80px 32px; position:relative; z-index:1;">
+    
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
+      <span class="section-label">TOOL.001</span>
+      <div style="flex:1;height:1px;background:var(--line);"></div>
+      <a href="/#lab" class="mono" style="font-size:10px; color:var(--near-black);">&larr; BACK TO LAB</a>
+    </div>
+
+    <!-- 标题 -->
+    <h1 class="hero-title" style="font-size: clamp(32px, 6vw, 64px); margin-bottom: 16px;">CLIENT CRM</h1>
+    <p style="font-size: 14px; color: rgba(29,29,31,0.6); margin-bottom: 40px;">客户管理系统 / Secure. Local. Zero third-party exposure.</p>
+
+    <!-- 正文内容 (你可以在这里写关于这个工具的详细介绍) -->
+    <div style="font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--near-black);">
+        <p style="margin-bottom: 24px;">
+            Commercial CRM platforms monetize relationship data. This axis tool keeps client context sovereign — no cloud sync, no behavioral analytics, no vendor lock-in.
+        </p>
+        <p style="margin-bottom: 24px;">
+            商业CRM将关系数据商品化。本工具确保客户档案的主权归属于使用者本人，无云同步、无行为分析、无供应商绑定。
+        </p>
+        <!-- 以后只需在这里继续添加段落和图片 -->
+    </div>
+
+</main>
+
+<!-- ACCESS GATEWAY (Footer 与首页完全一致) -->
+<section id="access" style="background:var(--black);position:relative;overflow:hidden;z-index:1;">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  <div style="max-width:1200px;margin:0 auto;padding:100px 32px;position:relative;z-index:1;">
+    <!-- 里面放你原来首页底部的联系方式和版权信息 -->
+  </div>
+</section>
+
+<script src="/main.js"></script>
+</body>
+</html>
