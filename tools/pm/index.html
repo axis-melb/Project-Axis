@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROJECT MANAGER · TOOL.005 — Project Axis</title>
+
+<!-- Tailwind & Fonts -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+<style>
+  /* 
+   * PROJECT MANAGER TOOL SPECIFIC STYLES 
+   * Identical to FASTING 16:8 for platform consistency
+   */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f2;
+    --fg: #111110;
+    --muted: #999896;
+    --border: #d8d6d2;
+    --black: #111110;
+    --mono: 'Space Mono', monospace;
+    --body: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-weight: 300;
+    line-height: 1.6;
+    font-size: 14px;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    z-index: 100;
+  }
+  .mono { font-family: var(--mono); }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .section-label:hover { color: var(--fg); }
+  .desktop-nav { display: flex; gap: 32px; align-items: center; }
+
+  /* BACK LINK */
+  .back-bar {
+    margin-top: 52px;
+    padding: 16px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .back-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--fg); }
+  .back-sep { color: var(--border); font-size: 10px; }
+  .back-current {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 72px 40px 56px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: end;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    font-family: var(--mono);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .hero-sub {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 420px;
+  }
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: end;
+    padding-bottom: 4px;
+  }
+  .hero-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    background: var(--fg);
+    color: var(--bg);
+    border: 1px solid var(--fg);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--fg);
+  }
+
+  /* TICKER */
+  .ticker {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-block;
+    animation: ticker 24s linear infinite;
+  }
+  .ticker-item {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 48px;
+  }
+  .ticker-dot { color: var(--border); margin-right: 48px; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTION */
+  section { border-bottom: 1px solid var(--border); }
+  .section-header {
+    padding: 40px 40px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+
+  /* WHY */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .why-col { padding: 40px; }
+  .why-col:first-child { border-right: 1px solid var(--border); }
+  .why-col-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .why-problem-list, .why-solution-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .why-problem-list li, .why-solution-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .why-problem-list li { color: var(--muted); }
+  .why-problem-list li::before {
+    content: '×';
+    font-family: var(--mono);
+    color: var(--border);
+    flex-shrink: 0;
+  }
+  .why-solution-list li { color: var(--fg); }
+  .why-solution-list li::before {
+    content: '→';
+    font-family: var(--mono);
+    color: var(--fg);
+    flex-shrink: 0;
+  }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border);
+  }
+  .feature-cell {
+    padding: 36px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .feature-cell:last-child { border-right: none; }
+  .feature-num {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .feature-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .feature-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* SETUP STEPS */
+  .steps-grid { border-top: 1px solid var(--border); }
+  .step-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+    min-height: 100px;
+  }
+  .step-row:last-child { border-bottom: none; }
+  .step-num-cell {
+    padding: 32px 40px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+  .step-content {
+    padding: 32px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .step-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .step-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .step-note {
+    padding: 32px 40px;
+    display: flex;
+    align-items: flex-start;
+  }
+  .step-note-inner {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: var(--border);
+    line-height: 1.8;
+    text-transform: uppercase;
+  }
+
+  /* EXPORT */
+  .export-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .export-left { padding: 40px; border-right: 1px solid var(--border); }
+  .export-right { padding: 40px; }
+  .json-preview {
+    background: #1a1a18;
+    color: #c8c5be;
+    padding: 24px;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.8;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  .json-key { color: #888684; }
+  .json-val { color: #e8e5de; }
+  .json-str { color: #aab89e; }
+
+  /* SCREENSHOTS */
+  .screenshots-section { padding: 0 40px 40px; border-top: 1px solid var(--border); }
+  .screenshots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .screenshot-cell {
+    background: var(--bg);
+    aspect-ratio: 9/16;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .screenshot-img { width: 100%; height: 100%; object-fit: cover; }
+  .screenshot-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px 16px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .desktop-nav { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 32px; }
+    .why-grid { grid-template-columns: 1fr; }
+    .why-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .features-grid { grid-template-columns: 1fr; }
+    .feature-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .step-row { grid-template-columns: 48px 1fr; }
+    .step-note { display: none; }
+    .export-grid { grid-template-columns: 1fr; }
+    .export-left { border-right: none; border-bottom: 1px solid var(--border); }
+    .screenshots-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px; height: 100%;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:100%;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg);text-decoration:none;">PROJECT AXIS</a>
+      <div class="desktop-nav">
+        <a href="/#lab" class="section-label">LAB</a>
+        <a href="/#log" class="section-label">LOG</a>
+        <a href="/#system" class="section-label">SYSTEM</a>
+        <a href="#access" class="section-label">ACCESS</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="back-bar">
+  <a href="/lab" class="back-link">← LAB</a>
+  <span class="back-sep">/</span>
+  <span class="back-current">PROJECT MANAGER (PM)</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">TOOL.005 / 项目管理控制台</div>
+    <h1 class="hero-title">PROJECT<br>MANAGER</h1>
+    <p class="hero-sub">A streamlined tracking tool for Australian construction consultants. Manage project types, progress, and budgets securely on your device. / <strong>专为澳洲建筑从业人员设计，实时记录项目进展与财务细节。</strong></p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-tag-row">
+      <span class="tag">AU CONSTRUCTION</span>
+      <span class="tag">OFFLINE DATA</span>
+      <span class="tag">BUDGET TRACKER</span>
+      <span class="tag">LOCAL STORAGE</span>
+    </div>
+    <div class="cta-row" style="margin-top: 8px;">
+     <a href="https://axis-melb.github.io/tools-online/project-manager.html" class="btn-primary" target="_blank">OPEN TOOL →</a>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">CONSULTANT SUITE</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">LIVE PROGRESS TRACKING</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">BUDGET MANAGEMENT</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">SITE NOTES LOG</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">ZERO CLOUD UPLOADS</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">PROJECT EXPORT</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">CONSULTANT SUITE</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">LIVE PROGRESS TRACKING</span><span class="ticker-dot">·</span>
+  </div>
+</div>
+
+<!-- WHY THIS EXISTS -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§01</span>
+    <span class="section-title">WHY THIS EXISTS / 初衷</span>
+  </div>
+  <div class="why-grid">
+    <div class="why-col">
+      <div class="why-col-label">THE PROBLEM / 痛点</div>
+      <div style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.03); border-left: 2px solid var(--fg);">
+          <p style="font-size: 13px; color: var(--muted); line-height: 1.5;">
+              Site work often involves patchy reception and sensitive project data. General project apps are either too complex or require constant internet access to sync.
+          </p>
+          <p style="font-size: 13px; color: var(--muted); line-height: 1.5; margin-top: 8px; font-style: italic;">
+              建筑工地的信号往往不稳定且涉及项目敏感信息。市面上的软件要么功能冗余，要么必须实时联网才能同步。
+          </p>
+      </div>
+      <ul class="why-problem-list">
+        <li>Complex enterprise software is overkill for individual consultants</li>
+        <li>Poor mobile experience in traditional spreadsheets</li>
+        <li>Risk of data exposure on centralized project platforms</li>
+      </ul>
+    </div>
+    <div class="why-col">
+      <div class="why-col-label">THE SOLUTION / 这里提供的逻辑</div>
+      <ul class="why-solution-list">
+        <li>Instant access via mobile browser, even in low-signal zones</li>
+        <li>Focus on the essentials: Category, Progress, Value, and Notes</li>
+        <li>Local storage ensures total privacy of your commercial data</li>
+        <li>Exportable project histories for backup or reporting</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§02</span>
+    <span class="section-title">FEATURES / 功能说明</span>
+  </div>
+  <div class="features-grid">
+    <div class="feature-cell">
+      <div class="feature-num">F.001</div>
+      <div class="feature-title">PROJECT TYPES</div>
+      <p class="feature-desc">Categorise projects by Residential, Commercial, or Infrastructure. Filter your dashboard to focus on specific work pipelines. / 快速分类项目，支持按类型过滤显示。</p>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-num">F.002</div>
+      <div class="feature-title">PROGRESS MONITORING</div>
+      <p class="feature-desc">Track live status from 'Planning' to 'Practical Completion'. Visual indicators show you exactly which projects need attention. / 从策划到竣工全流程监控，状态一目了然。</p>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-num">F.003</div>
+      <div class="feature-title">VALUE & NOTES</div>
+      <p class="feature-desc">Record contract values and onsite observations. Keep a running log of design changes or client directives for every job. / 记录合同额与现场笔记，汇总设计变更与客户指令。</p>
+    </div>
+  </div>
+</section>
+
+<!-- INTERFACE PREVIEW -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§03</span>
+    <span class="section-title">INTERFACE / 界面预览</span>
+  </div>
+  <div class="screenshots-section">
+    <div class="screenshots-grid">
+      <div class="screenshot-cell">
+        <img src="screenshots/overview.png" class="screenshot-img" alt="Overview">
+        <div class="screenshot-caption">01 — PROJECT LIST OVERVIEW</div>
+      </div>
+      <div class="screenshot-cell">
+        <img src="screenshots/project_entry.png" class="screenshot-img" alt="Entry">
+        <div class="screenshot-caption">02 — NEW PROJECT INPUT</div>
+      </div>
+      <div class="screenshot-cell">
+        <img src="screenshots/financials.png" class="screenshot-img" alt="Financials">
+        <div class="screenshot-caption">03 — BUDGET & PROGRESS LOG</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§04</span>
+    <span class="section-title">GETTING STARTED / 使用指南</span>
+  </div>
+  <div class="steps-grid">
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">01</span></div>
+      <div class="step-content">
+        <div class="step-title">SAVE TO HOME SCREEN</div>
+        <p class="step-desc">Open project-manager.html and use your mobile browser's 'Add to Home Screen' for an app-like experience. / 浏览器打开并“添加到主屏幕”，享受原生 App 般的体验。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">FASTER ACCESS<br>WHILE ONSITE</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">02</span></div>
+      <div class="step-content">
+        <div class="step-title">DEFINE YOUR PIPELINE</div>
+        <p class="step-desc">Enter your current live projects. Set the initial progress and contract values to build your mobile dashboard. / 输入当前在研项目，设定初始进度与金额以构建看板。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">TOTAL DATA<br>PRIVACY</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">03</span></div>
+      <div class="step-content">
+        <div class="step-title">ONGOING BACKUPS</div>
+        <p class="step-desc">Export your project database (JSON) regularly to ensure your commercial records are archived externally. / 定期导出 JSON 数据，确保您的商业记录在外部留底备份。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">LOCAL-ONLY<br>STORAGE MODEL</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§05</span>
+    <span class="section-title">DATA SAFETY / 数据安全</span>
+  </div>
+  <div class="export-grid">
+    <div class="export-left">
+      <p style="font-size:13px; color:var(--muted); line-height:1.7;">Your data never leaves your device. Project values and client details are stored strictly in your browser cache.</p>
+      <ul style="margin-top: 16px; list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 13px; color: var(--muted);">
+        <li>• No registration or email required</li>
+        <li>• Zero surveillance or data mining</li>
+        <li>• Manual JSON backups for full control</li>
+      </ul>
+    </div>
+    <div class="export-right">
+      <div class="json-preview">
+<span class="json-key">{</span><br>
+&nbsp;&nbsp;<span class="json-key">"title"</span>: <span class="json-str">"North Sydney Office Lot"</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"type"</span>: <span class="json-str">"Commercial"</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"value"</span>: <span class="json-val">2500000</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"progress"</span>: <span class="json-val">0.65</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"updated"</span>: <span class="json-str">"2024-04-16"</span><br>
+<span class="json-key">}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESS GATEWAY (Footer) -->
+<section id="access" style="background:var(--black);position:relative;overflow:hidden;z-index:1; border-top: 1px solid var(--border);">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  
+  <div style="max-width:1200px;margin:0 auto;padding:80px 40px;position:relative;z-index:1;">
+    <div style="max-width: 600px; margin: 40px 0 60px 0; text-align: left;">
+        <h2 style="font-family: var(--mono); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; color: #fff;">SOURCE CODE & SUPPORT</h2>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 40px; line-height: 1.8;">
+            Project Axis tools are developed for independent professionals. If this helps your daily site work, consider buying the lab a coffee. <br>
+            <span style="color: rgba(255,255,255,0.5); font-size: 13px;">我们的工具专为独立专业人士开发。如果它简化了您的日常工作，欢迎请我们喝杯咖啡。</span>
+        </p>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <a href="https://axis-melb.github.io/tools-online/project-manager.html" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); text-decoration: none; transition: all 0.2s;">
+                SOURCE (GITHUB) ↗
+            </a>
+            <a href="https://buy.stripe.com/eVqaEXedSeuJeIUaQX0gw00" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: #fff; color: #000; border: 1px solid #fff; text-decoration: none; transition: all 0.2s; font-weight: bold;">
+                BUY ME A COFFEE ☕
+            </a>
+        </div>
+        <div style="margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+          <p style="margin-bottom: 8px; color: #fff;"><strong>DISCLAIMER / 免责声明:</strong></p>
+          <p>This tool is for personal organizational use only. It is not a substitute for formal project administration or legal oversight. Data is stored locally; backups are the user's responsibility.</p>
+          <p style="margin-top: 4px;">本工具仅供个人组织使用，不能替代正式的项目管理或法律监管。数据本地存储，备份由用户自行负责。</p>
+        </div>
+    </div>
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4);">
+        PROJECT AXIS — AX-2024.005 — PM LAYER
+      </div>
+      <a href="/lab" style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,0.4);">
+        ← BACK TO LAB
+      </a>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
