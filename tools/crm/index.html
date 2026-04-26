@@ -1,209 +1,190 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Monitor, Smartphone, ShieldCheck, Coffee, Github } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HKCRM · TOOL.004 — Project Axis</title>
 
-export default function App() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+<!-- 使用 Tailwind CDN 处理布局，无需您服务器安装任何东西 -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
 
-  return (
-    <div className="min-h-screen bg-[#f5f4f2] text-[#111110] font-sans selection:bg-[#111110] selection:text-[#f5f4f2]">
-      {/* NAVIGATION */}
-      <nav className="fixed top-0 left-0 right-0 h-[52px] border-b border-[#d8d6d2] bg-[#f5f4f2] z-[100]">
-        <div className="max-w-[1200px] mx-auto px-8 h-full flex items-center justify-between">
-          <a href="/" className="mono text-[11px] tracking-[0.35em] uppercase color-[#111110] no-underline">PROJECT AXIS</a>
-          <div className="hidden md:flex gap-8 items-center">
-            <a href="#lab" className="section-label no-underline">LAB</a>
-            <a href="#log" className="section-label no-underline">LOG</a>
-            <a href="#system" className="section-label no-underline">SYSTEM</a>
-            <a href="#access" className="section-label no-underline">ACCESS</a>
-          </div>
-          <button className="md:hidden text-[#111110]" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div 
-              initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-              className="absolute top-[52px] left-0 right-0 bg-[#f5f4f2] border-b border-[#d8d6d2] p-8 flex flex-col gap-4 md:hidden z-[99]"
-            >
-              <a href="#lab" className="section-label" onClick={() => setIsMobileMenuOpen(false)}>LAB</a>
-              <a href="#log" className="section-label" onClick={() => setIsMobileMenuOpen(false)}>LOG</a>
-              <a href="#system" className="section-label" onClick={() => setIsMobileMenuOpen(false)}>SYSTEM</a>
-              <a href="#access" className="section-label" onClick={() => setIsMobileMenuOpen(false)}>ACCESS</a>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
+<style>
+  /* 基础变量与 Fasting 页面完全一致 */
+  :root {
+    --bg: #f5f4f2;
+    --fg: #111110;
+    --muted: #999896;
+    --border: #d8d6d2;
+    --black: #111110;
+    --mono: 'Space Mono', monospace;
+    --body: 'Inter', 'Noto Sans SC', sans-serif;
+  }
 
-      {/* BREADCRUMB */}
-      <div className="mt-[52px] px-10 py-4 border-b border-[#d8d6d2] flex items-center gap-2">
-        <a href="/lab" className="mono text-[10px] tracking-[0.15em] uppercase text-[#999896] no-underline hover:text-[#111110]">← LAB</a>
-        <span className="text-[#d8d6d2] text-[10px]">/</span>
-        <span className="mono text-[10px] tracking-[0.15em] uppercase">HKCRM</span>
-      </div>
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-weight: 300;
+    line-height: 1.6;
+    font-size: 14px;
+  }
 
-      {/* HERO */}
-      <div className="px-10 pt-[72px] pb-[56px] border-b border-[#d8d6d2] grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
-        <div>
-          <div className="mono text-[10px] tracking-[0.2em] uppercase text-[#999896] mb-5">TOOL.004 / 客户管理控制台</div>
-          <h1 className="mono text-5xl md:text-7xl font-bold leading-[1.05] tracking-tighter mb-4">HK<br />CRM</h1>
-          <p className="text-[13px] text-[#999896] leading-relaxed max-w-[380px]">
-            A private-by-design policy manager for insurance agents. No cloud database. All data stays on your device. / 专为保险代理人设计的私密客户管理工具。无需数据库，数据不离设备。
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 self-end pb-1">
-          <div className="flex flex-wrap gap-2">
-            <span className="mono text-[9px] tracking-[0.15em] uppercase px-3 py-1 border border-[#d8d6d2] text-[#999896]">HTML · LOCAL ONLY</span>
-            <span className="mono text-[9px] tracking-[0.15em] uppercase px-3 py-1 border border-[#d8d6d2] text-[#999896]">INSURANCE TOOL</span>
-            <span className="mono text-[9px] tracking-[0.15em] uppercase px-3 py-1 border border-[#d8d6d2] text-[#999896]">EXPORT JSON</span>
-          </div>
-          <div className="mt-2">
-            <a href="https://axis-melb.github.io/tools-online/hkcrm.html" className="mono text-[10px] tracking-[0.15em] uppercase px-6 py-3 bg-[#111110] text-[#f5f4f2] border border-[#111110] no-underline hover:bg-transparent hover:text-[#111110] transition-colors inline-block">
-              OPEN TOOL →
-            </a>
-          </div>
-        </div>
-      </div>
+  /* 导航栏样式复刻 */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    z-index: 100;
+  }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+  }
 
-      {/* TICKER */}
-      <div className="border-b border-[#d8d6d2] py-2.5 overflow-hidden whitespace-nowrap">
-        <div className="ticker-animation">
-          {[...Array(2)].map((_, i) => (
-            <span key={i}>
-              <span className="mono text-[10px] tracking-[0.2em] uppercase text-[#999896] mr-12">POLICY ANNIVERSARY REMINDER</span>
-              <span className="text-[#d8d6d2] mr-12">·</span>
-              <span className="mono text-[10px] tracking-[0.2em] uppercase text-[#999896] mr-12">NO DATABASE REQUIRED</span>
-              <span className="text-[#d8d6d2] mr-12">·</span>
-              <span className="mono text-[10px] tracking-[0.2em] uppercase text-[#999896] mr-12">COMMISSION CALCULATOR</span>
-              <span className="text-[#d8d6d2] mr-12">·</span>
-            </span>
-          ))}
-        </div>
-      </div>
+  /* 面包屑导航 */
+  .back-bar { margin-top: 52px; padding: 16px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .back-link { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; color: var(--muted); }
 
-      {/* SECTION 01: WHY */}
-      <section className="border-b border-[#d8d6d2]">
-        <div className="px-10 pt-10 flex items-baseline gap-4 mb-8">
-          <span className="mono text-[10px] tracking-[0.2em] text-[#999896] uppercase">§01</span>
-          <span className="mono text-[11px] tracking-[0.3em] uppercase">WHY THIS EXISTS / 为什么做这个</span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 border-t border-[#d8d6d2]">
-          <div className="p-10 border-b md:border-b-0 md:border-r border-[#d8d6d2]">
-            <div className="mono text-[9px] tracking-[0.2em] uppercase text-[#999896] mb-6">THE PROBLEM / 痛点</div>
-            <div className="mb-6 p-4 bg-black/5 border-l-2 border-[#111110]">
-              <p className="text-sm font-medium mb-1 leading-relaxed text-[#111110]">I'm designed this for Hong Kong insurance professionals, primarily for tracking long-term policies.</p>
-              <p className="text-[13px] text-[#999896] leading-relaxed italic">本工具是为香港保险从业人员设计的，主要记录长期保险。</p>
-            </div>
-            <ul className="space-y-3.5 text-[13px]">
-              <li className="flex items-start gap-3 text-[#999896] before:content-['×'] before:mono before:text-[#d8d6d2]">
-                Traditional CRMs are expensive and complex for small/medium client bases.
-              </li>
-              <li className="flex items-start gap-3 text-[#999896] before:content-['×'] before:mono before:text-[#d8d6d2]">
-                Excel lacks automatic visual reminders for policy anniversaries.
-              </li>
-              <li className="flex items-start gap-3 text-[#999896] before:content-['×'] before:mono before:text-[#d8d6d2]">
-                Client privacy risks when data is stored on third-party cloud servers.
-              </li>
-            </ul>
-          </div>
-          <div className="p-10">
-            <div className="mono text-[9px] tracking-[0.2em] uppercase text-[#999896] mb-6">THE SOLUTION / 这里提供的逻辑</div>
-            <ul className="space-y-3.5 text-[13px]">
-              <li className="flex items-start gap-3 text-[#111110] before:content-['→'] before:mono before:text-[#111110]">
-                A pure HTML link. No install, no registration, privacy by default. / 纯网页链接，无需注册。
-              </li>
-              <li className="flex items-start gap-3 text-[#111110] before:content-['→'] before:mono before:text-[#111110]">
-                30-day "Red Alert" logic before anniversaries to keep you proactive. / 到期前30天自动飘红提醒。
-              </li>
-              <li className="flex items-start gap-3 text-[#111110] before:content-['→'] before:mono before:text-[#111110]">
-                Zero-sharing policy. Your data resides only on your phone or PC. / 数据仅存在本地，不共享。
-              </li>
-              <li className="flex items-start gap-3 text-[#111110] before:content-['→'] before:mono before:text-[#111110]">
-                Completely free tool with simple JSON export for seamless backup. / 完全免费，建议定期导出备份。
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
+  /* 核心展示区 */
+  .hero { padding: 72px 40px 56px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; }
+  .hero-title { font-family: var(--mono); font-size: 64px; font-weight: 700; line-height: 1.05; letter-spacing: -1px; }
 
-      {/* SECTION 02: FEATURES */}
-      <section className="border-b border-[#d8d6d2]">
-        <div className="px-10 pt-10 flex items-baseline gap-4 mb-8">
-          <span className="mono text-[10px] tracking-[0.2em] text-[#999896] uppercase">§02</span>
-          <span className="mono text-[11px] tracking-[0.3em] uppercase">FEATURES / 功能清单</span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 border-t border-[#d8d6d2]">
-          {[
-            { id: 'F.001', title: 'POLICY CORE DATA', desc: 'Record policy start date, duration (years), and annual premium seamlessly. / 记录保单日期、年限及年保费。' },
-            { id: 'F.002', title: 'COMMISSION CALCULATOR', desc: 'Custom commission filling for instant financial calculation and tracking. / 使用者可自填佣金以便计算。' },
-            { id: 'F.003', title: 'CLIENT NOTES', desc: 'Add personalized notes to each client for long-term tracking and history. / 可为每个客户添加备注记录。' }
-          ].map((f) => (
-            <div key={f.id} className="p-9 border-b md:border-b-0 md:border-r border-[#d8d6d2] last:border-r-0">
-              <div className="mono text-[9px] tracking-[0.2em] text-[#999896] mb-4">{f.id}</div>
-              <div className="mono text-[13px] font-bold tracking-[0.05em] mb-2">{f.title}</div>
-              <p className="text-[12px] text-[#999896] leading-relaxed">{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+  /* Ticker 滚动条动画 */
+  .ticker { border-bottom: 1px solid var(--border); padding: 10px 0; overflow: hidden; white-space: nowrap; }
+  .ticker-inner { display: inline-block; animation: ticker 24s linear infinite; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
 
-      {/* SECTION 03: INTERFACE */}
-      <section className="border-b border-[#d8d6d2] pb-10">
-        <div className="px-10 pt-10 flex items-baseline gap-4 mb-8">
-          <span className="mono text-[10px] tracking-[0.2em] text-[#999896] uppercase">§03</span>
-          <span className="mono text-[11px] tracking-[0.3em] uppercase">INTERFACE / 界面预览</span>
-        </div>
-        <div className="px-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#d8d6d2]">
-            <div className="bg-[#f5f4f2] aspect-[9/16] flex flex-col items-center justify-center p-8 text-center relative overflow-hidden">
-              <Monitor className="text-[#d8d6d2] mb-3" size={32} />
-              <span className="mono text-[9px] tracking-[0.2em] text-[#d8d6d2] uppercase">DESKTOP DASHBOARD</span>
-              <div className="absolute bottom-0 left-0 right-0 p-3 bg-white/50 border-t border-[#d8d6d2] mono text-[9px] text-[#999896]">01 — CLIENT LIST</div>
-            </div>
-            <div className="bg-[#f5f4f2] aspect-[9/16] flex flex-col items-center justify-center p-8 text-center relative">
-              <Smartphone className="text-[#d8d6d2] mb-3" size={32} />
-              <span className="mono text-[9px] tracking-[0.2em] text-[#d8d6d2] uppercase">MOBILE TRACKER</span>
-              <div className="absolute bottom-0 left-0 right-0 p-3 bg-white/50 border-t border-[#d8d6d2] mono text-[9px] text-[#999896]">02 — RESPONSIVE UI</div>
-            </div>
-            <div className="bg-[#f5f4f2] aspect-[9/16] flex flex-col items-center justify-center p-8 text-center relative">
-              <ShieldCheck className="text-red-300 mb-3" size={32} />
-              <span className="mono text-[9px] tracking-[0.2em] text-red-300 uppercase">RED ALERT NOTIFICATION</span>
-              <div className="absolute bottom-0 left-0 right-0 p-3 bg-red-50/50 border-t border-red-100 mono text-[9px] text-red-300">03 — 30-DAY WARNING</div>
-            </div>
-          </div>
-        </div>
-      </section>
+  /* 网格布局复刻 */
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); }
+  .why-col { padding: 40px; }
+  .why-col:first-child { border-right: 1px solid var(--border); }
 
-      {/* FOOTER */}
-      <footer id="access" className="bg-[#111110] text-[#f5f4f2] relative overflow-hidden border-t border-[#d8d6d2]">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-        <div className="max-w-[1200px] mx-auto px-10 py-20 relative z-1">
-          <div className="max-w-[600px] mb-14">
-            <h2 className="mono text-sm tracking-[0.2em] uppercase mb-6">SOURCE CODE & SUPPORT</h2>
-            <p className="text-sm text-white/70 mb-10 leading-relaxed">
-              If this tool optimizes your workflow, consider supporting its development. Your contribution fuels the lab. <br />
-              <span className="text-white/50 text-[13px]">如果这个工具为您节省了时间，欢迎考虑支持维护开发。</span>
-            </p>
-            <div className="flex flex-wrap gap-4 mb-8">
-              <a href="https://github.com/axis-melb/tools-online" className="mono text-[11px] tracking-[0.15em] uppercase px-7 py-3 border border-white/30 no-underline text-white hover:text-[#111110] hover:bg-white transition-colors duration-200">
-                SOURCE (GITHUB) ↗
-              </a>
-              <a href="#" className="mono text-[11px] font-bold tracking-[0.15em] uppercase px-7 py-3 bg-white text-black no-underline hover:bg-transparent hover:text-white border border-white transition-colors duration-200">
-                BUY ME A COFFEE ☕
-              </a>
-            </div>
-            <div className="mt-10 border-t border-white/10 pt-5 text-[12px] text-white/40 leading-relaxed">
-              <p className="mb-2 text-white/60 font-bold uppercase tracking-wider">Disclaimer / 免责声明:</p>
-              <p>Provided for informational purposes. Users are responsible for their own data backup. No medical or professional advice is implied. / 工具仅供参考，不构成专业建议，请自行备份数据。</p>
-            </div>
-          </div>
-          <div className="pt-8 border-t border-white/10 flex flex-wrap justify-between items-center gap-5 mono text-[10px] tracking-[0.2em] text-white/40 uppercase">
-            <div>PROJECT AXIS — AX-2024.004 — CRM LAYER</div>
-            <a href="/lab" className="no-underline text-white/40 hover:text-white transition-colors">← BACK TO LAB</a>
-          </div>
-        </div>
-      </footer>
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); }
+  .feature-cell { padding: 36px 40px; border-right: 1px solid var(--border); }
+  
+  /* 响应式适配 */
+  @media (max-width: 768px) {
+    .hero, .why-grid, .features-grid { grid-template-columns: 1fr; }
+    .why-col { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px; height: 100%; display:flex; align-items:center; justify-content:space-between;">
+    <a href="/" style="font-family:var(--mono); font-size:11px; letter-spacing:0.35em; text-transform:uppercase; color:var(--fg); text-decoration:none;">PROJECT AXIS</a>
+    <div style="display:flex; gap:32px;">
+      <a href="/#lab" class="section-label">LAB</a>
+      <a href="/#log" class="section-label">LOG</a>
+      <a href="/#system" class="section-label">SYSTEM</a>
     </div>
-  );
-}
+  </div>
+</nav>
+
+<div class="back-bar">
+  <a href="/lab" class="back-link">← LAB</a>
+  <span style="color:var(--border); font-size:10px;">/</span>
+  <span style="font-family:var(--mono); font-size:10px; color:var(--fg); letter-spacing:1.5px;">HKCRM</span>
+</div>
+
+<div class="hero">
+  <div>
+    <div style="font-family:var(--mono); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:20px;">TOOL.004 / 客户管理控制台</div>
+    <h1 class="hero-title">HK<br>CRM</h1>
+    <p style="font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 440px; margin-top:16px;">
+      A private-by-design policy manager for insurance agents. No cloud database. All data stays on your device. / <strong>本工具是为香港保险从业人员设计的，主要记录长期保险。</strong> 无需注册，数据不离设备。
+    </p>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:16px;">
+    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+      <span style="font-family:var(--mono); font-size:9px; letter-spacing:1.5px; border:1px solid var(--border); padding:5px 12px; color:var(--muted); text-transform:uppercase;">HTML · LOCAL ONLY</span>
+      <span style="font-family:var(--mono); font-size:9px; letter-spacing:1.5px; border:1px solid var(--border); padding:5px 12px; color:var(--muted); text-transform:uppercase;">EXPORT JSON</span>
+    </div>
+    <a href="https://axis-melb.github.io/tools-online/hkcrm.html" target="_blank" style="font-family:var(--mono); font-size:10px; text-transform:uppercase; padding:12px 24px; background:var(--fg); color:var(--bg); border:1px solid var(--fg); text-decoration:none; display:inline-block; width:fit-content;">OPEN TOOL →</a>
+  </div>
+</div>
+
+<div class="ticker">
+  <div class="ticker-inner">
+    <span style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-right:48px;">ANNIVERSARY REMINDER</span>
+    <span style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-right:48px;">COMMISSION CALCULATOR</span>
+    <span style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-right:48px;">ZERO DATA SHARED</span>
+    <span style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-right:48px;">ANNIVERSARY REMINDER</span>
+    <span style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-right:48px;">COMMISSION CALCULATOR</span>
+  </div>
+</div>
+
+<section>
+  <div style="padding:40px 40px 0; display:flex; align-items:baseline; gap:16px; margin-bottom:32px;">
+    <span style="font-family:var(--mono); font-size:10px; color:var(--muted);">§01</span>
+    <span style="font-family:var(--mono); font-size:11px; letter-spacing:3px; text-transform:uppercase;">WHY THIS EXISTS / 初衷</span>
+  </div>
+  <div class="why-grid">
+    <div class="why-col">
+      <div style="font-family:var(--mono); font-size:9px; color:var(--muted); text-transform:uppercase; margin-bottom:24px;">THE PROBLEM / 痛点</div>
+      <div style="font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:16px; padding:16px; background:rgba(0,0,0,0.03); border-left:2px solid var(--fg);">
+        I find that managing 50-100 policyholders doesn't require a heavy CRM, and Excel lacks automatic reminders. Plus, I don't want my client data on someone else's cloud. / 管理几十个客户并不需要庞大的系统，且 Excel 缺乏自动提醒。我不希望资料上传云端。
+      </div>
+      <p style="font-size:12px; color:var(--muted);">× 传统的 CRM 昂贵且复杂<br>× Excel 需手动翻查日期<br>× 数据储存在第三方不安全</p>
+    </div>
+    <div class="why-col">
+      <div style="font-family:var(--mono); font-size:9px; color:var(--muted); text-transform:uppercase; margin-bottom:24px;">THE SOLUTION / 解决方案</div>
+      <p style="font-size:13px; line-height:1.8;">→ 纯 HTML 链接，本地优先，隐私受控<br>→ 30天自动“飘红”提醒，准时联系客户<br>→ 自填比例计算佣金，财务状况一眼知<br>→ 导出 JSON 备份，真正拥有你的数据</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div style="padding:40px 40px 0; display:flex; align-items:baseline; gap:16px; margin-bottom:32px;">
+    <span style="font-family:var(--mono); font-size:10px; color:var(--muted);">§02</span>
+    <span style="font-family:var(--mono); font-size:11px; letter-spacing:3px; text-transform:uppercase;">FEATURES / 功能</span>
+  </div>
+  <div class="features-grid">
+    <div class="feature-cell">
+      <div style="font-family:var(--mono); font-size:9px; color:var(--muted); margin-bottom:16px;">F.001</div>
+      <div style="font-family:var(--mono); font-size:13px; font-weight:700; margin-bottom:10px;">ANNIVERSARY ALERT</div>
+      <p style="font-size:12px; color:var(--muted); line-height:1.7;">保单周年日前30天，客户条目将自动显示为红色，确保不漏过交费提醒。</p>
+    </div>
+    <div class="feature-cell">
+      <div style="font-family:var(--mono); font-size:9px; color:var(--muted); margin-bottom:16px;">F.002</div>
+      <div style="font-family:var(--mono); font-size:13px; font-weight:700; margin-bottom:10px;">COMMISSION CALC</div>
+      <p style="font-size:12px; color:var(--muted); line-height:1.7;">录入保单年缴及年限，配合自填佣金率，实时计算您的预期业务收益。</p>
+    </div>
+    <div class="feature-cell" style="border-right:none;">
+      <div style="font-family:var(--mono); font-size:9px; color:var(--muted); margin-bottom:16px;">F.003</div>
+      <div style="font-family:var(--mono); font-size:13px; font-weight:700; margin-bottom:10px;">CLIENT NOTES</div>
+      <p style="font-size:12px; color:var(--muted); line-height:1.7;">自由记录客户偏好、家庭详情或跟进备注，所有内容仅保留在您手中。</p>
+    </div>
+  </div>
+</section>
+
+<footer style="background:var(--black); padding:80px 40px; color:rgba(255,255,255,0.7); border-top: 1px solid var(--border);">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div style="max-width:600px; margin-bottom:40px;">
+      <h2 style="font-family:var(--mono); font-size:14px; color:#fff; text-transform:uppercase; margin-bottom:20px;">SECURITY & BACKUP</h2>
+      <p style="font-size:13px; line-height:1.8;">
+        All data is stored in your browser's localStorage. Recommended to export JSON backup weekly. / 数据保留在本地浏览器，建议每周导出 JSON 备份。
+      </p>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:32px; display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px; text-transform:uppercase;">
+      <span>PROJECT AXIS — AX-2024.004</span>
+      <a href="/lab" style="color:rgba(255,255,255,0.4); text-decoration:none;">← BACK TO LAB</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
