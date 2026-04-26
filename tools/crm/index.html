@@ -5,14 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HKCRM · TOOL.004 — Project Axis</title>
 
-<!-- 使用 Tailwind CDN 处理布局，无需您服务器安装任何东西 -->
+<!-- Tailwind & Fonts from Template -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
 
 <style>
-  /* 基础变量与 Fasting 页面完全一致 */
+  /* 
+   * HKCRM TOOL SPECIFIC STYLES 
+   * 完全复刻 Fasting 页面的设计语言
+   */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
     --bg: #f5f4f2;
     --fg: #111110;
@@ -23,6 +28,8 @@
     --body: 'Inter', 'Noto Sans SC', sans-serif;
   }
 
+  html { scroll-behavior: smooth; }
+
   body {
     background: var(--bg);
     color: var(--fg);
@@ -30,9 +37,10 @@
     font-weight: 300;
     line-height: 1.6;
     font-size: 14px;
+    overflow-x: hidden;
   }
 
-  /* 导航栏样式复刻 */
+  /* NAV (Template Structure) */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -41,6 +49,7 @@
     background: var(--bg);
     z-index: 100;
   }
+  .mono { font-family: var(--mono); }
   .section-label {
     font-family: var(--mono);
     font-size: 10px;
@@ -48,143 +57,623 @@
     text-transform: uppercase;
     text-decoration: none;
     color: var(--muted);
+    transition: color 0.2s;
+  }
+  .section-label:hover { color: var(--fg); }
+  .desktop-nav { display: flex; gap: 32px; align-items: center; }
+
+  /* BACK LINK */
+  .back-bar {
+    margin-top: 52px;
+    padding: 16px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .back-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--fg); }
+  .back-sep { color: var(--border); font-size: 10px; }
+  .back-current {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--fg);
   }
 
-  /* 面包屑导航 */
-  .back-bar { margin-top: 52px; padding: 16px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-  .back-link { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; color: var(--muted); }
+  /* HERO */
+  .hero {
+    padding: 72px 40px 56px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: end;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    font-family: var(--mono);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .hero-sub {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 440px;
+  }
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: end;
+    padding-bottom: 4px;
+  }
+  .hero-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    background: var(--fg);
+    color: var(--bg);
+    border: 1px solid var(--fg);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--fg);
+  }
 
-  /* 核心展示区 */
-  .hero { padding: 72px 40px 56px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; }
-  .hero-title { font-family: var(--mono); font-size: 64px; font-weight: 700; line-height: 1.05; letter-spacing: -1px; }
-
-  /* Ticker 滚动条动画 */
-  .ticker { border-bottom: 1px solid var(--border); padding: 10px 0; overflow: hidden; white-space: nowrap; }
-  .ticker-inner { display: inline-block; animation: ticker 24s linear infinite; }
+  /* TICKER */
+  .ticker {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-block;
+    animation: ticker 24s linear infinite;
+  }
+  .ticker-item {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 48px;
+  }
+  .ticker-dot { color: var(--border); margin-right: 48px; }
   @keyframes ticker {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
   }
 
-  /* 网格布局复刻 */
-  .why-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); }
+  /* SECTION */
+  section { border-bottom: 1px solid var(--border); }
+  .section-header {
+    padding: 40px 40px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+
+  /* WHY */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
   .why-col { padding: 40px; }
   .why-col:first-child { border-right: 1px solid var(--border); }
+  .why-col-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .why-problem-list, .why-solution-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .why-problem-list li, .why-solution-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .why-problem-list li { color: var(--muted); }
+  .why-problem-list li::before {
+    content: '×';
+    font-family: var(--mono);
+    color: var(--border);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .why-solution-list li { color: var(--fg); }
+  .why-solution-list li::before {
+    content: '→';
+    font-family: var(--mono);
+    color: var(--fg);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
 
-  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); }
-  .feature-cell { padding: 36px 40px; border-right: 1px solid var(--border); }
-  
-  /* 响应式适配 */
+  /* FEATURES */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border);
+  }
+  .feature-cell {
+    padding: 36px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .feature-cell:last-child { border-right: none; }
+  .feature-num {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .feature-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .feature-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* SCREENSHOTS (Consistent with Fasting) */
+  .screenshots-section {
+    padding: 0 40px 40px;
+    border-top: 1px solid var(--border);
+  }
+  .screenshots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 0;
+  }
+  .screenshot-cell {
+    background: var(--bg);
+    aspect-ratio: 9/16;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .screenshot-placeholder-icon {
+    font-family: var(--mono);
+    font-size: 24px;
+    color: var(--border);
+  }
+  .screenshot-placeholder-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--border);
+  }
+  .screenshot-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px 16px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* SETUP STEPS */
+  .steps-grid { border-top: 1px solid var(--border); }
+  .step-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+    min-height: 100px;
+  }
+  .step-row:last-child { border-bottom: none; }
+  .step-num-cell {
+    padding: 32px 40px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+  .step-content {
+    padding: 32px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .step-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .step-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .step-note {
+    padding: 32px 40px;
+    display: flex;
+    align-items: flex-start;
+  }
+  .step-note-inner {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: var(--border);
+    line-height: 1.8;
+    text-transform: uppercase;
+  }
+
+  /* EXPORT */
+  .export-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .export-left { padding: 40px; border-right: 1px solid var(--border); }
+  .export-right { padding: 40px; }
+  .json-preview {
+    background: #1a1a18;
+    color: #c8c5be;
+    padding: 24px;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.8;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  .json-key { color: #888684; }
+  .json-val { color: #e8e5de; }
+  .json-str { color: #aab89e; }
+
+  /* RESPONSIVE */
   @media (max-width: 768px) {
-    .hero, .why-grid, .features-grid { grid-template-columns: 1fr; }
-    .why-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 32px; }
+    .why-grid { grid-template-columns: 1fr; }
+    .why-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .features-grid { grid-template-columns: 1fr; }
+    .feature-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .step-row { grid-template-columns: 48px 1fr; }
+    .step-note { display: none; }
+    .export-grid { grid-template-columns: 1fr; }
+    .export-left { border-right: none; border-bottom: 1px solid var(--border); }
+    .screenshots-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
-  <div style="max-width:1200px;margin:0 auto;padding:0 32px; height: 100%; display:flex; align-items:center; justify-content:space-between;">
-    <a href="/" style="font-family:var(--mono); font-size:11px; letter-spacing:0.35em; text-transform:uppercase; color:var(--fg); text-decoration:none;">PROJECT AXIS</a>
-    <div style="display:flex; gap:32px;">
-      <a href="/#lab" class="section-label">LAB</a>
-      <a href="/#log" class="section-label">LOG</a>
-      <a href="/#system" class="section-label">SYSTEM</a>
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px; height: 100%;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:100%;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg);text-decoration:none;">PROJECT AXIS</a>
+      <div class="desktop-nav">
+        <a href="/#lab" class="section-label">LAB</a>
+        <a href="/#log" class="section-label">LOG</a>
+        <a href="/#system" class="section-label">SYSTEM</a>
+        <a href="#access" class="section-label">ACCESS</a>
+      </div>
     </div>
   </div>
 </nav>
 
+<!-- BREADCRUMB -->
 <div class="back-bar">
   <a href="/lab" class="back-link">← LAB</a>
-  <span style="color:var(--border); font-size:10px;">/</span>
-  <span style="font-family:var(--mono); font-size:10px; color:var(--fg); letter-spacing:1.5px;">HKCRM</span>
+  <span class="back-sep">/</span>
+  <span class="back-current">HKCRM</span>
 </div>
 
+<!-- HERO -->
 <div class="hero">
   <div>
-    <div style="font-family:var(--mono); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:20px;">TOOL.004 / 客户管理控制台</div>
+    <div class="hero-eyebrow">TOOL.004 / 客户管理控制台</div>
     <h1 class="hero-title">HK<br>CRM</h1>
-    <p style="font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 440px; margin-top:16px;">
-      A private-by-design policy manager for insurance agents. No cloud database. All data stays on your device. / <strong>本工具是为香港保险从业人员设计的，主要记录长期保险。</strong> 无需注册，数据不离设备。
-    </p>
+    <p class="hero-sub">A private-by-design policy manager for insurance agents. No cloud database. All data stays on your device. / <strong>本工具是为香港保险从业人员设计的，主要记录长期保险。</strong> 无需注册，数据不离设备。</p>
   </div>
-  <div style="display:flex; flex-direction:column; gap:16px;">
-    <div style="display:flex; flex-wrap:wrap; gap:8px;">
-      <span style="font-family:var(--mono); font-size:9px; letter-spacing:1.5px; border:1px solid var(--border); padding:5px 12px; color:var(--muted); text-transform:uppercase;">HTML · LOCAL ONLY</span>
-      <span style="font-family:var(--mono); font-size:9px; letter-spacing:1.5px; border:1px solid var(--border); padding:5px 12px; color:var(--muted); text-transform:uppercase;">EXPORT JSON</span>
+  <div class="hero-right">
+    <div class="hero-tag-row">
+      <span class="tag">HTML · LOCAL ONLY</span>
+      <span class="tag">NO REGISTRATION</span>
+      <span class="tag">ZERO DATA EXTRACTION</span>
+      <span class="tag">EXPORT JSON</span>
     </div>
-    <a href="https://axis-melb.github.io/tools-online/hkcrm.html" target="_blank" style="font-family:var(--mono); font-size:10px; text-transform:uppercase; padding:12px 24px; background:var(--fg); color:var(--bg); border:1px solid var(--fg); text-decoration:none; display:inline-block; width:fit-content;">OPEN TOOL →</a>
+    <div class="cta-row" style="margin-top: 8px;">
+     <a href="https://axis-melb.github.io/tools-online/hkcrm.html" class="btn-primary" target="_blank">OPEN TOOL →</a>
+    </div>
   </div>
 </div>
 
+<!-- TICKER -->
 <div class="ticker">
   <div class="ticker-inner">
-    <span style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-right:48px;">ANNIVERSARY REMINDER</span>
-    <span style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-right:48px;">COMMISSION CALCULATOR</span>
-    <span style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-right:48px;">ZERO DATA SHARED</span>
-    <span style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-right:48px;">ANNIVERSARY REMINDER</span>
-    <span style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-right:48px;">COMMISSION CALCULATOR</span>
+    <span class="ticker-item">ANNIVERSARY REMINDER</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">COMMISSION CALCULATOR</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">LOCAL STORAGE</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">EXPORT JSON BACKUP</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">NO ACCOUNT REQUIRED</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">PRIVACY BY DEFAULT</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">ANNIVERSARY REMINDER</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">COMMISSION CALCULATOR</span><span class="ticker-dot">·</span>
   </div>
 </div>
 
+<!-- WHY THIS EXISTS -->
 <section>
-  <div style="padding:40px 40px 0; display:flex; align-items:baseline; gap:16px; margin-bottom:32px;">
-    <span style="font-family:var(--mono); font-size:10px; color:var(--muted);">§01</span>
-    <span style="font-family:var(--mono); font-size:11px; letter-spacing:3px; text-transform:uppercase;">WHY THIS EXISTS / 初衷</span>
+  <div class="section-header">
+    <span class="section-num">§01</span>
+    <span class="section-title">WHY THIS EXISTS / 为什么做这个</span>
   </div>
   <div class="why-grid">
     <div class="why-col">
-      <div style="font-family:var(--mono); font-size:9px; color:var(--muted); text-transform:uppercase; margin-bottom:24px;">THE PROBLEM / 痛点</div>
-      <div style="font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:16px; padding:16px; background:rgba(0,0,0,0.03); border-left:2px solid var(--fg);">
-        I find that managing 50-100 policyholders doesn't require a heavy CRM, and Excel lacks automatic reminders. Plus, I don't want my client data on someone else's cloud. / 管理几十个客户并不需要庞大的系统，且 Excel 缺乏自动提醒。我不希望资料上传云端。
+      <div class="why-col-label">THE PROBLEM / 痛点</div>
+      <div style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.03); border-left: 2px solid var(--fg);">
+          <p style="font-size: 14px; font-weight: 500; color: var(--fg); margin-bottom: 8px;">
+              I'm tired of complex CRMs that compromise privacy. I need a lightweight way to track my local clients without cloud overhead.
+          </p>
+          <p style="font-size: 13px; color: var(--muted); line-height: 1.5;">
+              我发现管理几十个客户并不需要庞大的 CRM 系统，而 Excel 又缺乏自动到期提醒。更重要的是，我不希望客户隐私资料被上传到第三方的云端数据库。
+          </p>
       </div>
-      <p style="font-size:12px; color:var(--muted);">× 传统的 CRM 昂贵且复杂<br>× Excel 需手动翻查日期<br>× 数据储存在第三方不安全</p>
+      <ul class="why-problem-list">
+        <li>Traditional CRMs are expensive and require server-side databases / 传统 CRM 昂贵且涉及服务器维护</li>
+        <li>Excel needs manually tracking of policy anniversaries / Excel 难以自动跟踪保单周年期</li>
+        <li>Data privacy risks when using third-party SaaS platforms / 第三方 SaaS 平台存在泄露客户资料的风险</li>
+      </ul>
     </div>
     <div class="why-col">
-      <div style="font-family:var(--mono); font-size:9px; color:var(--muted); text-transform:uppercase; margin-bottom:24px;">THE SOLUTION / 解决方案</div>
-      <p style="font-size:13px; line-height:1.8;">→ 纯 HTML 链接，本地优先，隐私受控<br>→ 30天自动“飘红”提醒，准时联系客户<br>→ 自填比例计算佣金，财务状况一眼知<br>→ 导出 JSON 备份，真正拥有你的数据</p>
+      <div class="why-col-label">THE SOLUTION / 这里提供的逻辑</div>
+      <ul class="why-solution-list">
+        <li>An offline-first tool. Pure HTML link. Privacy by default / 纯 HTML 链接，本地优先，隐私至上</li>
+        <li>30-day "Red Alert" for policy anniversaries. Contact clients on time / 到期前30天自动飘红，准时联系客户</li>
+        <li>Self-filled commission rates for instant financial overview / 自填佣金比例，快速预览财务收益</li>
+        <li>Full JSON export. You own your data forever / 完整的 JSON 数据导出，永不丢失控制权</li>
+      </ul>
     </div>
   </div>
 </section>
 
+<!-- FEATURES -->
 <section>
-  <div style="padding:40px 40px 0; display:flex; align-items:baseline; gap:16px; margin-bottom:32px;">
-    <span style="font-family:var(--mono); font-size:10px; color:var(--muted);">§02</span>
-    <span style="font-family:var(--mono); font-size:11px; letter-spacing:3px; text-transform:uppercase;">FEATURES / 功能</span>
+  <div class="section-header">
+    <span class="section-num">§02</span>
+    <span class="section-title">WHAT IT DOES / 功能</span>
   </div>
   <div class="features-grid">
     <div class="feature-cell">
-      <div style="font-family:var(--mono); font-size:9px; color:var(--muted); margin-bottom:16px;">F.001</div>
-      <div style="font-family:var(--mono); font-size:13px; font-weight:700; margin-bottom:10px;">ANNIVERSARY ALERT</div>
-      <p style="font-size:12px; color:var(--muted); line-height:1.7;">保单周年日前30天，客户条目将自动显示为红色，确保不漏过交费提醒。</p>
+      <div class="feature-num">F.001</div>
+      <div class="feature-title">ANNIVERSARY ALERT</div>
+      <p class="feature-desc">When a policy anniversary is within 30 days, the client entry turns <strong>red</strong>. No more missing premium deadlines. / 保单周年日前30天自动飘红提醒，提醒客户准时续保。</p>
     </div>
     <div class="feature-cell">
-      <div style="font-family:var(--mono); font-size:9px; color:var(--muted); margin-bottom:16px;">F.002</div>
-      <div style="font-family:var(--mono); font-size:13px; font-weight:700; margin-bottom:10px;">COMMISSION CALC</div>
-      <p style="font-size:12px; color:var(--muted); line-height:1.7;">录入保单年缴及年限，配合自填佣金率，实时计算您的预期业务收益。</p>
+      <div class="feature-num">F.002</div>
+      <div class="feature-title">COMMISSION CALCULATOR</div>
+      <p class="feature-desc">Input policy start date, duration, and annual premium. Customize your commission rate to see your earnings instantly. / 记录开始时间、年期和保费，自主填写佣金率以计算收益。</p>
     </div>
-    <div class="feature-cell" style="border-right:none;">
-      <div style="font-family:var(--mono); font-size:9px; color:var(--muted); margin-bottom:16px;">F.003</div>
-      <div style="font-family:var(--mono); font-size:13px; font-weight:700; margin-bottom:10px;">CLIENT NOTES</div>
-      <p style="font-size:12px; color:var(--muted); line-height:1.7;">自由记录客户偏好、家庭详情或跟进备注，所有内容仅保留在您手中。</p>
+    <div class="feature-cell">
+      <div class="feature-num">F.003</div>
+      <div class="feature-title">CLIENT NOTES</div>
+      <p class="feature-desc">Keep ad-hoc notes for each client — follow-up history, specific needs, or family details. Everything stays local. / 为每个客户记录详细备注，支持个性化跟踪与快速查阅。</p>
     </div>
   </div>
 </section>
 
-<footer style="background:var(--black); padding:80px 40px; color:rgba(255,255,255,0.7); border-top: 1px solid var(--border);">
-  <div style="max-width:1200px; margin:0 auto;">
-    <div style="max-width:600px; margin-bottom:40px;">
-      <h2 style="font-family:var(--mono); font-size:14px; color:#fff; text-transform:uppercase; margin-bottom:20px;">SECURITY & BACKUP</h2>
-      <p style="font-size:13px; line-height:1.8;">
-        All data is stored in your browser's localStorage. Recommended to export JSON backup weekly. / 数据保留在本地浏览器，建议每周导出 JSON 备份。
-      </p>
-    </div>
-    <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:32px; display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px; text-transform:uppercase;">
-      <span>PROJECT AXIS — AX-2024.004</span>
-      <a href="/lab" style="color:rgba(255,255,255,0.4); text-decoration:none;">← BACK TO LAB</a>
+<!-- INTERFACE -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§03</span>
+    <span class="section-title">INTERFACE / 界面预览</span>
+  </div>
+  <div class="screenshots-section">
+    <div class="screenshots-grid">
+      <div class="screenshot-cell">
+        <div class="screenshot-placeholder-icon">📋</div>
+        <div class="screenshot-placeholder-label">CLIENT VIEW</div>
+        <div class="screenshot-caption">01 — LIST OVERVIEW</div>
+      </div>
+      <div class="screenshot-cell">
+        <div class="screenshot-placeholder-icon">📅</div>
+        <div class="screenshot-placeholder-label">CALENDAR SYNC</div>
+        <div class="screenshot-caption">02 — ANNIVERSARIES</div>
+      </div>
+      <div class="screenshot-cell" style="color: #ef4444;">
+        <div class="screenshot-placeholder-icon" style="color: #ef4444;">🚨</div>
+        <div class="screenshot-placeholder-label" style="color: #ef4444;">RED ALERT</div>
+        <div class="screenshot-caption">03 — PAYMENT REMINDER</div>
+      </div>
     </div>
   </div>
-</footer>
+</section>
+
+<!-- SETUP -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§04</span>
+    <span class="section-title">GETTING STARTED / 第一次使用</span>
+  </div>
+  <div class="steps-grid">
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">01</span></div>
+      <div class="step-content">
+        <div class="step-title">BOOKMARK THE LINK</div>
+        <p class="step-desc">Open the tool and bookmark it. No install required. It runs as a static page strictly from your browser. / 在手机或电脑浏览器打开链接并收藏，无需安装任何应用。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">STAYS ON<br>LOCAL BROWSER<br>· CHROME<br>· SAFARI</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">02</span></div>
+      <div class="step-content">
+        <div class="step-title">ADD CLIENT DATA</div>
+        <p class="step-desc">Fill in the policy start date, duration (years), and premium. The system will handle the anniversary calculations. / 填写保单日期、年期和保费，系统将自动计算相关数据。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">CLIENT DATA<br>IS NEVER<br>SENT TO US</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">03</span></div>
+      <div class="step-content">
+        <div class="step-title">ROUTINE CHECK</div>
+        <p class="step-desc">Open the tool weekly. Any client marked in red means it's time to reach out and prepare for the premium payment. / 每周定期查看，变红的条目就是需要联系客户准备交费的时候。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">30-DAY<br>PRIOR WARNING<br>BY DEFAULT</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§05</span>
+    <span class="section-title">YOUR DATA / 数据安全与备份</span>
+  </div>
+  <div class="export-grid">
+    <div class="export-left">
+      <p style="font-size:13px; color:var(--muted); line-height:1.7;">Your client data is stored in your browser's <code>localStorage</code>. To switch devices or back up, use the built-in export function.</p>
+      <ul style="margin-top: 20px; list-style: none; display: flex; flex-direction: column; gap: 14px; font-size: 13px; color: var(--fg);">
+        <li style="display: flex; gap: 10px;">→ Regularly hit <strong>Export (JSON)</strong> to save a backup to your local device.</li>
+        <li style="display: flex; gap: 10px;">→ On a new device, open the tool and select <strong>Import</strong> to restore.</li>
+        <li style="display: flex; gap: 10px;">→ Completely private. No data is shared with third parties.</li>
+      </ul>
+    </div>
+    <div class="export-right">
+      <div class="json-preview">
+<span class="json-key">{</span><br>
+&nbsp;&nbsp;<span class="json-key">"clientName"</span>: <span class="json-str">"Johnny Doe"</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"policyDate"</span>: <span class="json-str">"2023-01-15"</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"premium"</span>: <span class="json-val">50000</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"commission"</span>: <span class="json-val">0.35</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"notes"</span>: <span class="json-str">"None"</span><br>
+<span class="json-key">}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESS GATEWAY (Footer) -->
+<section id="access" style="background:var(--black);position:relative;overflow:hidden;z-index:1; border-top: 1px solid var(--border);">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  
+  <div style="max-width:1200px;margin:0 auto;padding:80px 40px;position:relative;z-index:1;">
+    <div style="max-width: 600px; margin: 40px 0 60px 0; text-align: left;">
+        <h2 style="font-family: var(--mono); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; color: #fff;">SOURCE CODE & SUPPORT</h2>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 40px; line-height: 1.8;">
+            If this tool added value to your professional life, consider buying me a coffee. It fuels the laboratory. <br>
+            <span style="color: rgba(255,255,255,0.5); font-size: 13px;">如果这个工具为您节省了时间，欢迎请我喝杯咖啡。这是我们实验室持续更新的动力。</span>
+        </p>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 30px;">
+            <a href="https://github.com/axis-melb/tools-online" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); text-decoration: none; transition: all 0.2s;">
+                SOURCE (GITHUB) ↗
+            </a>
+            <a href="https://buy.stripe.com/eVqaEXedSeuJeIUaQX0gw00" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: #fff; color: #000; border: 1px solid #fff; text-decoration: none; transition: all 0.2s; font-weight: bold;">
+                BUY ME A COFFEE ☕
+            </a>
+        </div>
+        <div style="margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+          <p style="margin-bottom: 8px; color: #fff;"><strong>DISCLAIMER / 免责声明:</strong></p>
+          <p style="margin-bottom: 8px;">This is a zero-server tool. We do not store or process your data. Use at your own risk.</p>
+          <p>这是一个零服务器工具。我们不存储、查看或处理您输入的任何信息。您应对导出的 JSON 数据负全部保管责任。</p>
+        </div>
+    </div>
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4);">
+        PROJECT AXIS — AX-2024.004 — CRM LAYER
+      </div>
+      <a href="/lab" style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,0.4);">
+        ← BACK TO LAB
+      </a>
+    </div>
+  </div>
+</section>
 
 </body>
 </html>
