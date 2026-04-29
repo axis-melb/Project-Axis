@@ -452,9 +452,9 @@
 <!-- HERO -->
 <div class="hero">
   <div>
-    <div class="hero-eyebrow">TOOL.004 / 客户管理控制台</div>
+    <div class="hero-eyebrow">TOOL.001 / 客户管理控制台</div>
     <h1 class="hero-title">HK<br>CRM</h1>
-    <p class="hero-sub">A private-by-design policy manager for insurance agents. No cloud database. All data stays on your device. / <strong>本工具是为香港保险从业人员设计的，主要记录长期保险。</strong> 无需注册，数据不离设备。</p>
+    <p class="hero-sub">A private-by-design policy manager for insurance agents. No cloud database required. All data stays on your device. / <strong>本工具是为香港保险从业人员设计的，主要记录长期保险的客户信息，提醒保单周年日。</strong> 无需注册，数据不离设备。</p>
   </div>
   <div class="hero-right">
     <div class="hero-tag-row">
@@ -494,7 +494,7 @@
       <div class="why-col-label">THE PROBLEM / 痛点</div>
       <div style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.03); border-left: 2px solid var(--fg);">
           <p style="font-size: 14px; font-weight: 500; color: var(--fg); margin-bottom: 8px;">
-              I'm tired of complex CRMs that compromise privacy. I need a lightweight way to track my local clients without cloud overhead.
+              I'm tired of complex CRMs that compromise privacy. I need a lightweight way to track my local clients without cloud overhead, plus reminders for when to follow up with them.
           </p>
           <p style="font-size: 13px; color: var(--muted); line-height: 1.5;">
               我发现管理几十个客户并不需要庞大的 CRM 系统，而 Excel 又缺乏自动到期提醒。更重要的是，我不希望客户隐私资料被上传到第三方的云端数据库。
@@ -583,7 +583,7 @@
       <div class="step-num-cell"><span class="step-num">01</span></div>
       <div class="step-content">
         <div class="step-title">BOOKMARK THE LINK</div>
-        <p class="step-desc">Open the tool and bookmark it. No install required. It runs as a static page strictly from your browser. / 在手机或电脑浏览器打开链接并收藏，无需安装任何应用。</p>
+        <p class="step-desc">Open the tool link and bookmark it or save it to your home screen. No installation required—it runs as a static page directly in your browser. / 在手机或电脑浏览器打开链接并收藏，可直接保存在手机屏幕上，无需安装任何应用。</p>
       </div>
       <div class="step-note">
         <span class="step-note-inner">STAYS ON<br>LOCAL BROWSER<br>· CHROME<br>· SAFARI</span>
@@ -619,13 +619,44 @@
     <span class="section-title">YOUR DATA / 数据安全与备份</span>
   </div>
   <div class="export-grid">
-    <div class="export-left">
-      <p style="font-size:13px; color:var(--muted); line-height:1.7;">Your client data is stored in your browser's <code>localStorage</code>. To switch devices or back up, use the built-in export function.</p>
-      <ul style="margin-top: 20px; list-style: none; display: flex; flex-direction: column; gap: 14px; font-size: 13px; color: var(--fg);">
-        <li style="display: flex; gap: 10px;">→ Regularly hit <strong>Export (JSON)</strong> to save a backup to your local device.</li>
-        <li style="display: flex; gap: 10px;">→ On a new device, open the tool and select <strong>Import</strong> to restore.</li>
-        <li style="display: flex; gap: 10px;">→ Completely private. No data is shared with third parties.</li>
+   <div class="export-left">
+      <p style="font-size:13px; color:var(--muted); line-height:1.7;">
+        Your client data is stored in your browser's <code>localStorage</code>. To switch devices or back up, use the built-in export function.<br>
+        <span style="font-size:12px; opacity: 0.8;">您的客户数据存储在浏览器本地。如需更换设备或备份，请使用内置导出功能。</span>
+      </p>
+      <ul style="margin-top: 20px; list-style: none; display: flex; flex-direction: column; gap: 18px; font-size: 13px; color: var(--fg); padding: 0;">
+        
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>Regularly hit <strong>Export (JSON)</strong> to save a backup to your local device. (I save mine to my iCloud.)</span>
+          </div>
+          <div style="padding-left: 24px; font-size: 12px; color: var(--muted);">
+            定期点击 <strong>导出 (JSON)</strong> 以保存备份至本地（建议存入 iCloud 或手机文件夹）。
+          </div>
+        </li>
+
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>On a new device (such as an iPad), open the tool and select <strong>Import</strong> to restore your data.</span>
+          </div>
+          <div style="padding-left: 24px; font-size: 12px; color: var(--muted);">
+            在新设备（如 iPad）上打开此页面，选择 <strong>导入</strong> 即可恢复数据。
+          </div>
+        </li>
+
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>Completely private. No data is shared with third parties.</span>
+          </div>
+          <div style="padding-left: 24px; font-size: 12px; color: var(--muted);">
+            完全私密。数据绝不与任何第三方共享。
+          </div>
+        </li>
       </ul>
+    </div> 
     </div>
     <div class="export-right">
       <div class="json-preview">
