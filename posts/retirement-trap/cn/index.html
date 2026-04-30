@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>退休陷阱 — PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/style.css">
+<style>
+  .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
+  .post-body p { margin-bottom: 1.8em; }
+  .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-body .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .post-body .highlight-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: var(--near-black); min-width: 80px; }
+  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
+  @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
+  .post-sidebar { position: sticky; top: 80px; }
+  .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
+  .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
+  .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
+  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
+  .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
+  .series-note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.35); white-space: nowrap; padding-top: 2px; }
+  .series-note-text { font-size: 12px; color: rgba(29,29,31,0.5); line-height: 1.6; }
+  .case-block { border: 1px solid var(--line-dark); padding: 20px 24px; margin: 2em 0; background: rgba(29,29,31,0.015); }
+  .case-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .case-block p { font-size: 13px; color: rgba(29,29,31,0.65); margin-bottom: 0.8em; line-height: 1.75; }
+  .case-block p:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <div style="display:flex;align-items:center;">
+        <a href="retirement-trap.html" class="mono" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(29,29,31,0.5);text-decoration:none;border:1px solid rgba(29,29,31,0.1);padding:4px 10px;">ENGLISH</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
+  <div style="margin-bottom:48px;">
+    <a href="/#log" style="text-decoration:none; color:rgba(29,29,31,0.4); font-family:'Space Mono'; font-size:10px; letter-spacing:0.3em;">← 回到日志</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;">
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.002 — SERIES 02</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-04-30</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">风险 / 保险</span>
+  </div>
+
+  <div style="position:relative;">
+    <div class="post-log-num">002</div>
+    <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
+      退休陷阱
+    </h1>
+    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:12px;">停止工作，不等于停止风险。</p>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="post-tag">职业责任险</span>
+      <span class="post-tag">尾期保险</span>
+      <span class="post-tag">建筑法</span>
+      <span class="post-tag">Lacrosse 案例</span>
+      <span class="post-tag">系列</span>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:0 32px 120px;position:relative;">
+  <div class="post-layout">
+    <article>
+      <div class="post-body">
+
+        <div class="series-note">
+          <div class="series-note-label">系列</div>
+          <div class="series-note-text">本系列第二篇，聚焦维多利亚州建筑行业的风险、保险与责任结构。<a href="risk-liability-cn.html" style="color:rgba(29,29,31,0.6);text-decoration:underline;">点此阅读第一篇。</a></div>
+        </div>
+
+        <h3>续保时没人问的那个问题</h3>
+
+        <p>
+          每一位维多利亚州建筑测量师都知道，职业责任险（PI Insurance）是注册的强制条件。但很少有人追问那个后续问题——而一旦你问了，它会改变你对整个职业生涯的思考方式：当你停止执业，你的责任会怎样？
+        </p>
+
+        <p>
+          根据《1993年建筑法》（维多利亚州）第134(1)条，答案既清晰又令人不安。10年追诉期从入住许可证（Occupancy Permit）或最终检查证书的签发之日起算 —— 而不是从你退休之日，也不是从你注销注册之日。时钟从许可证签发的那一刻开始走，它对你的职业规划漠然置之。
+        </p>
+
+        <blockquote>
+          你可以退休，可以注销注册，可以关闭公司。但你签发的许可证带来的相关责任，仍有效存续长达10年 —— 如果涉及到外墙覆层，则是15年。
+        </blockquote>
+
+        <h3>Run-off 保险的困境</h3>
+
+        <p>
+          由于职业责任险以“索赔触发制（claims-made）”为基础 —— 意味着保单必须在索赔提出时仍然有效，而不仅仅是在工程完成时 —— 一个在退休时注销保单的建筑测量师，实际上对此后发生的任何索赔都处于无保障的裸奔状态。业内的解决方案称为“Run-off Cover”（尾期保险）：一种在你停止执业后仍能响应索赔的保单，覆盖你执业年间完成的工作。
+        </p>
+
+        <p>
+          问题在于：Run-off 保险昂贵、费用难以预测，而且通常只由你停止执业时的现任承保人提供。你无法货比三家，只能接受报价，或者选择裸奔。
+        </p>
+
+        <div class="highlight-row">
+          <div class="highlight-num">1 家</div>
+          <div>尾期保险通常只能由你停止执业时的现任承保人提供。没有竞争市场，没有替代选项。</div>
+        </div>
+
+        <div class="highlight-row">
+          <div class="highlight-num">10-15 年</div>
+          <div>退休建筑测量师需要考虑维持尾期保险的最短期限 —— 涉及2019年7月至2023年12月间外墙覆层项目的，追诉期可达15年。</div>
+        </div>
+
+        <h3>Lacrosse 判决的警示</h3>
+
+        <p>
+          要理解这种风险的实际规模，有必要检视维多利亚州近年来最重要的实测案例：2014年 Lacrosse 大厦火灾及其后续诉讼。
+        </p>
+
+        <div class="case-block">
+          <div class="case-block-label">案例参考 — Lacrosse Tower</div>
+          <p>2014年11月，一场因外墙可燃铝复合板（ACP）蔓延14层的火灾席卷了 Docklands 的一栋公寓楼。项目建筑测量师为 Gardner Group Pty Ltd。</p>
+          <p>在2019年 VCAT 的裁定中，Gardner Group 被认定因签发不符合 BCA 规范的建筑许可而违反了注意义务。建筑测量师被分配承担了约1200万澳元赔偿金中的 33%（2021年上诉后调整为30%）。</p>
+          <p>更关键的是，“同行专业意见”抗辩被驳回 —— 即便某种做法在当时是行业普遍现象，也不能作为免责理由。广泛的行业误解，不构成法律上的抗辩。</p>
+        </div>
+
+        <p>
+          在那个特定案例中，Gardner Group 以公司形式运作，公司承接了责任，职业责任险进行了赔付，制度按预期运转了。
+        </p>
+
+        <p>
+          但更具警示意义的案例出现在2023年 —— 它讲述了一个截然不同的故事：当公司不再存在、无法承接冲击时，会发生什么。
+        </p>
+
+        <h3>公司关门之后：2023年的案例</h3>
+
+        <div class="case-block">
+          <div class="case-block-label">案例参考 — Shangri-La Construction [2023] VCC 1473</div>
+          <p>2023年8月宣判。这是维多利亚州政府首次根据2020年修订的《建筑法》向建筑商追讨外墙整改费用。</p>
+          <p>当案件开庭时，Shangri-La 公司已进入外部管理（实质上公司已不存在）。法院并未就此停止，而是根据《建筑法》第137F条，直接追究了董事个人的责任，判令其支付 1,190,705 澳元。</p>
+          <p>该董事辩称自己依赖了火灾工程师和建筑测量师的批准，但法院认定：其个人参与选择外墙产品已足以建立责任，无论顾问是否批准。</p>
+        </div>
+
+        <p>
+          这对建筑测量师的影响是直接的。《建筑法》2020年的修订扩大了州政府追究个人而非仅仅是公司责任的权力。关闭公司并不能消除风险，只是移除了那道缓冲。
+        </p>
+
+        <blockquote>
+          公司结构是缓冲，不是盾牌。在涉及外墙覆层的事务中，法律已经侵蚀了许多从业者以为自己拥有的保护。
+        </blockquote>
+
+        <h3>三个你需要问自己的问题</h3>
+
+        <p>
+          如果你是维多利亚州的私人建筑测量师 —— 无论你处于职业中期还是即将退休 —— 以下问题值得认真思考：
+        </p>
+
+        <p>
+          <strong>第一：</strong> 你是否知道自己签发的最后一份入住许可证日期，以及其10年窗口何时关闭？如果你在2019-2023年间签发过涉及外墙的许可，追诉期可能是15年。
+        </p>
+
+        <p>
+          <strong>第二：</strong> 如果你计划退休，是否将 Run-off 保险纳入了退出成本？尾期保费是年付的、难以预测的，且你无法与新承保人谈判。退休规划中必须包含这个大多数财务规划师从未听说过的项目。
+        </p>
+
+        <p>
+          <strong>第三：</strong> 如果你通过公司架构执业，你是否清楚法律保护在哪里终止？Shangri-La 案不是极端案例，它是法律目前运作方式的预演。
+        </p>
+
+        <h3>结构性问题</h3>
+
+        <p>
+          真正困难之处在于，目前并没有完美的解决方案。Run-off 保险虽然是正确的工具，但价格昂贵且定价往往不透明。而不购买尾期保险，则意味着个人资产将在整个追诉期内处于风险之中。
+        </p>
+
+        <p>
+          还有一个时机问题。规划这件事的理想时间点，至少是在你计划退休前10年。行业谈论了太多的入职要求，却对退出架构（Exit Architecture）谈论甚少。
+        </p>
+
+        <h3>结语</h3>
+
+        <p>
+          建筑测量师的退休陷阱并非边缘情形，而是职业生涯逐年累积签发许可证的逻辑终点。停止工作只是关掉了水龙头，但并没有排空你的风险水箱。
+        </p>
+
+        <p>
+          如果你尚未与真正了解维州建筑行业的律师或经纪人讨论过 Run-off 保险和 2020 年后的责任条款，那么现在就是开始对话的时机。
+        </p>
+
+        <p style="font-style: italic; color: rgba(29,29,31,0.5); font-size: 12px; margin-top: 40px;">
+          下篇：消费者视角 —— 家庭建筑保险对房主而言实际如何运作，以及为什么“保险存在”不等于“保险有效”。
+        </p>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+
+        <div class="disclaimer-box">
+          <div class="sidebar-label" style="margin-bottom:10px;">免责声明</div>
+          <p>本文观点仅代表作者个人，不构成法律、保险或财务建议。案例引用仅供一般讨论，不应作为法律分析依据。读者应就其具体情况寻求独立专业意见。</p>
+        </div>
+
+      </div>
+    </article>
+
+    <aside class="post-sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-label">发布日期</div>
+        <div class="sidebar-value">2026-04-30</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">分类</div>
+        <div class="sidebar-value">风险 / 保险</div>
+        <div class="sidebar-value-sub">风险与保险分析</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">系列</div>
+        <div class="sidebar-value">风险与责任架构</div>
+        <div class="sidebar-value-sub">系列之二</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">阅读时长</div>
+        <div class="sidebar-value">~ 7 分钟</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">标签</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="post-tag">Run-off</span>
+          <span class="post-tag">追诉期</span>
+          <span class="post-tag">Lacrosse</span>
+          <span class="post-tag">外墙覆层</span>
+          <span class="post-tag">退休规划</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</body>
+</html>
