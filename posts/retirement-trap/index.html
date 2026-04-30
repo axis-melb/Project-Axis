@@ -9,123 +9,210 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <style>
-  :root { --line: rgba(29,29,31,0.1); --line-dark: rgba(29,29,31,0.2); --near-black: #1d1d1f; }
-  body { font-family: 'Inter', sans-serif; background-color: #fbfbfb; color: var(--near-black); }
+  :root {
+    --near-black: rgba(29, 29, 31, 1);
+    --line: rgba(29, 29, 31, 0.1);
+    --line-dark: rgba(29, 29, 31, 0.08);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--near-black); }
   .mono { font-family: 'Space Mono', monospace; }
-  
-  /* Post Body Styling */
   .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
   .post-body p { margin-bottom: 1.6em; }
   .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
-  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2.5em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
-  
-  /* Highlight Rows */
-  .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
-  .highlight-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: var(--near-black); min-width: 100px; text-transform: uppercase; line-height: 1.2; }
-  .highlight-text { font-size: 13px; color: rgba(29,29,31,0.6); line-height: 1.6; }
-
-  /* Case Blocks */
-  .case-block { border: 1px solid var(--line-dark); padding: 24px; margin: 2.5em 0; background: rgba(29,29,31,0.01); }
-  .case-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 12px; }
-  .case-block p { font-size: 13px; color: rgba(29,29,31,0.65); margin-bottom: 1em; line-height: 1.75; }
-  .case-block p:last-child { margin-bottom: 0; }
-
-  /* Layout */
-  @media (min-width: 1024px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
-  .post-sidebar { position: sticky; top: 40px; height: fit-content; }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-body .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .post-body .highlight-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: var(--near-black); min-width: 80px; }
+  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
+  @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
+  .post-sidebar { position: sticky; top: 80px; }
   .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
-  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 8px; }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
   .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
-  
-  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -20px; z-index: -1; }
-  .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 3em; display: flex; gap: 12px; }
+  .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
+  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
+  .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
+  .series-note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.35); white-space: nowrap; padding-top: 2px; }
   .series-note-text { font-size: 12px; color: rgba(29,29,31,0.5); line-height: 1.6; }
+  .case-block { border: 1px solid var(--line-dark); padding: 20px 24px; margin: 2em 0; background: rgba(29,29,31,0.015); }
+  .case-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .case-block p { font-size: 13px; color: rgba(29,29,31,0.65); margin-bottom: 0.8em; line-height: 1.75; }
+  .case-block p:last-child { margin-bottom: 0; }
 </style>
 </head>
-<body>
+<body class="bg-white">
 
-<nav class="border-b border-[rgba(29,29,31,0.1)]">
-  <div class="max-w-[1200px] mx-auto px-8 flex items-center justify-between h-[52px]">
-    <a href="/" class="mono text-[11px] tracking-[0.35em] uppercase no-underline">PROJECT AXIS</a>
-    <!-- Language Toggle Button -->
-    <a href="/cn/retirement-trap" class="mono text-[10px] border border-[rgba(29,29,31,0.1)] px-3 py-1 text-[rgba(29,29,31,0.5)] no-underline hover:bg-black hover:text-white transition-all">CN 中文</a>
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--line)]">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <a href="https://projectaxis.com.au/posts/retirement-trap/cn/" class="mono" style="font-size:10px;border:1px solid var(--line-dark);padding:4px 12px;text-decoration:none;color:inherit;border-radius:2px;">CN 中文</a>
+    </div>
   </div>
 </nav>
 
-<header class="max-w-[1200px] mx-auto px-8 pt-24 pb-12 relative">
-  <div class="mb-12">
-    <a href="/#log" class="mono text-[10px] tracking-[0.3em] text-[rgba(29,29,31,0.4)] no-underline">← BACK TO LOG</a>
+<section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
+  <div style="margin-bottom:48px;">
+    <a href="/#log" class="mono" style="text-decoration:none; color:rgba(29,29,31,0.4); font-size:10px; letter-spacing:0.3em;">← BACK TO LOG</a>
   </div>
 
-  <div class="flex items-center gap-6 mb-8">
-    <span class="mono text-[10px] tracking-[0.35em] text-[rgba(29,29,31,0.35)]">LOG.002 — SERIES 02</span>
-    <span class="mono text-[10px] tracking-[0.25em] text-[rgba(29,29,31,0.35)]">2026-04-30</span>
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;">
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.002 — SERIES 02</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-04-30</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">RISK / INSURANCE</span>
   </div>
 
-  <div class="relative">
+  <div style="position:relative;">
     <div class="post-log-num">002</div>
-    <h1 class="text-[clamp(32px,5vw,56px)] tracking-tight font-bold leading-[1.1] max-w-[800px] uppercase">
+    <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
       The Retirement<br>Trap
     </h1>
-    <p class="text-[15px] text-[rgba(29,29,31,0.45)] mt-4 font-light">Stopping work does not equal stopping risk.</p>
+    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:12px;">Stopping work does not equal stopping risk.</p>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="post-tag">PI Insurance</span>
+      <span class="post-tag">Run-off Cover</span>
+      <span class="post-tag">Building Act</span>
+      <span class="post-tag">Lacrosse</span>
+      <span class="post-tag">Series</span>
+    </div>
   </div>
-</header>
+</section>
 
-<main class="max-w-[1200px] mx-auto px-8 pb-32">
+<section style="max-width:1200px;margin:0 auto;padding:0 32px 120px;position:relative;">
   <div class="post-layout">
     <article>
       <div class="post-body">
 
         <div class="series-note">
-          <div class="mono text-[9px] tracking-[0.3em] uppercase text-[rgba(29,29,31,0.3)] pt-1">Series</div>
-          <div class="series-note-text">Part 2 of an ongoing series on risk, insurance, and liability in Victoria's building industry.</div>
+          <div class="series-note-label">Series</div>
+          <div class="series-note-text">Part 2 of an ongoing series on risk, insurance, and liability in Victoria's building industry. <a href="/posts/risk-liability/" style="color:rgba(29,29,31,0.6);text-decoration:underline;">Read Part 1 here.</a></div>
         </div>
 
         <h3>The Question Nobody Asks at Renewal</h3>
-        <p>Every building surveyor in Victoria knows that Professional Indemnity (PI) insurance is mandatory for registration. But very few ask the follow-up question that, once you ask it, changes how you think about your entire career: what happens to your liability when you stop practising?</p>
-        
-        <p>The answer, under the Building Act 1993 (Vic) s134(1), is straightforward and uncomfortable. The 10-year limitation period runs from the date of the occupancy permit or certificate of final inspection—not from when you retire, nor when you surrender your registration. The clock starts the moment the occupancy permit was issued. <strong>That clock does not care about your career plans.</strong></p>
 
-        <blockquote>You can retire. You can surrender your registration. You can wind up your company. The permits you signed keep the liability alive for up to 10 years — or 15, if cladding is involved.</blockquote>
+        <p>
+          Every building surveyor in Victoria knows that PI insurance is mandatory for registration. But very few ask the follow-up question that, once you ask it, changes how you think about your entire career: what happens to your liability when you stop practising?
+        </p>
+
+        <p>
+          The answer, under the Building Act 1993 (Vic) s134(1), is straightforward and uncomfortable. The 10-year limitation period runs from the date of the occupancy permit or certificate of final inspection -- not from when you retire, nor when you surrender your registration. The clock starts the moment the occupancy permit was issued. That clock does not care about your career plans.
+        </p>
+
+        <blockquote>
+          You can retire. You can surrender your registration. You can wind up your company. The permits you signed keep the liability alive for up to 10 years — or 15, if cladding is involved.
+        </blockquote>
 
         <h3>The Run-off Problem</h3>
-        <p>Because PI insurance operates on a claims-made basis — meaning the policy must be active when a claim is lodged, not just when the underlying work was done — a building surveyor who cancels their policy on retirement is, in practical terms, uninsured for anything that follows. The industry term for the solution is "run-off cover".</p>
-        
-        <p>The problem is that run-off cover is expensive, its cost is unpredictable, and it is typically only offered by the insurer who held your policy at the time you ceased practice. You cannot shop around.</p>
+
+        <p>
+          Because PI insurance operates on a claims-made basis — meaning the policy must be active when a claim is lodged, not just when the underlying work was done — a building surveyor who cancels their policy on retirement is, in practical terms, uninsured for anything that follows. The industry term for the solution is "run-off cover": a policy that continues to respond to claims made after you cease practice, covering work done during your active years.
+        </p>
+
+        <p>
+          The problem is that run-off cover is expensive, its cost is unpredictable, and it is typically only offered by the insurer who held your policy at the time you ceased practice. You cannot shop around. You take what is offered, or you go without.
+        </p>
 
         <div class="highlight-row">
-          <div class="highlight-num">1<br>INSURER</div>
-          <div class="highlight-text">Run-off cover is typically only available from the insurer in place at the time you cease practice. No competitive market. No alternatives.</div>
+          <div class="highlight-num">1 INSURER</div>
+          <div>Run-off cover is typically only available from the insurer in place at the time you cease practice. No competitive market. No alternatives.</div>
         </div>
 
         <div class="highlight-row">
-          <div class="highlight-num">10-15 YR<br>TAIL</div>
-          <div class="highlight-text">The minimum period a retiring building surveyor needs to consider maintaining run-off cover—rising to 15 years for cladding projects issued between 2019 and 2023.</div>
+          <div class="highlight-num">10-15 YR TAIL</div>
+          <div>The minimum period a retiring building surveyor needs to consider maintaining run-off cover — rising to 10-15 years for any project involving cladding issued between July 2019 and December 2023.</div>
         </div>
 
         <h3>The Lacrosse Precedent</h3>
-        <p>To understand what is actually at stake, it is worth examining how building surveyor liability played out in the most significant tested case in Victoria's recent history: the Lacrosse Tower fire of 2014.</p>
+
+        <p>
+          To understand what is actually at stake, it is worth examining how building surveyor liability played out in the most significant tested case in Victoria's recent history: the Lacrosse Tower fire of 2014, and the litigation that followed.
+        </p>
 
         <div class="case-block">
           <div class="case-block-label">Case Reference — Lacrosse Tower</div>
-          <p>In November 2014, a fire spread rapidly up 14 storeys of a Docklands apartment building due to combustible cladding. The building surveyor on the project was Gardner Group Pty Ltd.</p>
-          <p>In the 2019 VCAT decision, Gardner Group was found to have breached its duty of care by issuing a building permit that approved a non-compliant cladding specification. The building surveyor was apportioned 33% of approximately $12 million in damages.</p>
-          <p>Critically, the "peer professional opinion" defence—the argument that the building surveyor relied on what was then widely accepted industry practice—was rejected. Widespread professional misunderstanding is not a defence.</p>
+          <p>In November 2014, a fire spread rapidly up 14 storeys of a Docklands apartment building due to combustible aluminium composite panels (ACPs) on the facade. The building surveyor on the project was Gardner Group Pty Ltd.</p>
+          <p>In the 2019 VCAT decision, Gardner Group was found to have breached its duty of care by issuing a building permit that approved a non-BCA-compliant cladding specification. The building surveyor was apportioned 33% of approximately $12 million in damages — subsequently adjusted to 30% on appeal in 2021.</p>
+          <p>Critically, the "peer professional opinion" defence — the argument that the building surveyor relied on what was then widely accepted industry practice — was rejected. Widespread professional misunderstanding, VCAT held, is not a defence.</p>
         </div>
 
-        <h3>When the Company Closes</h3>
-        <p>Gardner Group operated as a company, which provided a layer of structural protection. But recent cases show what happens when the company is no longer there to absorb the hit.</p>
+        <p>
+          Gardner Group operated as a company, which provided a layer of structural protection for its individual practitioners. The company absorbed the liability; its PI insurer paid. That is the system working as intended — in that particular case.
+        </p>
+
+        <p>
+          But the more instructive case arrived in 2023 — and it tells a very different story about what happens when the company is no longer there to absorb the hit.
+        </p>
+
+        <h3>When the Company Closes: The 2023 Case</h3>
 
         <div class="case-block">
-          <div class="case-block-label">Case Reference — Shangri-La Construction [2023]</div>
-          <p>By the time the case was heard, the construction company had entered external administration. The court did not stop there. Proceedings were brought against the director in his personal capacity under Building Act 1993 s137F.</p>
-          <p>The implication for building surveyors is direct. The 2020 amendments to the Building Act expanded the State's ability to pursue individuals—not just companies. Closing a company does not extinguish the risk. It simply removes the buffer.</p>
+          <div class="case-block-label">Case Reference — Shangri-La Construction [2023] VCC 1473</div>
+          <p>Owners Corporation 1 Plan No PS 707553K and Ors v Shangri-La Construction Pty Ltd and Anor [2023] VCC 1473, handed down August 2023. The first decision in which the State of Victoria claimed against a builder for cladding rectification costs under the 2020 amendments to the Building Act 1993.</p>
+          <p>By the time the case was heard, Shangri-La Construction Pty Ltd had entered external administration — effectively, the company was gone. The court did not stop there. Proceedings were brought against the director, Mr Neqebullah, in his personal capacity under Building Act 1993 s137F. He was ordered to pay the State $1,190,705.</p>
+          <p>His defence — that he had relied on approvals from the fire engineer and building surveyor — did not succeed. The court held that his personal involvement in selecting the cladding product was sufficient to establish liability, regardless of what the consultants had approved.</p>
         </div>
 
-        <blockquote>The corporate structure is a buffer, not a shield. In cladding matters specifically, statute has already eroded the protection that many practitioners assume they have.</blockquote>
+        <p>
+          The implication for building surveyors is direct. The 2020 amendments to the Building Act expanded the State's ability to pursue individuals — not just companies — for cladding-related liability. Closing a company does not extinguish the risk. It simply removes the buffer.
+        </p>
+
+        <blockquote>
+          The corporate structure is a buffer, not a shield. In cladding matters specifically, statute has already eroded the protection that many practitioners assume they have.
+        </blockquote>
+
+        <h3>Three Questions to Ask Yourself</h3>
+
+        <p>
+          This is not intended as a comprehensive risk assessment. But if you are a private building surveyor in Victoria — whether you are mid-career, approaching retirement, or already winding down — the following questions are worth sitting with.
+        </p>
+
+        <p>
+          <strong>First:</strong> Do you know the last occupancy permit you signed, and when the 10-year window on that permit closes? If you signed permits in the 2019–2023 window involving any form of external cladding, the relevant limitation period may be 15 years, not 10.
+        </p>
+
+        <p>
+          <strong>Second:</strong> If you plan to retire, have you factored run-off cover into your exit costs? Run-off premiums are annual, unpredictable, and captive — you cannot renegotiate with a new insurer once your active policy lapses. The financial planning for retirement needs to include a line item that most financial planners have never heard of.
+        </p>
+
+        <p>
+          <strong>Third:</strong> If you operate through a company structure, do you understand where the corporate protection ends — particularly in the context of cladding-related liability under the post-2020 amendments to the Building Act? The Shangri-La case is not an edge case. It is a preview of how the statute now operates.
+        </p>
+
+        <h3>The Structural Problem</h3>
+
+        <p>
+          What makes this genuinely difficult is that there is no clean solution. Run-off cover is the right instrument, but it is expensive, its pricing is often opaque, and if a claim is made during the run-off period, future premiums typically increase — for a policy you are already locked into buying. The alternative — not carrying run-off cover — exposes personal assets for the full duration of the limitation period.
+        </p>
+
+        <p>
+          There is also a timing problem. The ideal moment to plan for this is at least 10 years before you intend to retire — which means having a conversation that most practitioners in their forties and fifties have not yet had, and that most professional development frameworks do not prompt. The industry talks a great deal about entry requirements. It talks very little about exit architecture.
+        </p>
+
+        <blockquote>
+          The industry talks a great deal about entry requirements. It talks very little about exit architecture.
+        </blockquote>
 
         <h3>Conclusion</h3>
-        <p>The retirement trap for building surveyors is not a fringe scenario. It is the logical endpoint of a career-long accumulation of signed permits, each carrying its own liability window. Stopping work closes the tap. It does not drain the tank.</p>
+
+        <p>
+          The retirement trap for building surveyors is not a fringe scenario. It is the logical endpoint of a career-long accumulation of signed permits, each carrying its own liability window, each requiring active insurance coverage to respond if a claim is ever made. Stopping work closes the tap. It does not drain the tank.
+        </p>
+
+        <p>
+          If you are a private building surveyor and you have never had a conversation specifically about run-off cover, exit timing, and the post-2020 cladding liability provisions — this is the prompt to have it. Not with this post. With a lawyer and an insurance broker who understand the Victorian building sector.
+        </p>
+
+        <p style="font-style: italic; color: rgba(29,29,31,0.5); font-size: 12px; margin-top: 40px;">
+          Next in this series: The Consumer Side — how Domestic Building Insurance actually works for homeowners, what changed when BPC took over in 2025, and why "insurance exists" is not the same as "insurance works."
+        </p>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+
+        <div class="disclaimer-box">
+          <div class="sidebar-label" style="margin-bottom:10px;">DISCLAIMER</div>
+          <p>The views expressed are solely those of the author in a personal capacity. This does not constitute legal, insurance, or financial advice. Case references are summarised for general discussion purposes and should not be relied upon as legal analysis. Readers should seek independent professional advice regarding their specific circumstances.</p>
+        </div>
 
       </div>
     </article>
@@ -133,20 +220,39 @@
     <aside class="post-sidebar">
       <div class="sidebar-block">
         <div class="sidebar-label">PUBLISHED</div>
-        <div class="sidebar-value">APRIL 30, 2026</div>
+        <div class="sidebar-value">2026-04-30</div>
       </div>
       <div class="sidebar-block">
         <div class="sidebar-label">CATEGORY</div>
         <div class="sidebar-value">RISK / INSURANCE</div>
+        <div class="sidebar-value-sub">Risk & insurance analysis</div>
       </div>
       <div class="sidebar-block">
-        <div class="sidebar-label">LEGAL REFERENCE</div>
-        <div class="sidebar-value">Building Act 1993 (Vic)</div>
-        <div class="text-[11px] text-[rgba(29,29,31,0.4)] mt-1">Section 134 & 137F</div>
+        <div class="sidebar-label">SERIES</div>
+        <div class="sidebar-value">Risk & Liability Architecture</div>
+        <div class="sidebar-value-sub">Entry 02 of ongoing</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">READ TIME</div>
+        <div class="sidebar-value">~ 7 MIN</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">CASES REFERENCED</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.6;">Lacrosse Tower [2019] VCAT 286<br>Tanah Merah v Owners Corp [2021] VSCA 122<br>Shangri-La Construction [2023] VCC 1473</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">TAGS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="post-tag">Run-off</span>
+          <span class="post-tag">s134</span>
+          <span class="post-tag">Lacrosse</span>
+          <span class="post-tag">Cladding</span>
+          <span class="post-tag">Retirement</span>
+        </div>
       </div>
     </aside>
   </div>
-</main>
+</section>
 
 </body>
 </html>
