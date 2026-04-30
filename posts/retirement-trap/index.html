@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Retirement Trap — PROJECT AXIS</title>
+<title>Risk & Liability Architecture — PROJECT AXIS</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,7 +12,6 @@
 <style>
   .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
   .post-body p { margin-bottom: 1.6em; }
-  .post-body p.zh { font-size: 13px; color: rgba(29,29,31,0.45); margin-top: -1em; margin-bottom: 1.8em; line-height: 1.9; }
   .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
   .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
   .post-body .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
@@ -30,10 +29,6 @@
   .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
   .series-note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.35); white-space: nowrap; padding-top: 2px; }
   .series-note-text { font-size: 12px; color: rgba(29,29,31,0.5); line-height: 1.6; }
-  .case-block { border: 1px solid var(--line-dark); padding: 20px 24px; margin: 2em 0; background: rgba(29,29,31,0.015); }
-  .case-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
-  .case-block p { font-size: 13px; color: rgba(29,29,31,0.65); margin-bottom: 0.8em; line-height: 1.75; }
-  .case-block p:last-child { margin-bottom: 0; }
 </style>
 </head>
 <body>
@@ -42,6 +37,9 @@
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
     <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
       <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <div style="display:flex;align-items:center;">
+        <a href="https://projectaxis.com.au/posts/risk-liability/cn/" class="mono" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(29,29,31,0.5);text-decoration:none;border:1px solid rgba(29,29,31,0.1);padding:4px 10px;">CN</a>
+      </div>
     </div>
   </div>
 </nav>
@@ -52,22 +50,20 @@
   </div>
 
   <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;">
-    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.002 — SERIES 02</span>
-    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-04-30</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.002</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-04-29</span>
     <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">RISK / INSURANCE</span>
   </div>
 
   <div style="position:relative;">
     <div class="post-log-num">002</div>
     <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
-      The Retirement<br>Trap
+      Risk &amp; Liability<br>Architecture
     </h1>
-    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:12px;">退休陷阱 / 停止工作，不等于停止风险。</p>
     <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
       <span class="post-tag">PI Insurance</span>
-      <span class="post-tag">Run-off Cover</span>
       <span class="post-tag">Building Act</span>
-      <span class="post-tag">Lacrosse</span>
+      <span class="post-tag">Risk</span>
       <span class="post-tag">Series</span>
     </div>
   </div>
@@ -79,191 +75,103 @@
       <div class="post-body">
 
         <div class="series-note">
-          <div class="series-note-label">Series / 系列</div>
-          <div class="series-note-text">Part 2 of an ongoing series on risk, insurance, and liability in Victoria's building industry. <a href="/posts/risk-liability/" style="color:rgba(29,29,31,0.6);text-decoration:underline;">Read Part 1 here.</a><br><span style="color:rgba(29,29,31,0.3);">本系列第二篇，聚焦维多利亚州建筑行业的风险、保险与责任结构。</span></div>
+          <div class="series-note-label">Series</div>
+          <div class="series-note-text">This is the opening entry of an ongoing series examining professional risk, insurance architecture, and liability structures in Victoria's building industry — and what a cross-border lens reveals about them.</div>
         </div>
 
-        <h3>The Question Nobody Asks at Renewal / 续保时没人问的那个问题</h3>
+        <h3>Why This Series Exists</h3>
 
         <p>
-          Every building surveyor in Victoria knows that PI insurance is mandatory for registration. But very few ask the follow-up question that, once you ask it, changes how you think about your entire career: what happens to your liability when you stop practising?
-        </p>
-        <p class="zh">
-          每一位维州建筑测量师都知道，职业责任险是注册的强制条件。但很少有人追问那个后续问题——而一旦你问了，它会改变你对整个职业生涯的思考方式：当你停止执业，你的责任会怎样？
+          My background is in commerce. Before becoming a registered building surveyor in Victoria, I spent time in financial services — and I hold a Comprehensive IA licence (Types 1-5) issued by the Insurance Authority of Hong Kong. I didn't plan for these two careers to intersect. But they do, in ways that are difficult to unsee once you've noticed them.
         </p>
 
         <p>
-          The answer, under the Building Act 1993 (Vic) s134(1), is straightforward and uncomfortable. The 10-year limitation period runs from the date of the occupancy permit or certificate of final inspection -- not from when you retire, nor when you surrender your registration. The clock starts the moment the occupancy permit was issued. That clock does not care about your career plans.
+          As a registered Building Surveyor, I sit down every year to renew my professional indemnity insurance. Every year, the form asks me to quantify the risk I carry — the projects I've touched, the permits I've signed, the inspections I've conducted. And every year, I find myself thinking less like a building surveyor and more like someone trained to read insurance products critically: what is this instrument actually covering, and what happens when it's tested?
         </p>
-        <p class="zh">
-          根据《1993年建筑法》第134(1)条，答案既清晰又令人不安。10年追诉期从入住许可证或最终检查证书的签发之日起算。不是从你退休之日，也不是从你注销注册之日——而是从许可证签发之日。那个时钟，对你的职业规划漠然置之。
+
+        <p>
+          That question — the gap between what insurance appears to cover and what it actually does — is what this series is about. Not as a legal treatise. Not as financial advice. But as a practitioner's field notes from someone positioned, by accident of career, to read the fine print from both sides.
+        </p>
+
+        <h3>The Instrument Nobody Reads</h3>
+
+        <p>
+          Professional indemnity insurance in Victoria is mandatory for registered building surveyors. No policy, no registration. No registration, no practice. That much everyone knows. What is less understood is how the policy actually works — specifically, that it operates on a <em>claims-made</em> basis.
         </p>
 
         <blockquote>
-          You can retire. You can surrender your registration. You can wind up your company. The permits you signed keep the liability alive for up to 10 years — or 15, if cladding is involved.
-          <br><br>
-          <span style="font-size:12px;font-style:normal;color:rgba(29,29,31,0.4);">你可以退休，可以注销注册，可以关闭公司。但你签发的许可证带来的相关责任，仍有效存续长达10年——如果涉及到外墙覆层，则是15年。</span>
+          A claims-made policy only responds to claims lodged while the policy is active, regardless of when the work was performed; it is triggered specifically when the claim is made.
         </blockquote>
 
-        <h3>The Run-off Problem / Run-off保险的困境</h3>
-
         <p>
-          Because PI insurance operates on a claims-made basis — meaning the policy must be active when a claim is lodged, not just when the underlying work was done — a building surveyor who cancels their policy on retirement is, in practical terms, uninsured for anything that follows. The industry term for the solution is "run-off cover": a policy that continues to respond to claims made after you cease practice, covering work done during your active years.
-        </p>
-        <p class="zh">
-          由于职业责任险以"索赔触发制"为基础——即保单必须在索赔提出时仍然有效，而不仅仅是在工程完成时——一个在退休时注销责任险保单的建筑测量师，实际上对此后发生的任何索赔都处于无保障的裸奔状态。业内的解决方案称为"run-off cover"（尾期保险）：一种在你停止执业后仍能响应索赔的保单，覆盖你实际执业年间所完成的工作。
+          The distinction sounds technical. But it isn't: It means that the umbrella you carry today only protects you if it's still open when the rain starts falling. And in this industry, the rain can arrive years after you've walked away from the project.
         </p>
 
+        <h3>Section 134: The Clock You Can't Stop</h3>
+
         <p>
-          The problem is that run-off cover is expensive, its cost is unpredictable, and it is typically only offered by the insurer who held your policy at the time you ceased practice. You cannot shop around. You take what is offered, or you go without.
+          Under the Building Act 1993 (Vic), s134(1) sets a 10-year limitation period for building actions, running from the date the occupancy permit or certificate of final inspection is issued. That is the statutory trigger. Not when defects appear. Not when a dispute is raised. The clock starts the moment the permit is signed.
         </p>
-        <p class="zh">
-          问题在于：run-off保险昂贵、费用难以预测，而且通常只由你停止执业时的现任承保人提供。你无法货比三家。要么接受报价，要么裸奔。
+
+        <p>
+          For building surveyors, this creates an exposure profile unlike most professions. Every occupancy permit you sign opens a 10-year window of potential liability. Sign 30 permits a year for 20 years, and at any given moment you are carrying overlapping liability windows stretching back through most of your career.
         </p>
 
         <div class="highlight-row">
-          <div class="highlight-num">1 INSURER</div>
-          <div>Run-off cover is typically only available from the insurer in place at the time you cease practice. No competitive market. No alternatives.<br><span style="color:rgba(29,29,31,0.35);font-size:12px;">尾期保险通常只能由你停止执业时的现任承保人提供。没有竞争市场，没有替代选项。</span></div>
+          <div class="highlight-num">10 YR</div>
+          <div>Standard statutory limitation period under s134(1), Building Act 1993 (Vic). Triggered from the date of issue of the occupancy permit or certificate of final inspection — not from when a defect is discovered.</div>
         </div>
 
         <div class="highlight-row">
-          <div class="highlight-num">10-15 YR TAIL</div>
-          <div>The minimum period a retiring building surveyor needs to consider maintaining run-off cover — rising to 10-15 years for any project involving cladding issued between July 2019 and December 2023.<br><span style="color:rgba(29,29,31,0.35);font-size:12px;">退休建筑测量师需要考虑维持尾期保险的最短期限——涉及2019年7月至2023年12月间外墙覆层项目的，则需15年。</span></div>
+          <div class="highlight-num">15 YR</div>
+          <div>Extended limitation period for cladding-related defects, applying to permits issued between 16 July 2019 and 1 December 2023. The cladding crisis didn't just raise premiums — it lengthened the tail for an entire generation of permits.</div>
         </div>
 
-        <h3>The Lacrosse Precedent / Lacrosse判决的警示</h3>
+        <h3>The Catch-22 of Risk Assessment</h3>
 
         <p>
-          To understand what is actually at stake, it is worth examining how building surveyor liability played out in the most significant tested case in Victoria's recent history: the Lacrosse Tower fire of 2014, and the litigation that followed.
-        </p>
-        <p class="zh">
-          要理解这种风险的实际规模，有必要检视维多利亚州近年来最重要的实测案例：2014年Lacrosse大厦火灾及其后续诉讼。
-        </p>
-
-        <div class="case-block">
-          <div class="case-block-label">Case Reference / 案例参考 — Lacrosse Tower</div>
-          <p>In November 2014, a fire spread rapidly up 14 storeys of a Docklands apartment building due to combustible aluminium composite panels (ACPs) on the facade. The building surveyor on the project was Gardner Group Pty Ltd.</p>
-          <p>In the 2019 VCAT decision, Gardner Group was found to have breached its duty of care by issuing a building permit that approved a non-BCA-compliant cladding specification. The building surveyor was apportioned 33% of approximately $12 million in damages — subsequently adjusted to 30% on appeal in 2021.</p>
-          <p>Critically, the "peer professional opinion" defence — the argument that the building surveyor relied on what was then widely accepted industry practice — was rejected. Widespread professional misunderstanding, VCAT held, is not a defence.</p>
-          <p style="color:rgba(29,29,31,0.35);">2014年11月，一场因外墙可燃铝复合板（ACP）蔓延14层的火灾席卷Docklands一栋公寓楼。项目建筑测量师为Gardner Group Pty Ltd。2019年VCAT裁定，Gardner Group因签发不符合BCA规范的建筑许可而违反注意义务，被分配约1200万澳元损失中的33%责任（2021年上诉后调整为30%）。关键在于，"同行专业意见"抗辩被驳回——广泛的行业误解，不构成免责理由。</p>
-        </div>
-
-        <p>
-          Gardner Group operated as a company, which provided a layer of structural protection for its individual practitioners. The company absorbed the liability; its PI insurer paid. That is the system working as intended — in that particular case.
-        </p>
-        <p class="zh">
-          Gardner Group以公司形式运作，这为其个人从业者提供了一层结构性保护。公司承接了责任，职业责任险承保人进行了赔付。在那个特定案例中，制度按预期运转了。
-        </p>
-
-        <p>
-          But the more instructive case arrived in 2023 — and it tells a very different story about what happens when the company is no longer there to absorb the hit.
-        </p>
-        <p class="zh">
-          但更具警示意义的案例出现在2023年——它讲述了一个截然不同的故事：当公司不再存在、无法承接冲击时，会发生什么。
-        </p>
-
-        <h3>When the Company Closes: The 2023 Case / 公司关门之后：2023年的案例</h3>
-
-        <div class="case-block">
-          <div class="case-block-label">Case Reference / 案例参考 — Shangri-La Construction [2023] VCC 1473</div>
-          <p>Owners Corporation 1 Plan No PS 707553K and Ors v Shangri-La Construction Pty Ltd and Anor [2023] VCC 1473, handed down August 2023. The first decision in which the State of Victoria claimed against a builder for cladding rectification costs under the 2020 amendments to the Building Act 1993.</p>
-          <p>By the time the case was heard, Shangri-La Construction Pty Ltd had entered external administration — effectively, the company was gone. The court did not stop there. Proceedings were brought against the director, Mr Neqebullah, in his personal capacity under Building Act 1993 s137F. He was ordered to pay the State $1,190,705.</p>
-          <p>His defence — that he had relied on approvals from the fire engineer and building surveyor — did not succeed. The court held that his personal involvement in selecting the cladding product was sufficient to establish liability, regardless of what the consultants had approved.</p>
-          <p style="color:rgba(29,29,31,0.35);">Shangri-La Construction进入外部管理（实质上公司已关闭）后，诉讼直接指向其董事个人，依据《建筑法》第137F条判令支付$1,190,705。他辩称依赖了火灾工程师和建筑测量师的批准，但法院认定，其个人参与选择外墙产品已足以建立责任。</p>
-        </div>
-
-        <p>
-          The implication for building surveyors is direct. The 2020 amendments to the Building Act expanded the State's ability to pursue individuals — not just companies — for cladding-related liability. Closing a company does not extinguish the risk. It simply removes the buffer.
-        </p>
-        <p class="zh">
-          这对建筑测量师的影响是直接的。《建筑法》2020年修订扩大了州政府追究个人责任的权力——不仅仅是公司。关闭一家公司，并不能消除风险，只是移除了那道缓冲。
+          Renewal time surfaces something that, once you see it, you cannot unsee. The underwriter needs to assess your risk. Your risk is assessed by looking at how long you've practised and what you've worked on. If you're experienced, your historical exposure is large. If you're junior, your competence profile raises flags. There is no configuration that presents as low-risk.
         </p>
 
         <blockquote>
-          The corporate structure is a buffer, not a shield. In cladding matters specifically, statute has already eroded the protection that many practitioners assume they have.
-          <br><br>
-          <span style="font-size:12px;font-style:normal;color:rgba(29,29,31,0.4);">公司结构是缓冲，不是盾牌。在外墙覆层相关事项中，法规已经侵蚀了许多从业者以为自己拥有的保护。</span>
+          The underwriter is not pricing your skill. They are pricing your exposure. These are not the same thing.
         </blockquote>
 
-        <h3>Three Questions to Ask Yourself / 三个你需要问自己的问题</h3>
-
         <p>
-          This is not intended as a comprehensive risk assessment. But if you are a private building surveyor in Victoria — whether you are mid-career, approaching retirement, or already winding down — the following questions are worth sitting with.
-        </p>
-        <p class="zh">
-          这不是一份完整的风险评估。但如果你是维州的私人建筑测量师——无论你处于职业中期、即将退休，还是已经在收尾阶段——以下问题值得认真思考。
+          This is where a background in commerce becomes less a credential and more a diagnostic tool. When I look at the PI renewal form, I don't just see a compliance requirement. I see a risk pricing mechanism — one that is structurally indifferent to whether the practitioner is good at their job.
         </p>
 
+        <h3>What This Series Will Cover</h3>
+
         <p>
-          <strong>First:</strong> Do you know the last occupancy permit you signed, and when the 10-year window on that permit closes? If you signed permits in the 2019–2023 window involving any form of external cladding, the relevant limitation period may be 15 years, not 10.
-        </p>
-        <p class="zh">
-          <strong>第一：</strong>你是否知道自己签发的最后一份入住许可证，以及那份许可证的10年窗口何时关闭？如果你在2019至2023年间签发了任何涉及外墙覆层的许可证，相关追诉期可能是15年，而非10年。
+          Over the coming entries, I'll be working through several connected questions: What does PI insurance actually cover when tested in court — and what does it not? What happens to a building surveyor's liability exposure at retirement, and why "stopping work" is not the same as "stopping risk"? How does Victoria's Domestic Building Insurance model compare to what existed before the BPC reforms of 2025 — and what changed for consumers? And finally, what does Hong Kong's insurance culture reveal, by contrast, about how differently risk can be distributed when it is made visible to the public rather than embedded in institutional mandates?
         </p>
 
         <p>
-          <strong>Second:</strong> If you plan to retire, have you factored run-off cover into your exit costs? Run-off premiums are annual, unpredictable, and captive — you cannot renegotiate with a new insurer once your active policy lapses. The financial planning for retirement needs to include a line item that most financial planners have never heard of.
+          These aren't abstract questions. They are questions that affect every private building surveyor practising in Victoria today.
         </p>
-        <p class="zh">
-          <strong>第二：</strong>如果你计划退休，你是否将run-off保险纳入了退出成本的规划？尾期保费是年付的、难以预测的、而且被动绑定——一旦你的主动保单失效，你就无法与新承保人重新谈判。退休的财务规划，需要包含一个大多数财务规划师从未听说过的成本项目。
-        </p>
+
+        <h3>Conclusion</h3>
 
         <p>
-          <strong>Third:</strong> If you operate through a company structure, do you understand where the corporate protection ends — particularly in the context of cladding-related liability under the post-2020 amendments to the Building Act? The Shangri-La case is not an edge case. It is a preview of how the statute now operates.
-        </p>
-        <p class="zh">
-          <strong>第三：</strong>如果你通过公司架构执业，你是否清楚公司保护在哪里终止——尤其是在《建筑法》2020年修订后，外墙覆层相关责任的语境下？Shangri-La案不是边缘情形，它是那部法规目前运作方式的预演。
+          The umbrella analogy is useful but incomplete. A PI policy isn't just an umbrella — it's an umbrella with an expiry date, a set of exclusions you need a magnifying glass to read, and a mechanism that only activates when someone decides to stand in front of you in court and call it rain. Most practitioners carry it because they have to. Very few have tested what happens when it's actually opened.
         </p>
 
-        <h3>The Structural Problem / 结构性问题</h3>
-
-        <p>
-          What makes this genuinely difficult is that there is no clean solution. Run-off cover is the right instrument, but it is expensive, its pricing is often opaque, and if a claim is made during the run-off period, future premiums typically increase — for a policy you are already locked into buying. The alternative — not carrying run-off cover — exposes personal assets for the full duration of the limitation period.
-        </p>
-        <p class="zh">
-          真正困难之处在于，没有简洁的解决方案。Run-off保险是正确的工具，但价格昂贵、定价不透明，而且如果在尾期期间发生索赔，未来保费通常会上涨——而你已经被锁定在必须购买这份保险的处境中。替代方案——不购买run-off保险——则意味着在整个追诉期内，个人资产处于裸奔状态。
-        </p>
-
-        <p>
-          There is also a timing problem. The ideal moment to plan for this is at least 10 years before you intend to retire — which means having a conversation that most practitioners in their forties and fifties have not yet had, and that most professional development frameworks do not prompt. The industry talks a great deal about entry requirements. It talks very little about exit architecture.
-        </p>
-        <p class="zh">
-          还有一个时机问题。规划这件事的理想时间点，至少是在你计划退休前10年——这意味着需要进行一场大多数四五十岁从业者尚未开始、大多数职业发展框架也不会触发的对话。行业对入职要求谈论甚多，对退出架构却几乎只字不提。
-        </p>
-
-        <blockquote>
-          The industry talks a great deal about entry requirements. It talks very little about exit architecture.
-          <br><br>
-          <span style="font-size:12px;font-style:normal;color:rgba(29,29,31,0.4);">行业对入职要求谈论甚多，对退出架构却几乎只字不提。</span>
-        </blockquote>
-
-        <h3>Conclusion / 结语</h3>
-
-        <p>
-          The retirement trap for building surveyors is not a fringe scenario. It is the logical endpoint of a career-long accumulation of signed permits, each carrying its own liability window, each requiring active insurance coverage to respond if a claim is ever made. Stopping work closes the tap. It does not drain the tank.
-        </p>
-        <p class="zh">
-          建筑测量师的退休陷阱，并非边缘情形。它是职业生涯中逐年累积签发的许可证的逻辑终点——每一份许可证都携带着自己的责任窗口，每一个窗口都需要有效的保险覆盖才能响应潜在的索赔。停止工作，关掉了水龙头，但并没有排空水箱。
-        </p>
-
-        <p>
-          If you are a private building surveyor and you have never had a conversation specifically about run-off cover, exit timing, and the post-2020 cladding liability provisions — this is the prompt to have it. Not with this post. With a lawyer and an insurance broker who understand the Victorian building sector.
-        </p>
-        <p class="zh">
-          如果你是一名私人建筑测量师，从未专门讨论过run-off保险、退出时机以及2020年后的外墙责任条款——这篇文章是那场对话的起点。但那场对话，需要与真正了解维州建筑行业的律师和保险经纪人来进行，而不是在这里。
-        </p>
-
-        <p style="font-style: italic; color: rgba(29,29,31,0.5); font-size: 12px; margin-top: 40px;">
-          Next in this series: The Consumer Side — how Domestic Building Insurance actually works for homeowners, what changed when BPC took over in 2025, and why "insurance exists" is not the same as "insurance works."
-          <br>下一篇：消费者视角——家庭建筑保险对房主而言实际如何运作，2025年BPC接管后发生了什么，以及为什么"保险存在"不等于"保险有效"。
-        </p>
+       <div style="margin-top:40px;border:1px solid var(--line-dark);padding:20px 24px;display:flex;align-items:flex-start;gap:20px;">
+          <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(29,29,31,0.3);white-space:nowrap;padding-top:3px;">NEXT</div>
+          <div>
+            <a href="retirement-trap.html" style="text-decoration:none;color:inherit;">
+              <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:6px;">The Retirement Trap →</div>
+              <div style="font-size:12px;color:rgba(29,29,31,0.5);line-height:1.65;">Stopping work doesn't stop the clock. Run-off cover, s134, and what the 2023 Shangri-La case means for every practitioner planning to retire.</div>
+            </a>
+          </div>
+        </div>
 
         <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
 
         <div class="disclaimer-box">
-          <div class="sidebar-label" style="margin-bottom:10px;">DISCLAIMER / 免责声明</div>
-          <p>The views expressed are solely those of the author in a personal capacity. This does not constitute legal, insurance, or financial advice. Case references are summarised for general discussion purposes and should not be relied upon as legal analysis. Readers should seek independent professional advice regarding their specific circumstances.</p>
-          <p>本文观点仅代表作者个人，不构成法律、保险或财务建议。案例引用仅供一般讨论目的，不应作为法律分析依据。读者应就其具体情况寻求独立专业意见。</p>
+          <div class="sidebar-label" style="margin-bottom:10px;">DISCLAIMER</div>
+          <p>The views expressed are solely those of the author in a personal capacity. This does not constitute legal, insurance, or financial advice. References to legislation are general in nature and should not be relied upon as legal interpretation.</p>
         </div>
 
       </div>
@@ -271,35 +179,29 @@
 
     <aside class="post-sidebar">
       <div class="sidebar-block">
-        <div class="sidebar-label">PUBLISHED / 发布日期</div>
-        <div class="sidebar-value">2026-04-30</div>
+        <div class="sidebar-label">PUBLISHED</div>
+        <div class="sidebar-value">2026-04-29</div>
       </div>
       <div class="sidebar-block">
-        <div class="sidebar-label">CATEGORY / 分类</div>
+        <div class="sidebar-label">CATEGORY</div>
         <div class="sidebar-value">RISK / INSURANCE</div>
-        <div class="sidebar-value-sub">风险与保险分析</div>
       </div>
       <div class="sidebar-block">
-        <div class="sidebar-label">SERIES / 系列</div>
+        <div class="sidebar-label">SERIES</div>
         <div class="sidebar-value">Risk & Liability Architecture</div>
-        <div class="sidebar-value-sub">Entry 02 of ongoing / 系列第二篇</div>
+        <div class="sidebar-value-sub">Entry 01 of ongoing</div>
       </div>
       <div class="sidebar-block">
-        <div class="sidebar-label">READ TIME / 阅读时长</div>
-        <div class="sidebar-value">~ 7 MIN</div>
+        <div class="sidebar-label">READ TIME</div>
+        <div class="sidebar-value">~ 6 MIN</div>
       </div>
       <div class="sidebar-block">
-        <div class="sidebar-label">CASES REFERENCED / 参考案例</div>
-        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.6;">Lacrosse Tower [2019] VCAT 286<br>Tanah Merah v Owners Corp [2021] VSCA 122<br>Shangri-La Construction [2023] VCC 1473</div>
-      </div>
-      <div class="sidebar-block">
-        <div class="sidebar-label">TAGS / 标签</div>
+        <div class="sidebar-label">TAGS</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
-          <span class="post-tag">Run-off</span>
+          <span class="post-tag">PI Insurance</span>
           <span class="post-tag">s134</span>
-          <span class="post-tag">Lacrosse</span>
-          <span class="post-tag">Cladding</span>
-          <span class="post-tag">Retirement</span>
+          <span class="post-tag">Building Act</span>
+          <span class="post-tag">Risk</span>
         </div>
       </div>
     </aside>
