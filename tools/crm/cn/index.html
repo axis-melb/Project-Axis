@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HKCRM · 工具 001 — Project Axis</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f4f2;
+    --fg: #111110;
+    --muted: #5a5856;
+    --border: #d8d6d2;
+    --black: #111110;
+    --mono: 'Space Mono', monospace;
+    --body: 'Noto Sans SC', 'Inter', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-weight: 300;
+    line-height: 1.7;
+    font-size: 14px;
+    overflow-x: hidden;
+  }
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    z-index: 100;
+  }
+  .mono { font-family: var(--mono); }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .section-label:hover { color: var(--fg); }
+  .desktop-nav { display: flex; gap: 32px; align-items: center; }
+
+  /* LANGUAGE SWITCH */
+  .lang-switch {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 5px 12px;
+    border: 1px solid var(--fg);
+    color: var(--fg);
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .lang-switch:hover {
+    background: var(--fg);
+    color: var(--bg);
+  }
+
+  .back-bar {
+    margin-top: 52px;
+    padding: 16px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .back-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--fg); }
+  .back-sep { color: var(--border); font-size: 10px; }
+  .back-current {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+
+  .hero {
+    padding: 72px 40px 56px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: end;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    font-family: var(--mono);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .hero-sub {
+    font-size: 14px;
+    color: var(--fg);
+    line-height: 1.8;
+    max-width: 440px;
+    font-weight: 400;
+  }
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: end;
+    padding-bottom: 4px;
+  }
+  .hero-tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    background: var(--fg);
+    color: var(--bg);
+    border: 1px solid var(--fg);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: transparent; color: var(--fg); }
+
+  .ticker {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner { display: inline-block; animation: ticker 24s linear infinite; }
+  .ticker-item {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 48px;
+  }
+  .ticker-dot { color: var(--border); margin-right: 48px; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  section { border-bottom: 1px solid var(--border); }
+  .section-header {
+    padding: 40px 40px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-size: 13px;
+    letter-spacing: 1px;
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .why-col { padding: 40px; }
+  .why-col:first-child { border-right: 1px solid var(--border); }
+  .why-col-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .why-problem-list, .why-solution-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .why-problem-list li, .why-solution-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .why-problem-list li { color: var(--muted); }
+  .why-problem-list li::before {
+    content: '×';
+    font-family: var(--mono);
+    color: var(--border);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .why-solution-list li { color: var(--fg); }
+  .why-solution-list li::before {
+    content: '→';
+    font-family: var(--mono);
+    color: var(--fg);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border);
+  }
+  .feature-cell {
+    padding: 36px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .feature-cell:last-child { border-right: none; }
+  .feature-num {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .feature-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--fg);
+  }
+  .feature-desc { font-size: 13px; color: var(--muted); line-height: 1.8; }
+
+  .screenshots-section { padding: 0 40px 40px; border-top: 1px solid var(--border); }
+  .screenshots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+  .screenshot-cell {
+    background: var(--bg);
+    aspect-ratio: 9/16;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .screenshot-placeholder-label {
+    font-size: 11px;
+    color: var(--border);
+    letter-spacing: 1px;
+  }
+  .screenshot-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px 16px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .steps-grid { border-top: 1px solid var(--border); }
+  .step-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+    min-height: 100px;
+  }
+  .step-row:last-child { border-bottom: none; }
+  .step-num-cell {
+    padding: 32px 40px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .step-num { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; color: var(--muted); }
+  .step-content { padding: 32px 40px; border-right: 1px solid var(--border); }
+  .step-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--fg);
+  }
+  .step-desc { font-size: 13px; color: var(--muted); line-height: 1.8; }
+  .step-note { padding: 32px 40px; display: flex; align-items: flex-start; }
+  .step-note-inner {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: var(--border);
+    line-height: 1.8;
+    text-transform: uppercase;
+  }
+
+  .export-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .export-left { padding: 40px; border-right: 1px solid var(--border); }
+  .export-right { padding: 40px; }
+  .json-preview {
+    background: #1a1a18;
+    color: #c8c5be;
+    padding: 24px;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.8;
+    margin-top: 20px;
+  }
+  .json-key { color: #888684; }
+  .json-val { color: #e8e5de; }
+  .json-str { color: #aab89e; }
+
+  /* 中文正文通用样式 */
+  .zh-body { font-size: 14px; color: var(--fg); line-height: 1.8; font-weight: 400; }
+  .zh-muted { font-size: 13px; color: var(--muted); line-height: 1.8; font-weight: 300; }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 32px; }
+    .back-bar { padding: 16px 20px; }
+    .why-grid { grid-template-columns: 1fr; }
+    .why-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .features-grid { grid-template-columns: 1fr; }
+    .feature-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .step-row { grid-template-columns: 48px 1fr; }
+    .step-note { display: none; }
+    .export-grid { grid-template-columns: 1fr; }
+    .export-left { border-right: none; border-bottom: 1px solid var(--border); }
+    .screenshots-grid { grid-template-columns: 1fr 1fr; }
+    .section-header { padding: 32px 20px 0; }
+    .why-col { padding: 28px 20px; }
+    .feature-cell { padding: 28px 20px; }
+    .step-num-cell { padding: 24px 16px; }
+    .step-content { padding: 24px 20px; }
+    .export-left, .export-right { padding: 28px 20px; }
+    .screenshots-section { padding: 0 20px 28px; }
+    .desktop-nav { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;height:100%;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:100%;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg);text-decoration:none;">PROJECT AXIS</a>
+      <div class="desktop-nav">
+        <a href="/#lab" class="section-label">LAB</a>
+        <a href="/#log" class="section-label">LOG</a>
+        <a href="/#system" class="section-label">SYSTEM</a>
+        <a href="#access" class="section-label">ACCESS</a>
+        <a href="/tools/crm/" class="lang-switch">EN</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="back-bar">
+  <a href="/#lab" class="back-link">← 实验室</a>
+  <span class="back-sep">/</span>
+  <span class="back-current">HKCRM</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">TOOL.001 / 客户管理控制台</div>
+    <h1 class="hero-title">HK<br>CRM</h1>
+    <p class="hero-sub">专为香港保险从业人员设计的保单管理工具。无需注册，无需云端，所有客户数据仅存储于本地设备。</p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-tag-row">
+      <span class="tag">纯 HTML · 本地运行</span>
+      <span class="tag">无需注册</span>
+      <span class="tag">零数据上传</span>
+      <span class="tag">JSON 导出</span>
+    </div>
+    <div style="margin-top:8px;">
+      <a href="https://axis-melb.github.io/tools-online/hkcrm.html" class="btn-primary" target="_blank">立即使用 →</a>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">周年日提醒</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">佣金计算器</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">本地存储</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">JSON 数据备份</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">无需账户</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">隐私优先</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">周年日提醒</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">佣金计算器</span><span class="ticker-dot">·</span>
+  </div>
+</div>
+
+<!-- WHY -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§01</span>
+    <span class="section-title">为什么做这个</span>
+  </div>
+  <div class="why-grid">
+    <div class="why-col">
+      <div class="why-col-label">痛点</div>
+      <div style="margin-bottom:24px;padding:16px;background:rgba(0,0,0,0.03);border-left:2px solid var(--fg);">
+        <p class="zh-body">我发现管理几十个客户根本不需要庞大的 CRM 系统。而 Excel 又无法自动提醒保单周年日。更重要的是，我不希望客户的私人资料被上传到任何第三方的云端数据库。</p>
+      </div>
+      <ul class="why-problem-list">
+        <li>传统 CRM 系统价格昂贵，且需要服务器维护</li>
+        <li>Excel 表格无法自动追踪保单周年日，只能人工核对</li>
+        <li>第三方 SaaS 平台存在数据泄露风险，客户隐私难以保障</li>
+      </ul>
+    </div>
+    <div class="why-col">
+      <div class="why-col-label">解决方案</div>
+      <ul class="why-solution-list">
+        <li>离线优先，纯 HTML 链接，无服务器、无账户、无供应商绑定</li>
+        <li>保单周年日前 30 天自动飘红提醒，不再错过任何交费节点</li>
+        <li>自主填写佣金比例，快速预览各客户的预期收益</li>
+        <li>完整 JSON 导出，您永远拥有自己的数据主权</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§02</span>
+    <span class="section-title">主要功能</span>
+  </div>
+  <div class="features-grid">
+    <div class="feature-cell">
+      <div class="feature-num">F.001</div>
+      <div class="feature-title">周年日红色预警</div>
+      <p class="feature-desc">保单周年日前 30 天，客户条目自动变红。无需人工核对，系统主动提示您联系客户准备续保。</p>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-num">F.002</div>
+      <div class="feature-title">佣金计算器</div>
+      <p class="feature-desc">输入保单开始日期、年期及年度保费，自主填写佣金率，即时查看各客户的预期佣金收益。</p>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-num">F.003</div>
+      <div class="feature-title">客户备注</div>
+      <p class="feature-desc">为每位客户记录跟进历史、特殊需求或家庭背景。所有信息均存储于本地，不离开您的设备。</p>
+    </div>
+  </div>
+</section>
+
+<!-- INTERFACE -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§03</span>
+    <span class="section-title">界面预览</span>
+  </div>
+  <div class="screenshots-section">
+    <div class="screenshots-grid">
+      <div class="screenshot-cell">
+        <img src="../../screenshots/crm_dashboard.png" alt="CRM 客户列表" style="width:100%;object-fit:cover;position:absolute;inset:0;height:100%;" onerror="this.style.display='none'">
+        <div class="screenshot-placeholder-label">客户总览</div>
+        <div class="screenshot-caption">01 — 客户列表</div>
+      </div>
+      <div class="screenshot-cell">
+        <img src="../../screenshots/crm_mobile.png" alt="CRM 移动端" style="width:100%;object-fit:cover;position:absolute;inset:0;height:100%;" onerror="this.style.display='none'">
+        <div class="screenshot-placeholder-label">周年日视图</div>
+        <div class="screenshot-caption">02 — 周年日管理</div>
+      </div>
+      <div class="screenshot-cell" style="color:#ef4444;">
+        <img src="../../screenshots/crm_alert.png" alt="交费提醒" style="width:100%;object-fit:cover;position:absolute;inset:0;height:100%;border:1px solid #ef4444;" onerror="this.style.display='none'">
+        <div class="screenshot-placeholder-label" style="color:#ef4444;">红色预警</div>
+        <div class="screenshot-caption">03 — 交费提醒</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§04</span>
+    <span class="section-title">第一次使用</span>
+  </div>
+  <div class="steps-grid">
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">01</span></div>
+      <div class="step-content">
+        <div class="step-title">收藏链接</div>
+        <p class="step-desc">在手机或电脑浏览器中打开工具链接，将其加入书签，或直接保存到手机主屏幕。无需安装任何应用，打开即用。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">STAYS ON<br>LOCAL BROWSER<br>· CHROME<br>· SAFARI</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">02</span></div>
+      <div class="step-content">
+        <div class="step-title">录入客户资料</div>
+        <p class="step-desc">填写保单开始日期、年期及年度保费。系统将自动计算所有周年日，并在到期前 30 天发出红色预警。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">CLIENT DATA<br>IS NEVER<br>SENT TO US</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">03</span></div>
+      <div class="step-content">
+        <div class="step-title">定期查看</div>
+        <p class="step-desc">建议每周打开工具查看一次。凡变红的客户条目，即代表需要联系客户，提醒其准备即将到期的保费。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">30-DAY<br>PRIOR WARNING<br>BY DEFAULT</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§05</span>
+    <span class="section-title">数据安全与备份</span>
+  </div>
+  <div class="export-grid">
+    <div class="export-left">
+      <p class="zh-muted" style="margin-bottom:24px;">您的所有客户数据均存储在浏览器本地的 <code style="font-family:var(--mono);font-size:11px;">localStorage</code> 中。如需更换设备或做数据备份，请使用内置的导出功能。</p>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:20px;padding:0;">
+        <li style="display:flex;gap:10px;">
+          <span style="color:var(--muted);flex-shrink:0;">→</span>
+          <span class="zh-body">定期点击 <strong>导出 (JSON)</strong>，将备份文件保存至本地或云存储（iCloud、Google Drive 均可）。</span>
+        </li>
+        <li style="display:flex;gap:10px;">
+          <span style="color:var(--muted);flex-shrink:0;">→</span>
+          <span class="zh-body">在新设备（如 iPad 或新手机）上打开工具，选择 <strong>导入</strong>，即可完整恢复所有客户记录。</span>
+        </li>
+        <li style="display:flex;gap:10px;">
+          <span style="color:var(--muted);flex-shrink:0;">→</span>
+          <span class="zh-body">完全私密。我们不存储、不查看、不处理您输入的任何信息。</span>
+        </li>
+      </ul>
+    </div>
+    <div class="export-right">
+      <p style="font-size:11px;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">导出格式</p>
+      <div class="json-preview">
+        <span class="json-key">{</span><br>
+        &nbsp;&nbsp;<span class="json-key">"clientName"</span>: <span class="json-str">"Johnny Doe"</span>,<br>
+        &nbsp;&nbsp;<span class="json-key">"policyDate"</span>: <span class="json-str">"2023-01-15"</span>,<br>
+        &nbsp;&nbsp;<span class="json-key">"premium"</span>: <span class="json-val">50000</span>,<br>
+        &nbsp;&nbsp;<span class="json-key">"commission"</span>: <span class="json-val">0.35</span>,<br>
+        &nbsp;&nbsp;<span class="json-key">"notes"</span>: <span class="json-str">"第一季度需安排年度检视"</span><br>
+        <span class="json-key">}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<section id="access" style="background:var(--black);position:relative;overflow:hidden;z-index:1;border-top:1px solid var(--border);">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  <div style="max-width:1200px;margin:0 auto;padding:80px 40px;position:relative;z-index:1;">
+    <div style="max-width:600px;margin:40px 0 60px;">
+      <h2 style="font-family:var(--mono);font-size:14px;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;color:#fff;">SOURCE CODE & SUPPORT</h2>
+      <p style="font-size:14px;color:rgba(255,255,255,0.75);margin-bottom:40px;line-height:1.9;font-family:var(--body);">如果这个工具帮您节省了时间，欢迎请我喝杯咖啡。这是实验室持续更新的动力。</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:30px;">
+        <a href="https://axis-melb.github.io/tools-online/hkcrm.html" target="_blank" style="font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:14px 28px;background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3);text-decoration:none;">SOURCE (GITHUB) ↗</a>
+        <a href="https://buy.stripe.com/eVqaEXedSeuJeIUaQX0gw00" target="_blank" style="font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:14px 28px;background:#fff;color:#000;border:1px solid #fff;text-decoration:none;font-weight:bold;">请我喝咖啡 ☕</a>
+      </div>
+      <div style="margin-top:40px;font-size:12px;color:rgba(255,255,255,0.55);line-height:1.8;border-top:1px solid rgba(255,255,255,0.1);padding-top:20px;font-family:var(--body);">
+        <p style="margin-bottom:8px;color:rgba(255,255,255,0.85);font-weight:500;">免责声明</p>
+        <p>这是一个零服务器工具。我们不存储、查看或处理您输入的任何信息。您应对导出的 JSON 数据文件负全部保管责任。</p>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);">PROJECT AXIS — AX-2024.004 — CRM LAYER</div>
+      <a href="/#lab" style="font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;color:rgba(255,255,255,0.4);">← 返回实验室</a>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
