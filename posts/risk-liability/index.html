@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Risk & Liability Architecture — PROJECT AXIS</title>
+<title>风险与责任架构 — PROJECT AXIS</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,9 +12,9 @@
 <style>
   .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
   .post-body p { margin-bottom: 1.6em; }
-  .post-body p.zh { font-size: 13px; color: rgba(29,29,31,0.45); margin-top: -1em; margin-bottom: 1.8em; line-height: 1.9; }
+  .post-body p.zh { font-size: 15px; color: rgba(29,29,31,0.82); margin-top: 0; margin-bottom: 1.6em; line-height: 1.85; }
   .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
-  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 12px 0 12px 24px; margin: 2em 0; font-size: 14px; font-style: normal; color: rgba(29,29,31,0.65); line-height: 1.75; }
   .post-body .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
   .post-body .highlight-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: var(--near-black); min-width: 80px; }
   .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
@@ -38,32 +38,34 @@
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
     <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
       <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <a href="index.html" style="font-size:10px;font-family:'Space Mono';letter-spacing:0.2em;text-decoration:none;color:rgba(29,29,31,0.5);border:1px solid rgba(29,29,31,0.1);padding:4px 10px;text-transform:uppercase;">EN</a>
+      </div>
     </div>
   </div>
 </nav>
 
 <section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
   <div style="margin-bottom:48px;">
-    <a href="/#log" style="text-decoration:none; color:rgba(29,29,31,0.4); font-family:'Space Mono'; font-size:10px; letter-spacing:0.3em;">← BACK TO LOG</a>
+    <a href="/#log" style="text-decoration:none; color:rgba(29,29,31,0.4); font-family:'Space Mono'; font-size:10px; letter-spacing:0.3em;">← 返回日志</a>
   </div>
 
   <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;">
-    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.002</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">第 002 号文件</span>
     <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-04-29</span>
-    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">RISK / INSURANCE</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">风险 / 保险</span>
   </div>
 
   <div style="position:relative;">
     <div class="post-log-num">002</div>
     <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
-      Risk &amp; Liability<br>Architecture
+      风险与责任架构
     </h1>
-    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:12px;">风险与责任架构</p>
     <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
-      <span class="post-tag">PI Insurance</span>
-      <span class="post-tag">Building Act</span>
-      <span class="post-tag">Risk</span>
-      <span class="post-tag">Series</span>
+      <span class="post-tag">职业责任险</span>
+      <span class="post-tag">建筑法</span>
+      <span class="post-tag">风险管理</span>
+      <span class="post-tag">系列文章</span>
     </div>
   </div>
 </section>
@@ -74,134 +76,94 @@
       <div class="post-body">
 
         <div class="series-note">
-          <div class="series-note-label">Series / 系列</div>
-          <div class="series-note-text">This is the opening entry of an ongoing series examining professional risk, insurance architecture, and liability structures in Victoria's building industry — and what a cross-border lens reveals about them.<br><span style="color:rgba(29,29,31,0.3);">这是一个持续系列的开篇，探讨维多利亚州建筑行业的职业风险、保险架构与责任结构——以及跨境视角所揭示的深层问题。</span></div>
+          <div class="series-note-label">系列</div>
+          <div class="series-note-text">这是一个持续系列，探讨维多利亚州建筑行业的职业风险、保险架构与责任结构——以及跨境视角所揭示的深层问题。</div>
         </div>
 
-        <h3>Why This Series Exists / 为什么写这个系列</h3>
+        <h3>为什么写这个系列</h3>
 
         <p>
-          My background is in commerce. Before becoming a registered building surveyor in Victoria, I spent time in financial services — and I hold a Comprehensive IA licence (Types 1-5) issued by the Insurance Authority of Hong Kong. I didn't plan for these two careers to intersect. But they do, in ways that are difficult to unsee once you've noticed them.
-        </p>
-        <p class="zh">
-          我的背景是商科。在成为维多利亚州注册建筑测量师之前，我在金融服务行业工作过，并持有香港保险业监管局颁发的全牌照。我并没有预料到这两段职业经历会产生交集。但它们确实交叉了——而且一旦你注意到这种交叉，就很难视而不见。
+          我的背景是商科。在成为维多利亚州注册建筑测量师之前，我在金融服务行业工作过，并持有香港保险业监管局颁发的全牌照（1-5类）。我并没有预料到这两段职业经历会产生交集。但它们确实交叉了——而且一旦你注意到这种交叉，就很难视而不见。
         </p>
 
         <p>
-          As a registered Building Surveyor, I sit down every year to renew my professional indemnity insurance. Every year, the form asks me to quantify the risk I carry — the projects I've touched, the permits I've signed, the inspections I've conducted. And every year, I find myself thinking less like a building surveyor and more like someone trained to read insurance products critically: what is this instrument actually covering, and what happens when it's tested?
-        </p>
-        <p class="zh">
           做为一个注册建筑测量师，每年，我都要坐下来续保职业责任险。每年，表格都要求我量化自己承担的风险——我经手的项目、签发的许可证、完成的检查。而每年，我都发现自己的思维方式不再像一个建筑测量师，而更像一个经过训练、懂得批判性阅读保险产品的人：这个工具究竟覆盖了什么，当它真正被考验的时候会发生什么？
         </p>
 
         <p>
-          That question — the gap between what insurance appears to cover and what it actually does — is what this series is about. Not as a legal treatise. Not as financial advice. But as a practitioner's field notes from someone positioned, by accident of career, to read the fine print from both sides.
-        </p>
-        <p class="zh">
           这个问题——职业保险表面覆盖范围与实际覆盖范围之间的落差——正是这个系列的主题。不是法律论文，不是财务建议，而是一个因职业轨迹之偶然、恰好能从两个角度读懂条款细节的从业者的田野笔记。
         </p>
 
-        <h3>The Instrument Nobody Reads / 没人真正读懂的那份合同</h3>
+        <h3>没人真正读懂的那份合同</h3>
 
         <p>
-          Professional indemnity insurance in Victoria is mandatory for registered building surveyors. No policy, no registration. No registration, no practice. That much everyone knows. What is less understood is how the policy actually works — specifically, that it operates on a <em>claims-made</em> basis.
-        </p>
-        <p class="zh">
           在维多利亚州，职业责任险对注册建筑测量师而言是强制性的。没有保险，就没有注册；没有注册，就无法执业。这一点众所周知。但鲜为人知的是，这份保单实际上是如何运作的——具体来说，它以"索赔触发制（claims-made）"为基础。
         </p>
 
         <blockquote>
-          A claims-made policy only responds to claims lodged while the policy is active, regardless of when the work was performed; it is triggered specifically when the claim is made
-          <br><br>
-          <span style="font-size:12px;font-style:normal;color:rgba(29,29,31,0.4);">索赔触发制保单只在保单有效期内提出的索赔时才会响应。不是在工作完成时——而是在索赔提出时。</span>
+          索赔触发制保单只在保单有效期内提出的索赔时才会响应。不是在工作完成时——而是在索赔提出时。
         </blockquote>
 
         <p>
-          The distinction sounds technical. But it isn't: It means that the umbrella you carry today only protects you if it's still open when the rain starts falling. And in this industry, the rain can arrive years after you've walked away from the project.
-        </p>
-        <p class="zh">
           这个区别听起来很技术性，但实则不然。它意味着，你今天携带的那把伞，只有在雨下来的时候还撑着，才有用。而在这个行业里，雨可能在你离开那个项目多年之后才落下。
         </p>
 
-        <h3>Section 134: The Clock You Can't Stop / 那个你无法停止的时钟</h3>
+        <h3>第 134 条：那个你无法停止的时钟</h3>
 
         <p>
-          Under the Building Act 1993 (Vic), s134(1) sets a 10-year limitation period for building actions, running from the date the occupancy permit or certificate of final inspection is issued. That is the statutory trigger. Not when defects appear. Not when a dispute is raised. The clock starts the moment the permit is signed.
-        </p>
-        <p class="zh">
-          根据《1993年建筑法》（维多利亚州）第134(1)条，建筑诉讼的追诉期为10年，从入住许可证或最终检查证书的签发之日起算。这是法定触发点。这个时钟的起点不是在缺陷出现时，也不是在争议提出时——时钟从许可证签署的那一刻开始走。
+          根据《1993年建筑法》（维多利亚州）第 134(1) 条，建筑诉讼的追诉期为 10 年，从入住许可证或最终检查证书的签发之日起算。这是法定触发点。这个时钟的起点不是在缺陷出现时，也不是在争议提出时——时钟从许可证签署的那一刻开始走。
         </p>
 
         <p>
-          For building surveyors, this creates an exposure profile unlike most professions. Every occupancy permit you sign opens a 10-year window of potential liability. Sign 30 permits a year for 20 years, and at any given moment you are carrying overlapping liability windows stretching back through most of your career.
-        </p>
-        <p class="zh">
-          对于建筑测量师而言，这创造了一种与大多数职业截然不同的风险窗口。你签发的每一份入住许可证，都会开启一个10年的潜在责任窗口。如果你每年签发30份许可证，执业20年，那么在任何时刻，你都承载着横跨职业生涯大部分时间的重叠责任窗口。
+          对于建筑测量师而言，这创造了一种与大多数职业截然不同的风险窗口。你签发的每一份入住许可证，都会开启一个 10 年的潜在责任窗口。如果你每年签发 30 份许可证，执业 20 年，那么在任何时刻，你都承载着横跨职业生涯大部分时间的重叠责任窗口。
         </p>
 
         <div class="highlight-row">
-          <div class="highlight-num">10 YR</div>
-          <div>Standard statutory limitation period under s134(1), Building Act 1993 (Vic). Triggered from the date of issue of the occupancy permit or certificate of final inspection — not from when a defect is discovered.<br><span style="color:rgba(29,29,31,0.35);font-size:12px;">《1993年建筑法》第134(1)条规定的标准法定追诉期。从入住许可证或最终检查证书的签发之日起算——而非从缺陷被发现之时起算。</span></div>
+          <div class="highlight-num">10 年</div>
+          <div>《1993年建筑法》第 134(1) 条规定的标准法定追诉期。从入住许可证或最终检查证书的签发之日起算——而非从缺陷被发现之时起算。</div>
         </div>
 
         <div class="highlight-row">
-          <div class="highlight-num">15 YR</div>
-          <div>Extended limitation period for cladding-related defects, applying to permits issued between 16 July 2019 and 1 December 2023. The cladding crisis didn't just raise premiums — it lengthened the tail for an entire generation of permits.<br><span style="color:rgba(29,29,31,0.35);font-size:12px;">针对外墙覆层相关缺陷的延长追诉期，适用于2019年7月16日至2023年12月1日期间签发的许可证。外墙危机不仅推高了保费，更为整整一代许可证延长了责任的长尾。</span></div>
+          <div class="highlight-num">15 年</div>
+          <div>针对外墙覆层相关缺陷的延长追诉期，适用于 2019 年 7 月 16 日至 2023 年 12 月 1 日期间签发的许可证。外墙危机不仅推高了保费，更延长了责任的长尾。</div>
         </div>
 
-        <h3>The Catch-22 of Risk Assessment / 风险评估的第二十二条军规</h3>
+        <h3>风险评估的第二十二条军规</h3>
 
         <p>
-          Renewal time surfaces something that, once you see it, you cannot unsee. The underwriter needs to assess your risk. Your risk is assessed by looking at how long you've practised and what you've worked on. If you're experienced, your historical exposure is large. If you're junior, your competence profile raises flags. There is no configuration that presents as low-risk.
-        </p>
-        <p class="zh">
-          续保的时候，有一件事一旦你看见了就无法视而不见。承保人需要评估你的风险。而你的风险，是通过你的执业年限和工作内容来衡量的。如果你经验丰富，历史敞口就大；如果你资历尚浅，能力档案就会引发疑虑。没有任何一种配置呈现为低风险。
+          续保的时候，有一件事一旦你看见了就无法视而不见。承保人需要评估你的风险。而你的风险，是通过你的执业年限和工作内容来衡量的。如果你经验丰富，历史敞口就大；如果你资历尚浅，能力档案就会引发疑疑虑。没有任何一种配置呈现为低风险。
         </p>
 
         <blockquote>
-          The underwriter is not pricing your skill. They are pricing your exposure. These are not the same thing.
-          <br><br>
-          <span style="font-size:12px;font-style:normal;color:rgba(29,29,31,0.4);">承保人定价的不是你的专业能力，而是你的风险敞口。这两者并不相同。</span>
+          承保人定价的不是你的专业能力，而是你的风险敞口。这两者并不相同。
         </blockquote>
 
         <p>
-          This is where a background in commerce becomes less a credential and more a diagnostic tool. When I look at the PI renewal form, I don't just see a compliance requirement. I see a risk pricing mechanism — one that is structurally indifferent to whether the practitioner is good at their job.
-        </p>
-        <p class="zh">
           这正是商科背景不再只是一个资历认证、而是一种诊断工具的地方。当我看着职业责任险续保表格时，我看到的不只是一项合规要求，而是一套风险定价机制——它在结构上对从业者是否专业能干漠然置之。
         </p>
 
-        <h3>What This Series Will Cover / 这个系列将探讨什么</h3>
+        <h3>这个系列将探讨什么</h3>
 
         <p>
-          Over the coming entries, I'll be working through several connected questions: What does PI insurance actually cover when tested in court — and what does it not? What happens to a building surveyor's liability exposure at retirement, and why "stopping work" is not the same as "stopping risk"? How does Victoria's Domestic Building Insurance model compare to what existed before the BPC reforms of 2025 — and what changed for consumers? And finally, what does Hong Kong's insurance culture reveal, by contrast, about how differently risk can be distributed when it is made visible to the public rather than embedded in institutional mandates?
-        </p>
-        <p class="zh">
-          在接下来的几篇中，我将梳理几个相互关联的问题：当职业责任险在法庭上被真正检验时，它实际覆盖了什么——又不覆盖什么？建筑测量师退休时，其责任敞口会发生什么——为什么"停止工作"并不等于"停止风险"？维多利亚州的民宅建筑保险模式与2025年BPC改革前相比有何不同——对消费者来说改变了什么？最后，香港的保险文化，作为对照，揭示了当风险被公开呈现而非嵌入机构指令时，风险分配可以有多么不同？
+          在接下来的几篇中，我将梳理几个相互关联的问题：当职业责任险在法庭上被真正检验时，它实际覆盖了什么——又不覆盖什么？建筑测量师退休时，其责任敞口会发生什么——为什么"停止工作"并不等于"停止风险"？维多利亚州的民宅建筑保险模式与 2025 年 BPC 改革前相比有何不同？最后，香港的保险文化作为对照，揭示了风险分配在不同社会体系下的差异。
         </p>
 
         <p>
-          These aren't abstract questions. They are questions that affect every private building surveyor practising in Victoria today — most of whom, in my observation, have never had reason to think through the full architecture of the risk they carry.
-        </p>
-        <p class="zh">
           这些不是抽象问题。它们影响着今天在维多利亚州执业的每一位私人建筑测量师——据我观察，他们中的大多数从未有机会完整思考自己所承担风险的全貌。
         </p>
 
-        <h3>Conclusion / 结语</h3>
+        <h3>结语</h3>
 
         <p>
-          The umbrella analogy is useful but incomplete. A PI policy isn't just an umbrella — it's an umbrella with an expiry date, a set of exclusions you need a magnifying glass to read, and a mechanism that only activates when someone decides to stand in front of you in court and call it rain. Most practitioners carry it because they have to. Very few have tested what happens when it's actually opened.
-        </p>
-        <p class="zh">
           那把伞的比喻很有用，但并不完整。职业责任险不只是一把伞——它是一把有失效日期的伞，附有需要放大镜才能读清的除外条款，且只有在有人站到你面前、在法庭上宣布"现在下雨了"的时候，它的机制才会启动。大多数从业者持有它是因为别无选择。真正测试过它被打开时会发生什么的人，少之又少。
         </p>
 
        <div style="margin-top:40px;border:1px solid var(--line-dark);padding:20px 24px;display:flex;align-items:flex-start;gap:20px;">
-          <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(29,29,31,0.3);white-space:nowrap;padding-top:3px;">NEXT / 下一篇</div>
+          <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(29,29,31,0.3);white-space:nowrap;padding-top:3px;">下一篇</div>
           <div>
             <a href="/posts/retirement-trap/" style="text-decoration:none;color:var(--near-black);">
-              <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:6px;">The Retirement Trap →</div>
-              <div style="font-size:12px;color:rgba(29,29,31,0.5);line-height:1.65;">Stopping work doesn't stop the clock. Run-off cover, s134, and what the 2023 Shangri-La case means for every practitioner planning to retire. / 停止工作，不等于停止风险。尾期保险、追诉期与2023年案例的警示。</div>
+              <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:6px;">退休陷阱 →</div>
+              <div style="font-size:12px;color:rgba(29,29,31,0.5);line-height:1.65;">停止工作，不等于停止风险。尾期保险、追诉期与 2023 年案例的警示。</div>
             </a>
           </div>
         </div>
@@ -210,8 +172,7 @@
         <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
 
         <div class="disclaimer-box">
-          <div class="sidebar-label" style="margin-bottom:10px;">DISCLAIMER / 免责声明</div>
-          <p>The views expressed are solely those of the author in a personal capacity. This does not constitute legal, insurance, or financial advice. References to legislation are general in nature and should not be relied upon as legal interpretation.</p>
+          <div class="sidebar-label" style="margin-bottom:10px;">免责声明</div>
           <p>本文观点仅代表作者个人，不构成法律、保险或财务建议。文中对法规的引用具有一般性质，不应作为法律解释依据。</p>
         </div>
 
@@ -220,35 +181,36 @@
 
     <aside class="post-sidebar">
       <div class="sidebar-block">
-        <div class="sidebar-label">PUBLISHED / 发布日期</div>
+        <div class="sidebar-label">发布日期</div>
         <div class="sidebar-value">2026-04-29</div>
       </div>
       <div class="sidebar-block">
-        <div class="sidebar-label">CATEGORY / 分类</div>
-        <div class="sidebar-value">RISK / INSURANCE</div>
-        <div class="sidebar-value-sub">风险与保险分析</div>
+        <div class="sidebar-label">分类</div>
+        <div class="sidebar-value">风险 / 保险</div>
+        <div class="sidebar-value-sub">Risk & Insurance Analysis</div>
       </div>
       <div class="sidebar-block">
-        <div class="sidebar-label">SERIES / 系列</div>
-        <div class="sidebar-value">Risk & Liability Architecture</div>
-        <div class="sidebar-value-sub">Entry 01 of ongoing / 系列第一篇</div>
+        <div class="sidebar-label">系列</div>
+        <div class="sidebar-value">风险与责任架构</div>
+        <div class="sidebar-value-sub">系列第 01 篇</div>
       </div>
       <div class="sidebar-block">
-        <div class="sidebar-label">READ TIME / 阅读时长</div>
-        <div class="sidebar-value">~ 6 MIN</div>
+        <div class="sidebar-label">阅读时长</div>
+        <div class="sidebar-value">约 6 分钟</div>
       </div>
       <div class="sidebar-block">
-        <div class="sidebar-label">TAGS / 标签</div>
+        <div class="sidebar-label">标签</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
-          <span class="post-tag">PI Insurance</span>
+          <span class="post-tag">职业责任险</span>
           <span class="post-tag">s134</span>
-          <span class="post-tag">Building Act</span>
-          <span class="post-tag">Risk</span>
+          <span class="post-tag">建筑法</span>
+          <span class="post-tag">风险</span>
         </div>
       </div>
     </aside>
   </div>
 </section>
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"73976c8d5bae4cfdb5e3edd4efa0f352","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
