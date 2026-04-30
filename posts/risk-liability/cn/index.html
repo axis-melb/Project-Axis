@@ -10,24 +10,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/style.css">
 <style>
-  .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
+  .post-body { font-size: 15px; font-weight: 300; line-height: 1.9; color: rgba(29,29,31,0.82); max-width: 680px; }
   .post-body p { margin-bottom: 1.6em; }
-  .post-body p.zh { font-size: 15px; color: rgba(29,29,31,0.82); margin-top: 0; margin-bottom: 1.6em; line-height: 1.85; }
-  .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
-  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 12px 0 12px 24px; margin: 2em 0; font-size: 14px; font-style: normal; color: rgba(29,29,31,0.65); line-height: 1.75; }
-  .post-body .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
-  .post-body .highlight-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: var(--near-black); min-width: 80px; }
-  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
-  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .post-body h3 { font-family: 'Inter', sans-serif; font-size: 16px; letter-spacing: 0.05em; font-weight: 600; color: #1d1d1f; margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid rgba(29,29,31,0.1); }
+  .post-body blockquote { border-left: 2px solid #1d1d1f; padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-body .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(29,29,31,0.1); }
+  .post-body .highlight-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: #1d1d1f; min-width: 80px; }
+  .post-tag { border: 1px solid rgba(29,29,31,0.1); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid rgba(29,29,31,0.1); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
   .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
   @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
   .post-sidebar { position: sticky; top: 80px; }
-  .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
+  .sidebar-block { padding: 20px 0; border-top: 1px solid rgba(29,29,31,0.1); }
   .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
-  .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
+  .sidebar-value { font-size: 12px; font-weight: 500; color: #1d1d1f; }
   .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
   .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
-  .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
+  .series-note { border: 1px solid rgba(29,29,31,0.1); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
   .series-note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.35); white-space: nowrap; padding-top: 2px; }
   .series-note-text { font-size: 12px; color: rgba(29,29,31,0.5); line-height: 1.6; }
 </style>
@@ -39,7 +38,7 @@
     <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
       <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
       <div style="display:flex;align-items:center;gap:16px;">
-        <a href="index.html" style="font-size:10px;font-family:'Space Mono';letter-spacing:0.2em;text-decoration:none;color:rgba(29,29,31,0.5);border:1px solid rgba(29,29,31,0.1);padding:4px 10px;text-transform:uppercase;">EN</a>
+        <a href="https://projectaxis.com.au/posts/risk-liability/" class="mono" style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(29,29,31,0.5); text-decoration:none; border:1px solid rgba(29,29,31,0.1); padding:4px 10px; border-radius:2px;">EN</a>
       </div>
     </div>
   </div>
@@ -51,7 +50,7 @@
   </div>
 
   <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;">
-    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">第 002 号文件</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.002</span>
     <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-04-29</span>
     <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">风险 / 保险</span>
   </div>
@@ -65,7 +64,7 @@
       <span class="post-tag">职业责任险</span>
       <span class="post-tag">建筑法</span>
       <span class="post-tag">风险管理</span>
-      <span class="post-tag">系列文章</span>
+      <span class="post-tag">系列记录</span>
     </div>
   </div>
 </section>
@@ -77,17 +76,17 @@
 
         <div class="series-note">
           <div class="series-note-label">系列</div>
-          <div class="series-note-text">这是一个持续系列，探讨维多利亚州建筑行业的职业风险、保险架构与责任结构——以及跨境视角所揭示的深层问题。</div>
+          <div class="series-note-text">这是一个持续系列的开篇，探讨维多利亚州建筑行业的职业风险、保险架构与责任结构——以及跨境视角所揭示的深层问题。</div>
         </div>
 
         <h3>为什么写这个系列</h3>
 
         <p>
-          我的背景是商科。在成为维多利亚州注册建筑测量师之前，我在金融服务行业工作过，并持有香港保险业监管局颁发的全牌照（1-5类）。我并没有预料到这两段职业经历会产生交集。但它们确实交叉了——而且一旦你注意到这种交叉，就很难视而不见。
+          我的背景是商科。在成为维多利亚州注册建筑测量师之前，我在金融服务行业工作过，并持有香港保险业监管局颁发的全牌照（第1-5类）。我并没有预料到这两段职业经历会产生交集。但它们确实交叉了——而且一旦你注意到这种交叉，就很难视而不见。
         </p>
 
         <p>
-          做为一个注册建筑测量师，每年，我都要坐下来续保职业责任险。每年，表格都要求我量化自己承担的风险——我经手的项目、签发的许可证、完成的检查。而每年，我都发现自己的思维方式不再像一个建筑测量师，而更像一个经过训练、懂得批判性阅读保险产品的人：这个工具究竟覆盖了什么，当它真正被考验的时候会发生什么？
+          作为一个注册建筑测量师，每年我都要坐下来续保职业责任险（PI Insurance）。每年，表格都要求我量化自己承担的风险——我经手的项目、签发的许可证、完成的检查。而每年，我都发现自己的思维方式不再像一个建筑测量师，而更像一个经过训练、懂得批判性阅读保险产品的人：这个工具究竟覆盖了什么，当它真正被考验的时候会发生什么？
         </p>
 
         <p>
@@ -97,7 +96,7 @@
         <h3>没人真正读懂的那份合同</h3>
 
         <p>
-          在维多利亚州，职业责任险对注册建筑测量师而言是强制性的。没有保险，就没有注册；没有注册，就无法执业。这一点众所周知。但鲜为人知的是，这份保单实际上是如何运作的——具体来说，它以"索赔触发制（claims-made）"为基础。
+          在维多利亚州，职业责任险对注册建筑测量师而言是强制性的。没有保险，就没有注册；没有注册，就无法执业。这一点众所周知。但鲜为人知的是，这份保单实际上是如何运作的——具体来说，它以“索赔触发制（claims-made）”为基础。
         </p>
 
         <blockquote>
@@ -108,30 +107,30 @@
           这个区别听起来很技术性，但实则不然。它意味着，你今天携带的那把伞，只有在雨下来的时候还撑着，才有用。而在这个行业里，雨可能在你离开那个项目多年之后才落下。
         </p>
 
-        <h3>第 134 条：那个你无法停止的时钟</h3>
+        <h3>第134条：那个你无法停止的时钟</h3>
 
         <p>
-          根据《1993年建筑法》（维多利亚州）第 134(1) 条，建筑诉讼的追诉期为 10 年，从入住许可证或最终检查证书的签发之日起算。这是法定触发点。这个时钟的起点不是在缺陷出现时，也不是在争议提出时——时钟从许可证签署的那一刻开始走。
+          根据《1993年建筑法》（维多利亚州）第134(1)条，建筑诉讼的追诉期为10年，从入住许可证（Occupancy Permit）或最终检查证书的签发之日起算。这是法定触发点。这个时钟的起点不是在缺陷出现时，也不是在争议提出时——时钟从许可证签署的那一刻开始走。
         </p>
 
         <p>
-          对于建筑测量师而言，这创造了一种与大多数职业截然不同的风险窗口。你签发的每一份入住许可证，都会开启一个 10 年的潜在责任窗口。如果你每年签发 30 份许可证，执业 20 年，那么在任何时刻，你都承载着横跨职业生涯大部分时间的重叠责任窗口。
+          对于建筑测量师而言，这创造了一种与大多数职业截然不同的风险窗口。你签发的每一份入住许可证，都会开启一个10年的潜在责任窗口。如果你每年签发30份许可证，执业20年，那么在任何时刻，你都承载着横跨职业生涯大部分时间的重叠责任窗口。
         </p>
 
         <div class="highlight-row">
           <div class="highlight-num">10 年</div>
-          <div>《1993年建筑法》第 134(1) 条规定的标准法定追诉期。从入住许可证或最终检查证书的签发之日起算——而非从缺陷被发现之时起算。</div>
+          <div>《1993年建筑法》第134(1)条规定的标准法定追诉期。从入住许可证或最终检查证书的签发之日起算——而非从缺陷被发现之时起算。</div>
         </div>
 
         <div class="highlight-row">
           <div class="highlight-num">15 年</div>
-          <div>针对外墙覆层相关缺陷的延长追诉期，适用于 2019 年 7 月 16 日至 2023 年 12 月 1 日期间签发的许可证。外墙危机不仅推高了保费，更延长了责任的长尾。</div>
+          <div>针对外墙覆层（Cladding）相关缺陷的延长追诉期，适用于2019年7月16日至2023年12月1日期间签发的许可证。外墙危机不仅推高了保费，更为整整一代许可证延长了责任的长尾。</div>
         </div>
 
         <h3>风险评估的第二十二条军规</h3>
 
         <p>
-          续保的时候，有一件事一旦你看见了就无法视而不见。承保人需要评估你的风险。而你的风险，是通过你的执业年限和工作内容来衡量的。如果你经验丰富，历史敞口就大；如果你资历尚浅，能力档案就会引发疑疑虑。没有任何一种配置呈现为低风险。
+          续保的时候，有一件事一旦你看见了就无法视而不见。承保人需要评估你的风险。而你的风险，是通过你的执业年限和工作内容来衡量的。如果你经验丰富，历史敞口就大；如果你资历尚浅，能力档案就会引发疑虑。没有任何一种配置呈现为低风险。
         </p>
 
         <blockquote>
@@ -145,7 +144,7 @@
         <h3>这个系列将探讨什么</h3>
 
         <p>
-          在接下来的几篇中，我将梳理几个相互关联的问题：当职业责任险在法庭上被真正检验时，它实际覆盖了什么——又不覆盖什么？建筑测量师退休时，其责任敞口会发生什么——为什么"停止工作"并不等于"停止风险"？维多利亚州的民宅建筑保险模式与 2025 年 BPC 改革前相比有何不同？最后，香港的保险文化作为对照，揭示了风险分配在不同社会体系下的差异。
+          在接下来的几篇中，我将梳理几个相互关联的问题：当职业责任险在法庭上被真正检验时，它实际覆盖了什么——又不覆盖什么？建筑测量师退休时，其责任敞口会发生什么——为什么“停止工作”并不等于“停止风险”？维多利亚州的民宅建筑保险模式与2025年BPC改革前相比有何不同——对消费者来说改变了什么？最后，香港的保险文化，作为对照，揭示了当风险被公开呈现而非嵌入机构指令时，风险分配可以有多么不同？
         </p>
 
         <p>
@@ -155,21 +154,21 @@
         <h3>结语</h3>
 
         <p>
-          那把伞的比喻很有用，但并不完整。职业责任险不只是一把伞——它是一把有失效日期的伞，附有需要放大镜才能读清的除外条款，且只有在有人站到你面前、在法庭上宣布"现在下雨了"的时候，它的机制才会启动。大多数从业者持有它是因为别无选择。真正测试过它被打开时会发生什么的人，少之又少。
+          那把伞的比喻很有用，但并不完整。职业责任险不只是一把伞——它是一把有失效日期的伞，附有需要放大镜才能读清的除外条款，且只有在有人站到你面前、在法庭上宣布“现在下雨了”的时候，它的机制才会启动。大多数从业者持有它是因为别无选择。真正测试过它被打开时会发生什么的人，少之又少。
         </p>
 
-       <div style="margin-top:40px;border:1px solid var(--line-dark);padding:20px 24px;display:flex;align-items:flex-start;gap:20px;">
+       <div style="margin-top:40px;border:1px solid rgba(29,29,31,0.1);padding:20px 24px;display:flex;align-items:flex-start;gap:20px;">
           <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(29,29,31,0.3);white-space:nowrap;padding-top:3px;">下一篇</div>
           <div>
-            <a href="/posts/retirement-trap/" style="text-decoration:none;color:var(--near-black);">
-              <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:6px;">退休陷阱 →</div>
+            <a href="/posts/retirement-trap/" style="text-decoration:none;color:#1d1d1f;">
+              <div style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;margin-bottom:6px;">退休陷阱 (The Retirement Trap) →</div>
               <div style="font-size:12px;color:rgba(29,29,31,0.5);line-height:1.65;">停止工作，不等于停止风险。尾期保险、追诉期与 2023 年案例的警示。</div>
             </a>
           </div>
         </div>
 
 
-        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+        <hr style="border:none;border-top:1px solid rgba(29,29,31,0.1);margin:2.4em 0;" />
 
         <div class="disclaimer-box">
           <div class="sidebar-label" style="margin-bottom:10px;">免责声明</div>
@@ -187,12 +186,11 @@
       <div class="sidebar-block">
         <div class="sidebar-label">分类</div>
         <div class="sidebar-value">风险 / 保险</div>
-        <div class="sidebar-value-sub">Risk & Insurance Analysis</div>
       </div>
       <div class="sidebar-block">
         <div class="sidebar-label">系列</div>
         <div class="sidebar-value">风险与责任架构</div>
-        <div class="sidebar-value-sub">系列第 01 篇</div>
+        <div class="sidebar-value-sub">系列第 01 篇（持续更新）</div>
       </div>
       <div class="sidebar-block">
         <div class="sidebar-label">阅读时长</div>
@@ -202,9 +200,9 @@
         <div class="sidebar-label">标签</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
           <span class="post-tag">职业责任险</span>
-          <span class="post-tag">s134</span>
+          <span class="post-tag">第134条</span>
           <span class="post-tag">建筑法</span>
-          <span class="post-tag">风险</span>
+          <span class="post-tag">风险管理</span>
         </div>
       </div>
     </aside>
