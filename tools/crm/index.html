@@ -1,25 +1,36 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HKCRM · TOOL.001 — Project Axis</title>
+
+<!-- Tailwind & Fonts from Template -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
+
 <style>
+  /* 
+   * HKCRM TOOL SPECIFIC STYLES 
+   * 完全复刻 Fasting 页面的设计语言
+   */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
     --bg: #f5f4f2;
     --fg: #111110;
-    --muted: #6b6966;
+    --muted: #999896;
     --border: #d8d6d2;
     --black: #111110;
     --mono: 'Space Mono', monospace;
-    --body: 'Inter', sans-serif;
+    --body: 'Inter', 'Noto Sans SC', sans-serif;
   }
+
   html { scroll-behavior: smooth; }
+
   body {
     background: var(--bg);
     color: var(--fg);
@@ -29,6 +40,8 @@
     font-size: 14px;
     overflow-x: hidden;
   }
+
+  /* NAV (Template Structure) */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -50,24 +63,7 @@
   .section-label:hover { color: var(--fg); }
   .desktop-nav { display: flex; gap: 32px; align-items: center; }
 
-  /* LANGUAGE SWITCH */
-  .lang-switch {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 5px 12px;
-    border: 1px solid var(--fg);
-    color: var(--fg);
-    transition: background 0.2s, color 0.2s;
-    white-space: nowrap;
-  }
-  .lang-switch:hover {
-    background: var(--fg);
-    color: var(--bg);
-  }
-
+  /* BACK LINK */
   .back-bar {
     margin-top: 52px;
     padding: 16px 40px;
@@ -95,6 +91,7 @@
     color: var(--fg);
   }
 
+  /* HERO */
   .hero {
     padding: 72px 40px 56px;
     border-bottom: 1px solid var(--border);
@@ -132,7 +129,11 @@
     align-self: end;
     padding-bottom: 4px;
   }
-  .hero-tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
   .tag {
     font-family: var(--mono);
     font-size: 9px;
@@ -156,15 +157,22 @@
     cursor: pointer;
     display: inline-block;
   }
-  .btn-primary:hover { background: transparent; color: var(--fg); }
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--fg);
+  }
 
+  /* TICKER */
   .ticker {
     border-bottom: 1px solid var(--border);
     padding: 10px 0;
     overflow: hidden;
     white-space: nowrap;
   }
-  .ticker-inner { display: inline-block; animation: ticker 24s linear infinite; }
+  .ticker-inner {
+    display: inline-block;
+    animation: ticker 24s linear infinite;
+  }
   .ticker-item {
     font-family: var(--mono);
     font-size: 10px;
@@ -179,6 +187,7 @@
     to { transform: translateX(-50%); }
   }
 
+  /* SECTION */
   section { border-bottom: 1px solid var(--border); }
   .section-header {
     padding: 40px 40px 0;
@@ -202,6 +211,7 @@
     color: var(--fg);
   }
 
+  /* WHY */
   .why-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -247,6 +257,7 @@
     margin-top: 1px;
   }
 
+  /* FEATURES */
   .features-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -271,14 +282,23 @@
     margin-bottom: 10px;
     letter-spacing: 0.5px;
   }
-  .feature-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .feature-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
 
-  .screenshots-section { padding: 0 40px 40px; border-top: 1px solid var(--border); }
+  /* SCREENSHOTS (Consistent with Fasting) */
+  .screenshots-section {
+    padding: 0 40px 40px;
+    border-top: 1px solid var(--border);
+  }
   .screenshots-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
     background: var(--border);
+    margin-top: 0;
   }
   .screenshot-cell {
     background: var(--bg);
@@ -290,6 +310,11 @@
     gap: 12px;
     position: relative;
     overflow: hidden;
+  }
+  .screenshot-placeholder-icon {
+    font-family: var(--mono);
+    font-size: 24px;
+    color: var(--border);
   }
   .screenshot-placeholder-label {
     font-family: var(--mono);
@@ -311,6 +336,7 @@
     color: var(--muted);
   }
 
+  /* SETUP STEPS */
   .steps-grid { border-top: 1px solid var(--border); }
   .step-row {
     display: grid;
@@ -326,8 +352,16 @@
     align-items: flex-start;
     justify-content: center;
   }
-  .step-num { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; color: var(--muted); }
-  .step-content { padding: 32px 40px; border-right: 1px solid var(--border); }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+  .step-content {
+    padding: 32px 40px;
+    border-right: 1px solid var(--border);
+  }
   .step-title {
     font-family: var(--mono);
     font-size: 12px;
@@ -336,8 +370,16 @@
     text-transform: uppercase;
     margin-bottom: 10px;
   }
-  .step-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
-  .step-note { padding: 32px 40px; display: flex; align-items: flex-start; }
+  .step-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .step-note {
+    padding: 32px 40px;
+    display: flex;
+    align-items: flex-start;
+  }
   .step-note-inner {
     font-family: var(--mono);
     font-size: 10px;
@@ -347,6 +389,7 @@
     text-transform: uppercase;
   }
 
+  /* EXPORT */
   .export-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -362,14 +405,15 @@
     font-size: 11px;
     line-height: 1.8;
     margin-top: 20px;
+    overflow: hidden;
   }
   .json-key { color: #888684; }
   .json-val { color: #e8e5de; }
   .json-str { color: #aab89e; }
 
+  /* RESPONSIVE */
   @media (max-width: 768px) {
     .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 32px; }
-    .back-bar { padding: 16px 20px; }
     .why-grid { grid-template-columns: 1fr; }
     .why-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
     .features-grid { grid-template-columns: 1fr; }
@@ -379,14 +423,6 @@
     .export-grid { grid-template-columns: 1fr; }
     .export-left { border-right: none; border-bottom: 1px solid var(--border); }
     .screenshots-grid { grid-template-columns: 1fr 1fr; }
-    .section-header { padding: 32px 20px 0; }
-    .why-col { padding: 28px 20px; }
-    .feature-cell { padding: 28px 20px; }
-    .step-num-cell { padding: 24px 16px; }
-    .step-content { padding: 24px 20px; }
-    .export-left, .export-right { padding: 28px 20px; }
-    .screenshots-section { padding: 0 20px 28px; }
-    .desktop-nav { gap: 16px; }
   }
 </style>
 </head>
@@ -394,7 +430,7 @@
 
 <!-- NAV -->
 <nav>
-  <div style="max-width:1200px;margin:0 auto;padding:0 32px;height:100%;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px; height: 100%;">
     <div style="display:flex;align-items:center;justify-content:space-between;height:100%;">
       <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg);text-decoration:none;">PROJECT AXIS</a>
       <div class="desktop-nav">
@@ -402,7 +438,6 @@
         <a href="/#log" class="section-label">LOG</a>
         <a href="/#system" class="section-label">SYSTEM</a>
         <a href="#access" class="section-label">ACCESS</a>
-        <a href="/tools/crm/cn/" class="lang-switch">中文</a>
       </div>
     </div>
   </div>
@@ -410,7 +445,7 @@
 
 <!-- BREADCRUMB -->
 <div class="back-bar">
-  <a href="/#lab" class="back-link">← LAB</a>
+  <a href="/lab" class="back-link">← LAB</a>
   <span class="back-sep">/</span>
   <span class="back-current">HKCRM</span>
 </div>
@@ -418,9 +453,9 @@
 <!-- HERO -->
 <div class="hero">
   <div>
-    <div class="hero-eyebrow">TOOL.001 / Client Management Console</div>
+    <div class="hero-eyebrow">TOOL.001 / 客户管理控制台</div>
     <h1 class="hero-title">HK<br>CRM</h1>
-    <p class="hero-sub">A private-by-design policy manager for Hong Kong insurance agents. No cloud database. No registration. All data stays on your device.</p>
+    <p class="hero-sub">A private-by-design policy manager for insurance agents. No cloud database required. All data stays on your device. / <strong>本工具是为香港保险从业人员设计的，主要记录长期保险的客户信息，提醒保单周年日。</strong> 无需注册，数据不离设备。</p>
   </div>
   <div class="hero-right">
     <div class="hero-tag-row">
@@ -429,8 +464,8 @@
       <span class="tag">ZERO DATA EXTRACTION</span>
       <span class="tag">EXPORT JSON</span>
     </div>
-    <div style="margin-top:8px;">
-      <a href="https://axis-melb.github.io/tools-online/hkcrm.html" class="btn-primary" target="_blank">OPEN TOOL →</a>
+    <div class="cta-row" style="margin-top: 8px;">
+     <a href="https://axis-melb.github.io/tools-online/hkcrm.html" class="btn-primary" target="_blank">OPEN TOOL →</a>
     </div>
   </div>
 </div>
@@ -449,31 +484,36 @@
   </div>
 </div>
 
-<!-- WHY -->
+<!-- WHY THIS EXISTS -->
 <section>
   <div class="section-header">
     <span class="section-num">§01</span>
-    <span class="section-title">WHY THIS EXISTS</span>
+    <span class="section-title">WHY THIS EXISTS / 为什么做这个</span>
   </div>
   <div class="why-grid">
     <div class="why-col">
-      <div class="why-col-label">THE PROBLEM</div>
-      <div style="margin-bottom:24px;padding:16px;background:rgba(0,0,0,0.03);border-left:2px solid var(--fg);">
-        <p style="font-size:14px;font-weight:500;color:var(--fg);line-height:1.6;">I'm tired of complex CRMs that compromise privacy. I need a lightweight way to track clients without cloud overhead, plus automatic reminders for policy anniversaries.</p>
+      <div class="why-col-label">THE PROBLEM / 痛点</div>
+      <div style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.03); border-left: 2px solid var(--fg);">
+          <p style="font-size: 14px; font-weight: 500; color: var(--fg); margin-bottom: 8px;">
+              I'm tired of complex CRMs that compromise privacy. I need a lightweight way to track my local clients without cloud overhead, plus reminders for when to follow up with them.
+          </p>
+          <p style="font-size: 13px; color: var(--muted); line-height: 1.5;">
+              我发现管理几十个客户并不需要庞大的 CRM 系统，而 Excel 又缺乏自动到期提醒。更重要的是，我不希望客户隐私资料被上传到第三方的云端数据库。
+          </p>
       </div>
       <ul class="why-problem-list">
-        <li>Traditional CRMs are expensive and require server-side infrastructure</li>
-        <li>Spreadsheets require manual tracking of policy anniversary dates</li>
-        <li>Third-party SaaS platforms carry real data privacy risks for client information</li>
+        <li>Traditional CRMs are expensive and require server-side databases / 传统 CRM 昂贵且涉及服务器维护</li>
+        <li>Excel needs manually tracking of policy anniversaries / Excel 难以自动跟踪保单周年期</li>
+        <li>Data privacy risks when using third-party SaaS platforms / 第三方 SaaS 平台存在泄露客户资料的风险</li>
       </ul>
     </div>
     <div class="why-col">
-      <div class="why-col-label">THE SOLUTION</div>
+      <div class="why-col-label">THE SOLUTION / 这里提供的逻辑</div>
       <ul class="why-solution-list">
-        <li>Offline-first. Pure HTML. No server, no account, no vendor lock-in</li>
-        <li>30-day red alert before policy anniversaries — never miss a premium deadline</li>
-        <li>Self-filled commission rates for an instant financial overview</li>
-        <li>Full JSON export — you own your data, permanently</li>
+        <li>An offline-first tool. Pure HTML link. Privacy by default / 纯 HTML 链接，本地优先，隐私至上</li>
+        <li>30-day "Red Alert" for policy anniversaries. Contact clients on time / 到期前30天自动飘红，准时联系客户</li>
+        <li>Self-filled commission rates for instant financial overview / 自填佣金比例，快速预览财务收益</li>
+        <li>Full JSON export. You own your data forever / 完整的 JSON 数据导出，永不丢失控制权</li>
       </ul>
     </div>
   </div>
@@ -483,23 +523,23 @@
 <section>
   <div class="section-header">
     <span class="section-num">§02</span>
-    <span class="section-title">WHAT IT DOES</span>
+    <span class="section-title">WHAT IT DOES / 功能</span>
   </div>
   <div class="features-grid">
     <div class="feature-cell">
       <div class="feature-num">F.001</div>
       <div class="feature-title">ANNIVERSARY ALERT</div>
-      <p class="feature-desc">When a policy anniversary falls within 30 days, the client entry turns red. No more missed premium deadlines or lapsed policies.</p>
+      <p class="feature-desc">When a policy anniversary is within 30 days, the client entry turns <strong>red</strong>. No more missing premium deadlines. / 保单周年日前30天自动飘红提醒，提醒客户准时续保。</p>
     </div>
     <div class="feature-cell">
       <div class="feature-num">F.002</div>
       <div class="feature-title">COMMISSION CALCULATOR</div>
-      <p class="feature-desc">Input policy start date, duration, and annual premium. Set your own commission rate to see projected earnings at a glance.</p>
+      <p class="feature-desc">Input policy start date, duration, and annual premium. Customize your commission rate to see your earnings instantly. / 记录开始时间、年期和保费，自主填写佣金率以计算收益。</p>
     </div>
     <div class="feature-cell">
       <div class="feature-num">F.003</div>
       <div class="feature-title">CLIENT NOTES</div>
-      <p class="feature-desc">Store follow-up history, specific needs, or family context for each client. Everything lives locally — never leaves your device.</p>
+      <p class="feature-desc">Keep ad-hoc notes for each client — follow-up history, specific needs, or family details. Everything stays local. / 为每个客户记录详细备注，支持个性化跟踪与快速查阅。</p>
     </div>
   </div>
 </section>
@@ -508,26 +548,28 @@
 <section>
   <div class="section-header">
     <span class="section-num">§03</span>
-    <span class="section-title">INTERFACE</span>
+    <span class="section-title">INTERFACE / 界面预览</span>
   </div>
   <div class="screenshots-section">
-    <div class="screenshots-grid">
-      <div class="screenshot-cell">
-        <img src="screenshots/crm_dashboard.png" alt="CRM Dashboard" style="width:100%;object-fit:cover;position:absolute;inset:0;height:100%;" onerror="this.style.display='none'">
-        <div class="screenshot-placeholder-label">CLIENT VIEW</div>
-        <div class="screenshot-caption">01 — LIST OVERVIEW</div>
-      </div>
-      <div class="screenshot-cell">
-        <img src="screenshots/crm_mobile.png" alt="CRM Mobile" style="width:100%;object-fit:cover;position:absolute;inset:0;height:100%;" onerror="this.style.display='none'">
-        <div class="screenshot-placeholder-label">ANNIVERSARY VIEW</div>
-        <div class="screenshot-caption">02 — ANNIVERSARIES</div>
-      </div>
-      <div class="screenshot-cell" style="color:#ef4444;">
-        <img src="screenshots/crm_alert.png" alt="Payment Reminder" style="width:100%;object-fit:cover;position:absolute;inset:0;height:100%;border:1px solid #ef4444;" onerror="this.style.display='none'">
-        <div class="screenshot-placeholder-label" style="color:#ef4444;">RED ALERT</div>
-        <div class="screenshot-caption">03 — PAYMENT REMINDER</div>
-      </div>
-    </div>
+   <div class="screenshots-grid">
+  <div class="screenshot-cell">
+    <img src="screenshots/crm_dashboard.png" alt="CRM Dashboard" style="width: 100%; border-radius: 4px; margin-bottom: 15px;">
+    <div class="screenshot-placeholder-label">CLIENT VIEW</div>
+    <div class="screenshot-caption">01 — LIST OVERVIEW</div>
+  </div>
+
+  <div class="screenshot-cell">
+    <img src="screenshots/crm_mobile.png" alt="CRM Mobile" style="width: 100%; border-radius: 4px; margin-bottom: 15px;">
+    <div class="screenshot-placeholder-label">CALENDAR SYNC</div>
+    <div class="screenshot-caption">02 — ANNIVERSARIES</div>
+  </div>
+
+  <div class="screenshot-cell" style="color: #ef4444;">
+    <img src="screenshots/crm_alert.png" alt="Payment Reminder" style="width: 100%; border-radius: 4px; margin-bottom: 15px; border: 1px solid #ef4444;">
+    <div class="screenshot-placeholder-label" style="color: #ef4444;">RED ALERT</div>
+    <div class="screenshot-caption">03 — PAYMENT REMINDER</div>
+  </div>
+</div>
   </div>
 </section>
 
@@ -535,14 +577,14 @@
 <section>
   <div class="section-header">
     <span class="section-num">§04</span>
-    <span class="section-title">GETTING STARTED</span>
+    <span class="section-title">GETTING STARTED / 第一次使用</span>
   </div>
   <div class="steps-grid">
     <div class="step-row">
       <div class="step-num-cell"><span class="step-num">01</span></div>
       <div class="step-content">
         <div class="step-title">BOOKMARK THE LINK</div>
-        <p class="step-desc">Open the tool link and bookmark it, or save it to your home screen. No installation required — it runs as a static page directly in your browser.</p>
+        <p class="step-desc">Open the tool link and bookmark it or save it to your home screen. No installation required—it runs as a static page directly in your browser. / 在手机或电脑浏览器打开链接并收藏，可直接保存在手机屏幕上，无需安装任何应用。</p>
       </div>
       <div class="step-note">
         <span class="step-note-inner">STAYS ON<br>LOCAL BROWSER<br>· CHROME<br>· SAFARI</span>
@@ -552,7 +594,7 @@
       <div class="step-num-cell"><span class="step-num">02</span></div>
       <div class="step-content">
         <div class="step-title">ADD CLIENT DATA</div>
-        <p class="step-desc">Fill in the policy start date, duration (years), and annual premium. The system calculates all anniversary dates automatically from there.</p>
+        <p class="step-desc">Fill in the policy start date, duration (years), and premium. The system will handle the anniversary calculations. / 填写保单日期、年期和保费，系统将自动计算相关数据。</p>
       </div>
       <div class="step-note">
         <span class="step-note-inner">CLIENT DATA<br>IS NEVER<br>SENT TO US</span>
@@ -562,7 +604,7 @@
       <div class="step-num-cell"><span class="step-num">03</span></div>
       <div class="step-content">
         <div class="step-title">ROUTINE CHECK</div>
-        <p class="step-desc">Open the tool weekly. Any client entry marked in red signals it's time to reach out and prepare for the upcoming premium payment.</p>
+        <p class="step-desc">Open the tool weekly. Any client marked in red means it's time to reach out and prepare for the premium payment. / 每周定期查看，变红的条目就是需要联系客户准备交费的时候。</p>
       </div>
       <div class="step-note">
         <span class="step-note-inner">30-DAY<br>PRIOR WARNING<br>BY DEFAULT</span>
@@ -575,63 +617,98 @@
 <section>
   <div class="section-header">
     <span class="section-num">§05</span>
-    <span class="section-title">YOUR DATA</span>
+    <span class="section-title">YOUR DATA / 数据安全与备份</span>
   </div>
   <div class="export-grid">
-    <div class="export-left">
-      <p style="font-size:13px;color:var(--muted);line-height:1.8;">Your client data is stored in your browser's <code style="font-family:var(--mono);font-size:11px;">localStorage</code>. To back up or move to a new device, use the built-in export function.</p>
-      <ul style="margin-top:24px;list-style:none;display:flex;flex-direction:column;gap:18px;font-size:13px;color:var(--fg);padding:0;">
-        <li style="display:flex;gap:10px;">
-          <span style="color:var(--muted);flex-shrink:0;">→</span>
-          <span>Regularly hit <strong>Export (JSON)</strong> to save a backup to your local device or cloud storage (iCloud, Google Drive).</span>
+   <div class="export-left">
+      <p style="font-size:13px; color:var(--muted); line-height:1.7;">
+        Your client data is stored in your browser's <code>localStorage</code>. To switch devices or back up, use the built-in export function.<br>
+        <span style="font-size:12px; opacity: 0.8;">您的客户数据存储在浏览器本地。如需更换设备或备份，请使用内置导出功能。</span>
+      </p>
+      <ul style="margin-top: 20px; list-style: none; display: flex; flex-direction: column; gap: 18px; font-size: 13px; color: var(--fg); padding: 0;">
+        
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>Regularly hit <strong>Export (JSON)</strong> to save a backup to your local device. (I save mine to my iCloud.)</span>
+          </div>
+          <div style="padding-left: 24px; font-size: 12px; color: var(--muted);">
+            定期点击 <strong>导出 (JSON)</strong> 以保存备份至本地（建议存入 iCloud 或手机文件夹）。
+          </div>
         </li>
-        <li style="display:flex;gap:10px;">
-          <span style="color:var(--muted);flex-shrink:0;">→</span>
-          <span>On a new device, open the tool and select <strong>Import</strong> to restore your full client list.</span>
+
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>On a new device (such as an iPad), open the tool and select <strong>Import</strong> to restore your data.</span>
+          </div>
+          <div style="padding-left: 24px; font-size: 12px; color: var(--muted);">
+            在新设备（如 iPad）上打开此页面，选择 <strong>导入</strong> 即可恢复数据。
+          </div>
         </li>
-        <li style="display:flex;gap:10px;">
-          <span style="color:var(--muted);flex-shrink:0;">→</span>
-          <span>Completely private. No data is ever shared with third parties.</span>
+
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>Completely private. No data is shared with third parties.</span>
+          </div>
+          <div style="padding-left: 24px; font-size: 12px; color: var(--muted);">
+            完全私密。数据绝不与任何第三方共享。
+          </div>
         </li>
       </ul>
+    </div> 
     </div>
     <div class="export-right">
-      <p style="font-size:11px;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">EXPORT FORMAT</p>
       <div class="json-preview">
-        <span class="json-key">{</span><br>
-        &nbsp;&nbsp;<span class="json-key">"clientName"</span>: <span class="json-str">"Johnny Doe"</span>,<br>
-        &nbsp;&nbsp;<span class="json-key">"policyDate"</span>: <span class="json-str">"2023-01-15"</span>,<br>
-        &nbsp;&nbsp;<span class="json-key">"premium"</span>: <span class="json-val">50000</span>,<br>
-        &nbsp;&nbsp;<span class="json-key">"commission"</span>: <span class="json-val">0.35</span>,<br>
-        &nbsp;&nbsp;<span class="json-key">"notes"</span>: <span class="json-str">"Annual review due Q1"</span><br>
-        <span class="json-key">}</span>
+<span class="json-key">{</span><br>
+&nbsp;&nbsp;<span class="json-key">"clientName"</span>: <span class="json-str">"Johnny Doe"</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"policyDate"</span>: <span class="json-str">"2023-01-15"</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"premium"</span>: <span class="json-val">50000</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"commission"</span>: <span class="json-val">0.35</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"notes"</span>: <span class="json-str">"None"</span><br>
+<span class="json-key">}</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<section id="access" style="background:var(--black);position:relative;overflow:hidden;z-index:1;border-top:1px solid var(--border);">
-  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+<!-- ACCESS GATEWAY (Footer) -->
+<section id="access" style="background:var(--black);position:relative;overflow:hidden;z-index:1; border-top: 1px solid var(--border);">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  
   <div style="max-width:1200px;margin:0 auto;padding:80px 40px;position:relative;z-index:1;">
-    <div style="max-width:600px;margin:40px 0 60px;">
-      <h2 style="font-family:var(--mono);font-size:14px;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;color:#fff;">SOURCE CODE & SUPPORT</h2>
-      <p style="font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:40px;line-height:1.8;">If this tool saved you time, consider buying me a coffee. It keeps the laboratory running.</p>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:30px;">
-        <a href="https://axis-melb.github.io/tools-online/hkcrm.html" target="_blank" style="font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:14px 28px;background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3);text-decoration:none;">SOURCE (GITHUB) ↗</a>
-        <a href="https://buy.stripe.com/eVqaEXedSeuJeIUaQX0gw00" target="_blank" style="font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:14px 28px;background:#fff;color:#000;border:1px solid #fff;text-decoration:none;font-weight:bold;">BUY ME A COFFEE ☕</a>
-      </div>
-      <div style="margin-top:40px;font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6;border-top:1px solid rgba(255,255,255,0.1);padding-top:20px;">
-        <p style="margin-bottom:8px;color:#fff;"><strong>DISCLAIMER:</strong></p>
-        <p>This is a zero-server tool. We do not store or process your data. Use at your own risk.</p>
-      </div>
+    <div style="max-width: 600px; margin: 40px 0 60px 0; text-align: left;">
+        <h2 style="font-family: var(--mono); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; color: #fff;">SOURCE CODE & SUPPORT</h2>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 40px; line-height: 1.8;">
+            If this tool added value to your professional life, consider buying me a coffee. It fuels the laboratory. <br>
+            <span style="color: rgba(255,255,255,0.5); font-size: 13px;">如果这个工具为您节省了时间，欢迎请我喝杯咖啡。这是我们实验室持续更新的动力。</span>
+        </p>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 30px;">
+            <a href="https://axis-melb.github.io/tools-online/hkcrm.html" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); text-decoration: none; transition: all 0.2s;">
+                SOURCE (GITHUB) ↗
+            </a>
+            <a href="https://buy.stripe.com/eVqaEXedSeuJeIUaQX0gw00" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: #fff; color: #000; border: 1px solid #fff; text-decoration: none; transition: all 0.2s; font-weight: bold;">
+                BUY ME A COFFEE ☕
+            </a>
+        </div>
+        <div style="margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+          <p style="margin-bottom: 8px; color: #fff;"><strong>DISCLAIMER / 免责声明:</strong></p>
+          <p style="margin-bottom: 8px;">This is a zero-server tool. We do not store or process your data. Use at your own risk.</p>
+          <p>这是一个零服务器工具。我们不存储、查看或处理您输入的任何信息。您应对导出的 JSON 数据负全部保管责任。</p>
+        </div>
     </div>
-    <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;">
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);">PROJECT AXIS — AX-2024.004 — CRM LAYER</div>
-      <a href="/#lab" style="font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;color:rgba(255,255,255,0.4);">← BACK TO LAB</a>
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4);">
+        PROJECT AXIS — AX-2024.004 — CRM LAYER
+      </div>
+      <a href="/#lab" style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,0.4);">
+        ← BACK TO LAB
+      </a>
     </div>
   </div>
 </section>
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"73976c8d5bae4cfdb5e3edd4efa0f352","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
