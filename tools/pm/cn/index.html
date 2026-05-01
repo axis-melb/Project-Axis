@@ -3,18 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROJECT MANAGER · TOOL.002 — Project Axis</title>
+<title>项目管理 · 工具.002 — Project Axis</title>
 
-<!-- Fonts -->
+<!-- Tailwind & Fonts -->
+<script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
 <style>
-  /* 
-   * PROJECT MANAGER TOOL SPECIFIC STYLES 
-   * Identical to original for platform consistency
-   */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
@@ -60,21 +57,6 @@
   }
   .section-label:hover { color: var(--fg); }
   .desktop-nav { display: flex; gap: 32px; align-items: center; }
-
-  /* EN BUTTON */
-  .btn-lang {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    background: var(--fg);
-    color: var(--bg);
-    padding: 4px 12px;
-    border-radius: 2px;
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-  .btn-lang:hover { opacity: 0.8; }
 
   /* BACK LINK */
   .back-bar {
@@ -269,11 +251,6 @@
   }
 
   /* FEATURES */
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid var(--border);
-  }
   .feature-cell {
     padding: 36px 40px;
     border-right: 1px solid var(--border);
@@ -300,7 +277,6 @@
   }
 
   /* SETUP STEPS */
-  .steps-grid { border-top: 1px solid var(--border); }
   .step-row {
     display: grid;
     grid-template-columns: 80px 1fr 1fr;
@@ -352,14 +328,7 @@
     text-transform: uppercase;
   }
 
-  /* EXPORT */
-  .export-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-top: 1px solid var(--border);
-  }
-  .export-left { padding: 40px; border-right: 1px solid var(--border); }
-  .export-right { padding: 40px; }
+  /* DATA SAFETY JSON */
   .json-preview {
     background: #1a1a18;
     color: #c8c5be;
@@ -371,28 +340,8 @@
     overflow: hidden;
   }
   .json-key { color: #888684; }
-  .json-val { color: #e8e5de; }
   .json-str { color: #aab89e; }
-
-  /* SCREENSHOTS */
-  .screenshots-section { padding: 0 40px 40px; border-top: 1px solid var(--border); }
-  .screenshots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .screenshot-cell {
-    background: var(--bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .screenshot-img { width: 100%; height: auto; border-radius: 8px; border: 1px solid #eee; display: block; margin-bottom: 10px; }
-  .screenshot-caption {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
+  .json-val { color: #e8e5de; }
 
   /* RESPONSIVE */
   @media (max-width: 768px) {
@@ -400,13 +349,10 @@
     .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 32px; }
     .why-grid { grid-template-columns: 1fr; }
     .why-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
-    .features-grid { grid-template-columns: 1fr; }
-    .feature-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .features-grid { grid-template-columns: 1fr !important; }
+    .feature-cell { border-right: none !important; border-bottom: 1px solid var(--border); }
     .step-row { grid-template-columns: 48px 1fr; }
     .step-note { display: none; }
-    .export-grid { grid-template-columns: 1fr; }
-    .export-left { border-right: none; border-bottom: 1px solid var(--border); }
-    .screenshots-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -417,14 +363,12 @@
   <div style="max-width:1200px;margin:0 auto;padding:0 32px; height: 100%;">
     <div style="display:flex;align-items:center;justify-content:space-between;height:100%;">
       <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg);text-decoration:none;">PROJECT AXIS</a>
-      <div style="display:flex; gap:32px; align-items:center;">
-        <div class="desktop-nav">
-          <a href="/#lab" class="section-label">LAB</a>
-          <a href="/#log" class="section-label">LOG</a>
-          <a href="/#system" class="section-label">SYSTEM</a>
-          <a href="#access" class="section-label">ACCESS</a>
-        </div>
-        <a href="https://projectaxis.com.au/tools/pm/" class="btn-lang">EN</a>
+      <div class="desktop-nav">
+        <a href="/#lab" class="section-label">实验室</a>
+        <a href="/#log" class="section-label">日志</a>
+        <a href="/#system" class="section-label">系统</a>
+        <a href="#access" class="section-label">访问</a>
+        <a href="https://projectaxis.com.au/tools/pm/" class="mono" style="font-size:10px; letter-spacing:2px; text-transform:uppercase; background:var(--fg); color:var(--bg); padding:4px 12px; border-radius:2px; text-decoration:none;">EN</a>
       </div>
     </div>
   </div>
@@ -432,9 +376,9 @@
 
 <!-- BREADCRUMB -->
 <div class="back-bar">
-  <a href="/#lab" class="back-link">← LAB</a>
+  <a href="/#lab" class="back-link">← 实验室</a>
   <span class="back-sep">/</span>
-  <span class="back-current">PROJECT MANAGER (PM) / 项目管理 (PM)</span>
+  <span class="back-current">项目管理 (PM)</span>
 </div>
 
 <!-- HERO -->
@@ -442,7 +386,7 @@
   <div>
     <div class="hero-eyebrow">TOOL.002 / 项目管理控制台</div>
     <h1 class="hero-title">PROJECT<br>MANAGER</h1>
-    <p class="hero-sub">专为澳洲建筑从业人员设计，实时记录项目进展与财务细节。 / A streamlined tracking tool for Australian construction consultants.</p>
+    <p class="hero-sub"><strong>专为澳洲建筑从业人员设计，实时记录项目进展与财务细节。</strong></p>
   </div>
   <div class="hero-right">
     <div class="hero-tag-row">
@@ -460,13 +404,13 @@
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-inner">
-    <span class="ticker-item">CONSULTANT SUITE</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">咨询套件</span><span class="ticker-dot">·</span>
     <span class="ticker-item">实时进度追踪</span><span class="ticker-dot">·</span>
     <span class="ticker-item">预算管理</span><span class="ticker-dot">·</span>
-    <span class="ticker-item">现场笔记日志</span><span class="ticker-dot">·</span>
-    <span class="ticker-item">零云端上传</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">工地日志记录</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">零云上传</span><span class="ticker-dot">·</span>
     <span class="ticker-item">项目导出</span><span class="ticker-dot">·</span>
-    <span class="ticker-item">CONSULTANT SUITE</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">咨询套件</span><span class="ticker-dot">·</span>
     <span class="ticker-item">实时进度追踪</span><span class="ticker-dot">·</span>
   </div>
 </div>
@@ -475,29 +419,29 @@
 <section>
   <div class="section-header">
     <span class="section-num">§01</span>
-    <span class="section-title">WHY THIS EXISTS / 初衷</span>
+    <span class="section-title">初衷</span>
   </div>
   <div class="why-grid">
     <div class="why-col">
-      <div class="why-col-label">THE PROBLEM / 痛点</div>
+      <div class="why-col-label">痛点</div>
       <div style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.03); border-left: 2px solid var(--fg);">
-          <p style="font-size: 13px; color: var(--muted); line-height: 1.5; font-style: italic;">
+          <p style="font-size: 13px; color: var(--muted); line-height: 1.5;">
               建筑工地的信号往往不稳定且涉及项目敏感信息。市面上的软件要么功能冗余，要么必须实时联网才能同步。
           </p>
       </div>
       <ul class="why-problem-list">
-        <li>复杂且庞大的软件系统对于独立顾问来说过于繁琐</li>
-        <li>传统表格在手机端的体验非常糟糕</li>
-        <li>集中式平台存在数据泄露的商业风险</li>
+        <li>复杂的企业软件对个人顾问来说大材小用</li>
+        <li>传统电子表格在移动端的体验较差</li>
+        <li>中心化项目平台存在数据泄露风险</li>
       </ul>
     </div>
     <div class="why-col">
-      <div class="why-col-label">THE SOLUTION / 这里提供的逻辑</div>
+      <div class="why-col-label">这里提供的逻辑</div>
       <ul class="why-solution-list">
-        <li>即使在低信号区域也能通过浏览器即时访问</li>
-        <li>专注于核心：分类、进度、价值和笔记</li>
+        <li>在低信号区也可通过移动浏览器即时访问</li>
+        <li>专注于核心：类别、进度、价值和笔记</li>
         <li>本地存储确保您的商业数据完全私密</li>
-        <li>支持导出项目历史记录，方便备份或生成报告</li>
+        <li>可导出的项目历史记录，用于备份或报告</li>
       </ul>
     </div>
   </div>
@@ -507,23 +451,23 @@
 <section>
   <div class="section-header">
     <span class="section-num">§02</span>
-    <span class="section-title">FEATURES / 功能说明</span>
+    <span class="section-title">功能说明</span>
   </div>
-  <div class="features-grid">
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border);" class="features-grid">
     <div class="feature-cell">
       <div class="feature-num">F.001</div>
-      <div class="feature-title">项目类型分类</div>
-      <p class="feature-desc">按住宅、商业或基础设施对项目进行分类。通过看板过滤功能，专注于特定的工作流。</p>
+      <div class="feature-title">项目类型</div>
+      <p class="feature-desc">快速分类项目，支持按类型过滤显示。</p>
     </div>
     <div class="feature-cell">
       <div class="feature-num">F.002</div>
       <div class="feature-title">进度监控</div>
-      <p class="feature-desc">从“规划中”到“实际竣工”进行实时追踪。视觉指示器明确告诉您哪些项目需要关注。</p>
+      <p class="feature-desc">从策划到竣工全流程监控，状态一目了然。</p>
     </div>
     <div class="feature-cell">
       <div class="feature-num">F.003</div>
-      <div class="feature-title">价值与笔记</div>
-      <p class="feature-desc">记录合同金额和现场观察。为每项工作保留设计变更或客户指令的运行日志。</p>
+      <div class="feature-title">合同额与现场笔记</div>
+      <p class="feature-desc">汇总设计变更与客户指令，记录合同额与现场笔记。</p>
     </div>
   </div>
 </section>
@@ -532,22 +476,32 @@
 <section>
   <div class="section-header">
     <span class="section-num">§03</span>
-    <span class="section-title">INTERFACE / 界面预览</span>
+    <span class="section-title">界面预览</span>
   </div>
-  <div class="screenshots-section">
-    <div class="screenshots-grid">
-      <div class="screenshot-cell">
-        <img src="screenshots/overview.png" class="screenshot-img" alt="Overview">
-        <div class="screenshot-caption">01 — 项目列表概览</div>
+  <div style="padding: 0 40px 40px; border-top: 1px solid var(--border);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 32px;">
+      
+      <div style="text-align: center;">
+        <div style="aspect-ratio: 9/16; background: var(--bg); border: 1px solid #eee; border-radius: 8px; overflow: hidden; margin-bottom: 10px;">
+          <img src="https://projectaxis.com.au/tools/pm/screenshots/overview.png" alt="Overview" style="width: 100%; height: 100%; object-fit: cover;" referrerpolicy="no-referrer">
+        </div>
+        <div class="mono" style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);">01 — 项目列表概览</div>
       </div>
-      <div class="screenshot-cell">
-        <img src="screenshots/project_entry.png" class="screenshot-img" alt="Entry">
-        <div class="screenshot-caption">02 — 新项目录入</div>
+
+      <div style="text-align: center;">
+        <div style="aspect-ratio: 9/16; background: var(--bg); border: 1px solid #eee; border-radius: 8px; overflow: hidden; margin-bottom: 10px;">
+          <img src="https://projectaxis.com.au/tools/pm/screenshots/project_entry.png" alt="Entry" style="width: 100%; height: 100%; object-fit: cover;" referrerpolicy="no-referrer">
+        </div>
+        <div class="mono" style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);">02 — 新项目录入</div>
       </div>
-      <div class="screenshot-cell">
-        <img src="screenshots/financials.png" class="screenshot-img" alt="Financials">
-        <div class="screenshot-caption">03 — 预算与进度日志</div>
+
+      <div style="text-align: center;">
+        <div style="aspect-ratio: 9/16; background: var(--bg); border: 1px solid #eee; border-radius: 8px; overflow: hidden; margin-bottom: 10px;">
+          <img src="https://projectaxis.com.au/tools/pm/screenshots/financials.png" alt="Financials" style="width: 100%; height: 100%; object-fit: cover;" referrerpolicy="no-referrer">
+        </div>
+        <div class="mono" style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);">03 — 预算与进度日志</div>
       </div>
+
     </div>
   </div>
 </section>
@@ -556,58 +510,58 @@
 <section>
   <div class="section-header">
     <span class="section-num">§04</span>
-    <span class="section-title">GETTING STARTED / 使用指南</span>
+    <span class="section-title">使用指南</span>
   </div>
-  <div class="steps-grid">
+  <div style="border-top: 1px solid var(--border);">
     <div class="step-row">
       <div class="step-num-cell"><span class="step-num">01</span></div>
       <div class="step-content">
-        <div class="step-title">保存至主屏幕</div>
-        <p class="step-desc">打开项目页面，使用手机浏览器的“添加到主屏幕”功能，获得类似 App 的使用体验。</p>
+        <div class="step-title">保存到主屏幕</div>
+        <p class="step-desc">浏览器打开并“添加到主屏幕”，享受原生 App 般的体验。</p>
       </div>
       <div class="step-note">
-        <span class="step-note-inner">工地现场<br>快速访问</span>
+        <span class="step-note-inner">更快访问<br>工地现场</span>
       </div>
     </div>
     <div class="step-row">
       <div class="step-num-cell"><span class="step-num">02</span></div>
       <div class="step-content">
-        <div class="step-title">定义您的工作流</div>
-        <p class="step-desc">输入您当前的实时项目。设置初始进度和合同价值，构建您的移动看板。</p>
+        <div class="step-title">建立项目看板</div>
+        <p class="step-desc">输入当前在研项目，设定初始进度与金额以构建看板。</p>
       </div>
       <div class="step-note">
-        <span class="step-note-inner">数据完全<br>私密</span>
+        <span class="step-note-inner">完全数据<br>私密性</span>
       </div>
     </div>
     <div class="step-row">
       <div class="step-num-cell"><span class="step-num">03</span></div>
       <div class="step-content">
-        <div class="step-title">定期备份</div>
-        <p class="step-desc">定期导出项目数据库 (JSON)，确保您的商业记录已存档在设备之外。</p>
+        <div class="step-title">定期数据备份</div>
+        <p class="step-desc">定期导出 JSON 数据，确保您的商业记录在外部留底备份。</p>
       </div>
       <div class="step-note">
-        <span class="step-note-inner">纯本地<br>存储模式</span>
+        <span class="step-note-inner">仅限本地<br>存储模式</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- DATA -->
+<!-- DATA SAFETY -->
 <section>
   <div class="section-header">
     <span class="section-num">§05</span>
-    <span class="section-title">DATA SAFETY / 数据安全</span>
+    <span class="section-title">数据安全</span>
   </div>
-  <div class="export-grid">
-   <div class="export-left">
+  <div style="display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border);" class="export-grid">
+   <div style="padding: 40px; border-right: 1px solid var(--border);" class="why-col">
       <p style="font-size:13px; color:var(--muted); line-height:1.7;">
-        您的客户数据存储在浏览器本地 <code>localStorage</code>。如需更换设备或备份，请使用内置导出功能。
+        您的客户数据存储在浏览器本地 localStorage。如需更换设备或备份，请使用内置导出功能。
       </p>
       <ul style="margin-top: 20px; list-style: none; display: flex; flex-direction: column; gap: 18px; font-size: 13px; color: var(--fg); padding: 0;">
         <li style="display: flex; flex-direction: column; gap: 4px;">
           <div style="display: flex; gap: 10px;">
             <span style="color:var(--muted);">→</span>
-            <span>定期点击 <strong>导出 (JSON)</strong> 以保存备份（建议存入 iCloud）。</span>
+            <span>定期点击 <strong>导出 (JSON)</strong> 以保存备份至本地（建议存入 iCloud）。</span>
           </div>
         </li>
         <li style="display: flex; flex-direction: column; gap: 4px;">
@@ -616,23 +570,29 @@
             <span>在新设备（如 iPad）上打开此页面，选择 <strong>导入</strong> 即可恢复数据。</span>
           </div>
         </li>
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>完全私密。数据绝不与任何第三方共享。</span>
+          </div>
+        </li>
       </ul>
     </div>
-    <div class="export-right">
+    <div style="padding: 40px;">
       <div class="json-preview">
-<span class="json-key">{</span><br>
-&nbsp;&nbsp;<span class="json-key">"title"</span>: <span class="json-str">"North Sydney Office Lot"</span>,<br>
-&nbsp;&nbsp;<span class="json-key">"type"</span>: <span class="json-str">"Commercial"</span>,<br>
-&nbsp;&nbsp;<span class="json-key">"value"</span>: <span class="json-val">2500000</span>,<br>
-&nbsp;&nbsp;<span class="json-key">"progress"</span>: <span class="json-val">0.65</span>,<br>
-&nbsp;&nbsp;<span class="json-key">"updated"</span>: <span class="json-str">"2024-04-16"</span><br>
-<span class="json-key">}</span>
+        <span class="json-key">{</span><br>
+        &nbsp;&nbsp;<span class="json-key">"title"</span>: <span class="json-str">"North Sydney Office Lot"</span>,<br>
+        &nbsp;&nbsp;<span class="json-key">"type"</span>: <span class="json-str">"Commercial"</span>,<br>
+        &nbsp;&nbsp;<span class="json-key">"value"</span>: <span class="json-val">2500000</span>,<br>
+        &nbsp;&nbsp;<span class="json-key">"progress"</span>: <span class="json-val">0.65</span>,<br>
+        &nbsp;&nbsp;<span class="json-key">"updated"</span>: <span class="json-str">"2024-04-16"</span><br>
+        <span class="json-key">}</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ACCESS GATEWAY (Footer) -->
+<!-- FOOTER -->
 <section id="access" style="background:var(--black);position:relative;overflow:hidden;z-index:1; border-top: 1px solid var(--border);">
   <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
   
@@ -643,11 +603,11 @@
             我们的工具专为独立专业人士开发。如果它简化了您的日常工作，欢迎请我们喝杯咖啡。
         </p>
         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-            <a href="https://axis-melb.github.io/tools-online/project-manager.html" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); text-decoration: none;">
-                GITHUB 源码 ↗
+            <a href="https://axis-melb.github.io/tools-online/project-manager.html" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); text-decoration: none; transition: all 0.2s;">
+                源码 (GITHUB) ↗
             </a>
-            <a href="https://buy.stripe.com/eVqaEXedSeuJeIUaQX0gw00" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: #fff; color: #000; border: 1px solid #fff; text-decoration: none; font-weight: bold;">
-                请我喝咖啡 ☕
+            <a href="https://buy.stripe.com/eVqaEXedSeuJeIUaQX0gw00" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: #fff; color: #000; border: 1px solid #fff; text-decoration: none; transition: all 0.2s; font-weight: bold;">
+                请喝杯咖啡 ☕
             </a>
         </div>
         <div style="margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
