@@ -416,20 +416,25 @@
 
 <!-- NAVIGATION -->
 <nav>
-  <div style="max-width:1200px;margin:0 auto;padding:0 32px; height: 100%;">
-    <div style="display:flex;align-items:center;justify-content:space-between;height:100%;">
-      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg);text-decoration:none;">PROJECT AXIS</a>
-      <div class="desktop-nav">
-        <a href="/#lab" class="section-label">LAB</a>
-        <a href="/#log" class="section-label">LOG</a>
-        <a href="/#system" class="section-label">SYSTEM</a>
-        <a href="#access" class="section-label">ACCESS</a>
-        <a href="https://projectaxis.com.au/tools/pm/cn" class="btn-cn">CN</a>
-      </div>
-      <!-- Mobile CN -->
-      <a href="https://projectaxis.com.au/tools/pm/cn" class="btn-cn" style="display:inline-block; margin-left: auto;" class="md:hidden">CN</a>
+    <div style="width: 100%; padding: 0 40px; height: 80px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; height: 100%;">
+            
+            <!-- 左侧 Logo -->
+            <a href="/" class="mono" style="font-size:11px; letter-spacing:0.35em; text-transform:uppercase; color:var(--fg); text-decoration:none;">PROJECT AXIS</a>
+            
+            <!-- 右侧导航及语言切换 -->
+            <div class="desktop-nav" style="display: flex; align-items: center; gap: 24px;">
+                <a href="/#lab" class="section-label" style="font-size: 11px; text-decoration: none; color: var(--muted);">LAB</a>
+                <a href="/#log" class="section-label" style="font-size: 11px; text-decoration: none; color: var(--muted);">LOG</a>
+                <a href="/#system" class="section-label" style="font-size: 11px; text-decoration: none; color: var(--muted);">SYSTEM</a>
+                <a href="/#access" class="section-label" style="font-size: 11px; text-decoration: none; color: var(--muted);">ACCESS</a>
+                
+                <!-- 仅保留这一个 CN 按钮 -->
+                <a href="https://projectaxis.com.au/tools/pm/cn" class="btn-cn" style="background: #111; color: #fff; padding: 6px 12px; font-size: 10px; font-weight: bold; text-decoration: none;">CN</a>
+            </div>
+
+        </div>
     </div>
-  </div>
 </nav>
 
 <!-- BREADCRUMB -->
