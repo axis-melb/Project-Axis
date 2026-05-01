@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>轻断食 16:8 · 工具.003 — Project Axis</title>
+
+<!-- Tailwind & 字体 -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400&display=swap" rel="stylesheet" />
+
+<!-- 样式表 -->
+<link rel="stylesheet" href="https://projectaxis.com.au/style.css">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f2;
+    --fg: #111110;
+    --muted: #999896;
+    --border: #d8d6d2;
+    --black: #111110;
+    --mono: 'Space Mono', monospace;
+    --body: 'Noto Sans SC', 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-weight: 300;
+    line-height: 1.6;
+    font-size: 14px;
+    overflow-x: hidden;
+  }
+
+  /* 导航栏 */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    z-index: 100;
+  }
+  .mono { font-family: var(--mono); }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .section-label:hover { color: var(--fg); }
+  .desktop-nav { display: flex; gap: 32px; align-items: center; }
+  
+  /* EN 按钮 */
+  .en-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    color: var(--fg);
+    text-decoration: none;
+    transition: all 0.2s;
+    margin-left: 24px;
+  }
+  .en-btn:hover {
+    border-color: var(--fg);
+    background: rgba(0,0,0,0.03);
+  }
+
+  .mobile-nav-btn { display: none; background: none; border: none; cursor: pointer; color: var(--fg); width: 24px; height: 24px; }
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    padding: 20px 32px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    position: fixed;
+    top: 52px; left: 0; right: 0;
+    z-index: 99;
+  }
+  .mobile-menu.open { display: flex; gap: 16px; }
+
+  /* 面包屑 */
+  .back-bar {
+    margin-top: 52px;
+    padding: 16px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .back-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--fg); }
+  .back-sep { color: var(--border); font-size: 10px; }
+  .back-current {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+
+  /* 英雄区 */
+  .hero {
+    padding: 72px 40px 56px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: end;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    font-family: var(--mono);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .hero-sub {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 380px;
+  }
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: end;
+    padding-bottom: 4px;
+  }
+  .hero-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 8px;
+  }
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    background: var(--fg);
+    color: var(--bg);
+    border: 1px solid var(--fg);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--fg);
+  }
+
+  /* 跑马灯 */
+  .ticker {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-block;
+    animation: ticker 24s linear infinite;
+  }
+  .ticker-item {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 48px;
+  }
+  .ticker-dot { color: var(--border); margin-right: 48px; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* 章节 */
+  section {
+    border-bottom: 1px solid var(--border);
+  }
+  .section-header {
+    padding: 40px 40px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+
+  /* 为什么 */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .why-col {
+    padding: 40px;
+  }
+  .why-col:first-child {
+    border-right: 1px solid var(--border);
+  }
+  .why-col-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .why-problem-list, .why-solution-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .why-problem-list li, .why-solution-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .why-problem-list li { color: var(--muted); }
+  .why-problem-list li::before {
+    content: '×';
+    font-family: var(--mono);
+    color: var(--border);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .why-solution-list li { color: var(--fg); }
+  .why-solution-list li::before {
+    content: '→';
+    font-family: var(--mono);
+    color: var(--fg);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* 功能展示 */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border);
+  }
+  .feature-cell {
+    padding: 36px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .feature-cell:last-child { border-right: none; }
+  .feature-num {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .feature-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .feature-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* 使用步骤 */
+  .steps-grid {
+    border-top: 1px solid var(--border);
+  }
+  .step-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+    min-height: 100px;
+  }
+  .step-row:last-child { border-bottom: none; }
+  .step-num-cell {
+    padding: 32px 40px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+  .step-content {
+    padding: 32px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .step-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .step-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .step-note {
+    padding: 32px 40px;
+    display: flex;
+    align-items: flex-start;
+  }
+  .step-note-inner {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: var(--border);
+    line-height: 1.8;
+    text-transform: uppercase;
+  }
+
+  /* 数据导出 */
+  .export-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .export-left {
+    padding: 40px;
+    border-right: 1px solid var(--border);
+  }
+  .export-right {
+    padding: 40px;
+  }
+  .json-preview {
+    background: #1a1a18;
+    color: #c8c5be;
+    padding: 24px;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.8;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  .json-key { color: #888684; }
+  .json-val { color: #e8e5de; }
+  .json-str { color: #aab89e; }
+  .json-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  /* 预览图 */
+  .screenshots-section {
+    padding: 0 40px 40px;
+    border-top: 1px solid var(--border);
+  }
+  .screenshots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 0;
+  }
+  .screenshot-cell {
+    background: var(--bg);
+    aspect-ratio: 9/16;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .screenshot-placeholder-icon {
+    font-family: var(--mono);
+    font-size: 24px;
+    color: var(--border);
+  }
+  .screenshot-placeholder-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--border);
+  }
+  .screenshot-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px 16px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* 移动端适配 */
+  @media (max-width: 768px) {
+    .desktop-nav { display: none; }
+    .mobile-nav-btn { display: block; }
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 48px 20px 40px;
+      gap: 32px;
+    }
+    .why-grid { grid-template-columns: 1fr; }
+    .why-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .features-grid { grid-template-columns: 1fr; }
+    .feature-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .step-row { grid-template-columns: 48px 1fr; }
+    .step-note { display: none; }
+    .step-num-cell, .step-content { padding: 24px 20px; }
+    .export-grid { grid-template-columns: 1fr; }
+    .export-left { border-right: none; border-bottom: 1px solid var(--border); }
+    .export-left, .export-right { padding: 28px 20px; }
+    .section-header { padding: 32px 20px 0; }
+    .screenshots-section { padding: 0 20px 32px; }
+    .screenshots-grid { grid-template-columns: 1fr 1fr; }
+    .why-col { padding: 28px 20px; }
+    .en-btn { margin-left: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 导航 -->
+<nav>
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px; height: 100%;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:100%;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg);text-decoration:none;">PROJECT AXIS</a>
+      <div style="display:flex; align-items:center;">
+        <div class="desktop-nav">
+          <a href="/#lab" class="section-label">实验室</a>
+          <a href="/#log" class="section-label">日志</a>
+          <a href="/#system" class="section-label">系统</a>
+          <a href="#access" class="section-label">进入</a>
+        </div>
+        <a href="https://projectaxis.com.au/tools/fasting/" class="en-btn">EN</a>
+        <button class="mobile-nav-btn" id="mobile-menu-btn" style="margin-left: 16px;">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/#lab" class="section-label">实验室</a>
+    <a href="/#log" class="section-label">日志</a>
+    <a href="/#system" class="section-label">系统</a>
+    <a href="#access" class="section-label">进入</a>
+  </div>
+</nav>
+
+<!-- 路径 -->
+<div class="back-bar">
+  <a href="/#lab" class="back-link">← 实验室</a>
+  <span class="back-sep">/</span>
+  <span class="back-current">轻断食 16:8</span>
+</div>
+
+<!-- 英雄区 -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">工具.003 / 轻断食控制台</div>
+    <h1 class="hero-title">FASTING<br>16:8</h1>
+    <p class="hero-sub">一个注重隐私的轻断食追踪器。无需注册，无需服务器，无第三方访问。您的数据仅存储于浏览器本地。无需注册，数据不离设备。</p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-tag-row">
+      <span class="tag">HTML · 本地存储</span>
+      <span class="tag">无需注册</span>
+      <span class="tag">零数据抓取</span>
+      <span class="tag">导出 JSON</span>
+    </div>
+    <div class="cta-row">
+     <a href="https://axis-melb.github.io/tools-online/fasting.html" class="btn-primary" target="_blank">打开工具 →</a>
+    </div>
+  </div>
+</div>
+
+<!-- 跑马灯 -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">16小时断食</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">8小时进食窗口</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">饮水追踪</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">碳水日志</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">本地存储</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">导出 JSON</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">无需账号</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">无追踪器</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">16小时断食</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">8小时进食窗口</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">饮水追踪</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">碳水日志</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">本地存储</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">导出 JSON</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">无需账号</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">无追踪器</span><span class="ticker-dot">·</span>
+  </div>
+</div>
+
+<!-- 为什么做这个 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§01</span>
+    <span class="section-title">为什么做这个</span>
+  </div>
+  <div class="why-grid">
+    <div class="why-col">
+      <div class="why-col-label">市面上的问题</div>
+      <div style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.03); border-left: 2px solid var(--fg);">
+          <p style="font-size: 13px; color: var(--muted); line-height: 1.5;">
+              我厌倦了市面上那些必须绑定手机号、动辄要求实名注册的轻断食 App。我不需要各种社交广场或付费订阅，我只想要一个纯净的 16:8 计时器。
+          </p>
+      </div>
+      <ul class="why-problem-list">
+        <li>几乎每款断食应用都要求注册，甚至强制绑定手机号</li>
+        <li>数据在没有明确规则的情况下被上传到第三方服务器</li>
+        <li>充斥着冗余功能：卡路里计算、社交广场、付费广告</li>
+      </ul>
+    </div>
+    <div class="why-col">
+      <div class="why-col-label">这个工具的逻辑</div>
+      <ul class="why-solution-list">
+        <li>一个 HTML 文件。直接打开，直接使用。无需安装。</li>
+        <li>所有数据存储在浏览器 localStorage。不离开您的设备。</li>
+        <li>仅三个功能：断食计时、饮水记录、碳水日志。</li>
+        <li>随时将数据导出为 JSON — 您拥有完全的所有权。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 功能 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§02</span>
+    <span class="section-title">功能</span>
+  </div>
+  <div class="features-grid">
+    <div class="feature-cell">
+      <div class="feature-num">F.001</div>
+      <div class="feature-title">16:8 计时器</div>
+      <p class="feature-desc">设置进食窗口的起始和结束时间。计时器会实时显示您正处于断食期还是进食期，并带有进度条和坚持天数计数。</p>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-num">F.002</div>
+      <div class="feature-title">每日饮水记录</div>
+      <p class="feature-desc">快捷添加按钮（250ml, 500ml等）及自定义输入。对比目标追踪每日总量。每日自动重置。</p>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-num">F.003</div>
+      <div class="feature-title">碳水化合物记录</div>
+      <p class="feature-desc">记录每餐的碳水水平（无/低/中/高）及备注。保存运行历史，方便您查看饮食规律。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 界面 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§03</span>
+    <span class="section-title">界面预览</span>
+  </div>
+  <div class="screenshots-section">
+    <div class="screenshots-grid">
+      <div class="screenshot-cell">
+        <img src="https://projectaxis.com.au/tools/fasting/screenshots/timer.png" alt="计时器预览" style="width: auto; max-width: 95%;max-height: 80%; object-fit: contain;margin: 0 auto; display: block;">
+        <div class="screenshot-placeholder-icon">⏱️</div>
+        <div class="screenshot-placeholder-label">计时器视图</div>
+        <div class="screenshot-caption">01 — 断食计时器</div>
+      </div>
+      <div class="screenshot-cell">
+        <img src="https://projectaxis.com.au/tools/fasting/screenshots/water.png" alt="饮水记录预览" style="width: auto; max-width: 95%;max-height: 80%; object-fit: contain;margin: 0 auto; display: block;">
+        <div class="screenshot-placeholder-icon">💧</div>
+        <div class="screenshot-placeholder-label">饮水记录</div>
+        <div class="screenshot-caption">02 — 饮水量追踪</div>
+      </div>
+      <div class="screenshot-cell">
+        <img src="https://projectaxis.com.au/tools/fasting/screenshots/carbs.png" alt="碳水记录预览" style="width: auto; max-width: 95%;max-height: 80%; object-fit: contain;margin: 0 auto; display: block;">
+        <div class="screenshot-placeholder-icon">🥗</div>
+        <div class="screenshot-placeholder-label">碳水日志</div>
+        <div class="screenshot-caption">03 — 进食记录</div>
+      </div>
+    </div> 
+  </div> 
+</section>
+
+<!-- 步骤 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§04</span>
+    <span class="section-title">第一次使用</span>
+  </div>
+  <div class="steps-grid">
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">01</span></div>
+      <div class="step-content">
+        <div class="step-title">打开文件</div>
+        <p class="step-desc">下载 <code>fasting.html</code> 并直接用浏览器打开。无需安装，无需服务器，无依赖。直接收藏书签即可。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">适配主流浏览器<br>· Chrome · Safari<br>· Firefox</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">02</span></div>
+      <div class="step-content">
+        <div class="step-title">设置进食窗口</div>
+        <p class="step-desc">在计时器标签页中找到进食窗口设置。设置您偏好的起始和结束时间（例如 10:00 AM 到 6:00 PM）。工具会自动计算断食周期。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">设置自动保存<br>至本地存储</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">03</span></div>
+      <div class="step-content">
+        <div class="step-title">每日使用</div>
+        <p class="step-desc">设置一次，之后傻瓜操作。计时器会根据当前时间自动运行，无需手动开始/停止。随手记录饮水和餐饮即可。</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">语言切换<br>可用: 中 / EN</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 数据 -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§05</span>
+    <span class="section-title">数据导出与迁移</span>
+  </div>
+  <div class="export-grid">
+    <div class="export-left">
+      <p style="font-size:13px; color:var(--muted); line-height:1.7;">
+        您的个人数据存储在浏览器本地 <code>localStorage</code>。如需更换设备或备份，请使用内置导出功能。
+      </p>
+      <ul style="margin-top: 20px; list-style: none; display: flex; flex-direction: column; gap: 18px; font-size: 13px; color: var(--fg); padding: 0;">
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>定期点击 <strong>导出 (JSON)</strong> 以保存备份至本地（建议存入 iCloud 或手机文件夹）。</span>
+          </div>
+        </li>
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>在新设备（如 iPad）上打开此页面，选择 <strong>导入</strong> 即可恢复数据。</span>
+          </div>
+        </li>
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>完全私密。数据绝不与任何第三方共享。</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="export-right">
+      <div class="json-label">导出格式预览</div>
+      <div class="json-preview">
+<span class="json-key">{</span><br>
+&nbsp;&nbsp;<span class="json-key">"eatStart"</span>: <span class="json-str">"10:00"</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"eatEnd"</span>: <span class="json-str">"18:00"</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"dayCount"</span>: <span class="json-val">42</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"waterLog"</span>: [ <span class="json-str">...</span> ],<br>
+&nbsp;&nbsp;<span class="json-key">"mealLog"</span>: [ <span class="json-str">...</span> ],<br>
+&nbsp;&nbsp;<span class="json-key">"exportedAt"</span>: <span class="json-str">"2025-04-16"</span><br>
+<span class="json-key">}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 底栏 -->
+<section id="access" style="background:var(--black);position:relative;overflow:hidden;z-index:1; border-top: 1px solid var(--border);">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  <div style="max-width:1200px;margin:0 auto;padding:80px 40px;position:relative;z-index:1;">
+    <div style="max-width: 600px; margin: 40px 0 60px 0; text-align: left;">
+      <h2 style="font-family: var(--mono); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; color: #fff;">源码与支持</h2>
+      <p style="font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 40px; line-height: 1.8;">
+          如果这个工具为您节省了时间或创造了价值，欢迎请我喝杯咖啡。这是我持续更新的动力。
+      </p>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 30px;">
+          <a href="https://github.com/axis-melb/tools-online" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); text-decoration: none; transition: all 0.2s;">
+              源码 (GITHUB) ↗
+          </a>
+          <a href="https://buy.stripe.com/eVqaEXedSeuJeIUaQX0gw00" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: #fff; color: #000; border: 1px solid #fff; text-decoration: none; transition: all 0.2s; font-weight: bold;">
+              请我喝杯咖啡 ☕
+          </a>
+      </div>
+      <div style="margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left;">
+        <p style="margin-bottom: 8px; color: #fff;"><strong>免责声明:</strong></p>
+        <p>本工具为完全免费的开源资源，仅供个人参考使用，不构成任何医疗、健康或专业建议。请根据自身情况酌情使用，风险自担。</p>
+      </div>
+    </div>
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4);">
+        PROJECT AXIS — AX-2024.003 — 轻断食工具
+      </div>
+      <div style="display: flex; gap: 24px;">
+        <a href="/#lab" style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,0.4); transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+          ← 返回实验室
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if(mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('open');
+      });
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.remove('open');
+        });
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
