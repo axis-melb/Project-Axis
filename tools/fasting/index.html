@@ -9,15 +9,14 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
-<!-- 引入您的主站样式表 -->
-<link rel="stylesheet" href="/style.css">
+<!-- Absolute path to original stylesheet -->
+<link rel="stylesheet" href="https://projectaxis.com.au/style.css">
 
 <style>
   /* 
    * FASTING TOOL SPECIFIC STYLES 
-   * 融合了原工具的特定排版和主站规范
    */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -28,7 +27,7 @@
     --border: #d8d6d2;
     --black: #111110;
     --mono: 'Space Mono', monospace;
-    --body: 'Inter', 'Noto Sans SC', sans-serif;
+    --body: 'Inter', sans-serif;
   }
 
   html { scroll-behavior: smooth; }
@@ -43,7 +42,7 @@
     overflow-x: hidden;
   }
 
-  /* NAV (Template Structure Fallback Styles) */
+  /* NAV */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -64,6 +63,25 @@
   }
   .section-label:hover { color: var(--fg); }
   .desktop-nav { display: flex; gap: 32px; align-items: center; }
+
+  /* CN BUTTON */
+  .cn-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    color: var(--fg);
+    text-decoration: none;
+    transition: all 0.2s;
+    margin-left: 24px;
+    display: inline-block;
+  }
+  .cn-btn:hover {
+    border-color: var(--fg);
+    background: rgba(0,0,0,0.03);
+  }
+
   .mobile-nav-btn { display: none; background: none; border: none; cursor: pointer; color: var(--fg); width: 24px; height: 24px; }
   .mobile-menu {
     display: none;
@@ -77,9 +95,9 @@
   }
   .mobile-menu.open { display: flex; gap: 16px; }
 
-  /* BACK LINK */
+  /* BREADCRUMB */
   .back-bar {
-    margin-top: 52px; /* Adjusted for new nav height */
+    margin-top: 52px;
     padding: 16px 40px;
     border-bottom: 1px solid var(--border);
     display: flex;
@@ -372,7 +390,7 @@
   /* EXPORT */
   .export-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     border-top: 1px solid var(--border);
   }
   .export-left {
@@ -381,30 +399,6 @@
   }
   .export-right {
     padding: 40px;
-  }
-  .export-steps {
-    list-style: none;
-    counter-reset: export-counter;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 20px;
-  }
-  .export-steps li {
-    counter-increment: export-counter;
-    display: flex;
-    gap: 16px;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-  .export-steps li::before {
-    content: counter(export-counter, decimal-leading-zero);
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--muted);
-    flex-shrink: 0;
-    padding-top: 2px;
-    letter-spacing: 1px;
   }
   .json-preview {
     background: #1a1a18;
@@ -428,7 +422,7 @@
     margin-bottom: 12px;
   }
 
-  /* SCREENSHOT PLACEHOLDER */
+  /* SCREENSHOTS */
   .screenshots-section {
     padding: 0 40px 40px;
     border-top: 1px solid var(--border);
@@ -476,17 +470,7 @@
     color: var(--muted);
   }
 
-  .screenshot-note {
-    margin-top: 24px;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--border);
-    text-align: center;
-  }
-
-  /* RESPONSIVE STYLES */
+  /* RESPONSIVE */
   @media (max-width: 768px) {
     .desktop-nav { display: none; }
     .mobile-nav-btn { display: block; }
@@ -514,33 +498,36 @@
 </head>
 <body>
 
-<!-- NAV (与首页完全一致) -->
+<!-- NAV -->
 <nav>
   <div style="max-width:1200px;margin:0 auto;padding:0 32px; height: 100%;">
     <div style="display:flex;align-items:center;justify-content:space-between;height:100%;">
-      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg);text-decoration:none;">PROJECT AXIS</a>
-      <div class="desktop-nav">
-        <a href="/#lab" class="section-label">LAB</a>
-        <a href="/#log" class="section-label">LOG</a>
-        <a href="/#system" class="section-label">SYSTEM</a>
-        <a href="#access" class="section-label">ACCESS</a>
+      <a href="https://projectaxis.com.au/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg);text-decoration:none;">PROJECT AXIS</a>
+      <div style="display:flex; align-items:center;">
+        <div class="desktop-nav">
+          <a href="https://projectaxis.com.au/#lab" class="section-label">LAB</a>
+          <a href="https://projectaxis.com.au/#log" class="section-label">LOG</a>
+          <a href="https://projectaxis.com.au/#system" class="section-label">SYSTEM</a>
+          <a href="#access" class="section-label">ACCESS</a>
+        </div>
+        <a href="https://projectaxis.com.au/tools/fasting/cn" class="cn-btn">CN</a>
+        <button class="mobile-nav-btn" id="mobile-menu-btn" style="margin-left: 16px;">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
       </div>
-      <button class="mobile-nav-btn" id="mobile-menu-btn">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-      </button>
     </div>
   </div>
   <div class="mobile-menu" id="mobile-menu">
-    <a href="/#lab" class="section-label">LAB</a>
-    <a href="/#log" class="section-label">LOG</a>
-    <a href="/#system" class="section-label">SYSTEM</a>
+    <a href="https://projectaxis.com.au/#lab" class="section-label">LAB</a>
+    <a href="https://projectaxis.com.au/#log" class="section-label">LOG</a>
+    <a href="https://projectaxis.com.au/#system" class="section-label">SYSTEM</a>
     <a href="#access" class="section-label">ACCESS</a>
   </div>
 </nav>
 
 <!-- BREADCRUMB -->
 <div class="back-bar">
-  <a href="/#lab" class="back-link">← LAB</a>
+  <a href="https://projectaxis.com.au/#lab" class="back-link">← LAB</a>
   <span class="back-sep">/</span>
   <span class="back-current">FASTING 16:8</span>
 </div>
@@ -548,9 +535,9 @@
 <!-- HERO -->
 <div class="hero">
   <div>
-    <div class="hero-eyebrow">TOOL.003 / 轻断食控制台</div>
+    <div class="hero-eyebrow">TOOL.003 / FASTING CONSOLE</div>
     <h1 class="hero-title">FASTING<br>16:8</h1>
-    <p class="hero-sub">A private-by-design fasting tracker. No sign-up, no server, no third-party access. Your data lives in your browser and nowhere else. / 无需注册，数据不离设备。</p>
+    <p class="hero-sub">A private-by-design fasting tracker. No sign-up, no server, no third-party access. Your data lives in your browser and nowhere else.</p>
   </div>
   <div class="hero-right">
     <div class="hero-tag-row">
@@ -591,22 +578,16 @@
 <section>
   <div class="section-header">
     <span class="section-num">§01</span>
-    <span class="section-title">WHY THIS EXISTS / 为什么做这个</span>
+    <span class="section-title">WHY THIS EXISTS</span>
   </div>
   <div class="why-grid">
     <div class="why-col">
-      <div class="why-col-label">THE PROBLEM / 市面上的问题</div>
-      
-      <!-- 新增的中英文双语吐槽/痛点 -->
-<div style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.03); border-left: 2px solid var(--fg);">
-    <p style="font-size: 14px; font-weight: 500; color: var(--fg); margin-bottom: 8px;">
-        I'm tired of fasting apps that force phone number verification and real-name registration. I don't need social feeds or premium subscriptions. I just want a clean 16:8 timer.
-    </p>
-    <p style="font-size: 13px; color: var(--muted); line-height: 1.5;">
-        我厌倦了市面上那些必须绑定手机号、动辄要求实名注册的轻断食 App。我不需要各种社交广场或付费订阅，我只想要一个纯净的 16:8 计时器。
-    </p>
-</div>
-
+      <div class="why-col-label">THE PROBLEM</div>
+      <div style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.03); border-left: 2px solid var(--fg);">
+        <p style="font-size: 14px; font-weight: 500; color: var(--fg); margin-bottom: 8px;">
+            I'm tired of fasting apps that force phone number verification and real-name registration. I don't need social feeds or premium subscriptions. I just want a clean 16:8 timer.
+        </p>
+      </div>
       <ul class="why-problem-list">
         <li>Every fasting app requires registration — often with a phone number</li>
         <li>Data is uploaded to third-party servers without clear data policies</li>
@@ -614,7 +595,7 @@
       </ul>
     </div>
     <div class="why-col">
-      <div class="why-col-label">THE SOLUTION / 这个工具的逻辑</div>
+      <div class="why-col-label">THE SOLUTION</div>
       <ul class="why-solution-list">
         <li>A single HTML file. Open it, use it, done. No install required.</li>
         <li>All data is stored in your browser's localStorage. Nothing leaves your device.</li>
@@ -629,7 +610,7 @@
 <section>
   <div class="section-header">
     <span class="section-num">§02</span>
-    <span class="section-title">WHAT IT DOES / 功能</span>
+    <span class="section-title">WHAT IT DOES</span>
   </div>
   <div class="features-grid">
     <div class="feature-cell">
@@ -640,12 +621,12 @@
     <div class="feature-cell">
       <div class="feature-num">F.002</div>
       <div class="feature-title">WATER LOG</div>
-      <p class="feature-desc">Quick-add buttons for common amounts (250ml, 500ml, etc.) plus a custom input. Tracks daily total against your target. Resets automatically each day. 每日饮水记录。</p>
+      <p class="feature-desc">Quick-add buttons for common amounts (250ml, 500ml, etc.) plus a custom input. Tracks daily total against your target. Resets automatically each day.</p>
     </div>
     <div class="feature-cell">
       <div class="feature-num">F.003</div>
       <div class="feature-title">CARB LOG</div>
-      <p class="feature-desc">Log each meal with a carb level selection (none / low / medium / high) and optional notes. Keeps a running history so you can see patterns over days. 碳水化合物记录。</p>
+      <p class="feature-desc">Log each meal with a carb level selection (none / low / medium / high) and optional notes. Keeps a running history so you can see patterns over days.</p>
     </div>
   </div>
 </section>
@@ -654,47 +635,44 @@
 <section>
   <div class="section-header">
     <span class="section-num">§03</span>
-    <span class="section-title">INTERFACE / 界面预览</span>
+    <span class="section-title">INTERFACE</span>
   </div>
-
   <div class="screenshots-section">
     <div class="screenshots-grid">
-      
       <div class="screenshot-cell">
-        <img src="screenshots/timer.png" alt="Timer view" style="width: auto; max-width: 95%;max-height: 80%; object-fit: contain;margin: 0 auto; display: block;">
+        <img src="https://projectaxis.com.au/tools/fasting/screenshots/timer.png" alt="Timer view" style="width: auto; max-width: 95%;max-height: 80%; object-fit: contain;margin: 0 auto; display: block;">
         <div class="screenshot-placeholder-icon">⏱️</div>
         <div class="screenshot-placeholder-label">TIMER VIEW</div>
         <div class="screenshot-caption">01 — FASTING TIMER</div>
       </div>
-
       <div class="screenshot-cell">
-        <img src="screenshots/water.png" alt="Water log" style="width: auto; max-width: 95%;max-height: 80%; object-fit: contain;margin: 0 auto; display: block;">
+        <img src="https://projectaxis.com.au/tools/fasting/screenshots/water.png" alt="Water log" style="width: auto; max-width: 95%;max-height: 80%; object-fit: contain;margin: 0 auto; display: block;">
         <div class="screenshot-placeholder-icon">💧</div>
         <div class="screenshot-placeholder-label">WATER LOG</div>
         <div class="screenshot-caption">02 — WATER INTAKE</div>
       </div>
-
       <div class="screenshot-cell">
-        <img src="screenshots/carbs.png" alt="Carb log" style="width: auto; max-width: 95%;max-height: 80%; object-fit: contain;margin: 0 auto; display: block;">
+        <img src="https://projectaxis.com.au/tools/fasting/screenshots/carbs.png" alt="Carb log" style="width: auto; max-width: 95%;max-height: 80%; object-fit: contain;margin: 0 auto; display: block;">
         <div class="screenshot-placeholder-icon">🥗</div>
         <div class="screenshot-placeholder-label">CARB LOG</div>
         <div class="screenshot-caption">03 — MEAL RECORD</div>
       </div>
-
-    </div> </div> </section>
+    </div> 
+  </div> 
+</section>
 
 <!-- SETUP -->
 <section>
   <div class="section-header">
     <span class="section-num">§04</span>
-    <span class="section-title">GETTING STARTED / 第一次使用</span>
+    <span class="section-title">GETTING STARTED</span>
   </div>
   <div class="steps-grid">
     <div class="step-row">
       <div class="step-num-cell"><span class="step-num">01</span></div>
       <div class="step-content">
         <div class="step-title">OPEN THE FILE</div>
-        <p class="step-desc">Download <code>fasting.html</code> from GitHub and open it in your browser. No install, no server, no dependencies — it runs as a local file. Bookmark it for easy access. / 下载 fasting.html，直接用浏览器打开，收藏书签即可。</p>
+        <p class="step-desc">Download <code>fasting.html</code> from GitHub and open it in your browser. No install, no server, no dependencies — it runs as a local file. Bookmark it for easy access.</p>
       </div>
       <div class="step-note">
         <span class="step-note-inner">Works on any<br>modern browser<br>· Chrome · Safari<br>· Firefox</span>
@@ -704,7 +682,7 @@
       <div class="step-num-cell"><span class="step-num">02</span></div>
       <div class="step-content">
         <div class="step-title">SET YOUR EATING WINDOW</div>
-        <p class="step-desc">On the Timer tab, find the "Eating Window" section. Set your preferred start and end times — for example 10:00 AM to 6:00 PM. The tool will calculate your fasting and eating windows automatically. This is the only setup step. / 设置进食开始和结束时间，之后无需再动。</p>
+        <p class="step-desc">On the Timer tab, find the "Eating Window" section. Set your preferred start and end times — for example 10:00 AM to 6:00 PM. The tool will calculate your fasting and eating windows automatically.</p>
       </div>
       <div class="step-note">
         <span class="step-note-inner">Settings saved<br>to localStorage<br>automatically</span>
@@ -713,57 +691,44 @@
     <div class="step-row">
       <div class="step-num-cell"><span class="step-num">03</span></div>
       <div class="step-content">
-        <div class="step-title">USE IT DAILY — IT'S AUTOMATIC</div>
-        <p class="step-desc">After setup, just open the bookmark each day. The timer runs against the current time — no manual start/stop needed. Log water and meals as you go. The day counter tracks your streak automatically. / 设置一次，之后傻瓜操作。</p>
+        <div class="step-title">USE IT DAILY</div>
+        <p class="step-desc">After setup, just open the bookmark each day. The timer runs against the current time — no manual start/stop needed. Log water and meals as you go.</p>
       </div>
       <div class="step-note">
-        <span class="step-note-inner">Language toggle<br>available: EN / 中</span>
+        <span class="step-note-inner">Language toggle<br>available: EN</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- EXPORT / MIGRATE -->
+<!-- YOUR DATA -->
 <section>
   <div class="section-header">
     <span class="section-num">§05</span>
-    <span class="section-title">YOUR DATA / 数据导出与迁移</span>
+    <span class="section-title">YOUR DATA</span>
   </div>
   <div class="export-grid">
- <div class="export-left">
+    <div class="export-left">
       <p style="font-size:13px; color:var(--muted); line-height:1.7;">
-        Your client data is stored in your browser's <code>localStorage</code>. To switch devices or back up, use the built-in export function.<br>
-        <span style="font-size:12px; opacity: 0.8;">您的客户数据存储在浏览器本地。如需更换设备或备份，请使用内置导出功能。</span>
+        Your client data is stored in your browser's <code>localStorage</code>. To switch devices or back up, use the built-in export function.
       </p>
       <ul style="margin-top: 20px; list-style: none; display: flex; flex-direction: column; gap: 18px; font-size: 13px; color: var(--fg); padding: 0;">
-        
         <li style="display: flex; flex-direction: column; gap: 4px;">
           <div style="display: flex; gap: 10px;">
             <span style="color:var(--muted);">→</span>
             <span>Regularly hit <strong>Export (JSON)</strong> to save a backup to your local device. (I save mine to my iCloud.)</span>
           </div>
-          <div style="padding-left: 24px; font-size: 12px; color: var(--muted);">
-            定期点击 <strong>导出 (JSON)</strong> 以保存备份至本地（建议存入 iCloud 或手机文件夹）。
-          </div>
         </li>
-
         <li style="display: flex; flex-direction: column; gap: 4px;">
           <div style="display: flex; gap: 10px;">
             <span style="color:var(--muted);">→</span>
             <span>On a new device (such as an iPad), open the tool and select <strong>Import</strong> to restore your data.</span>
           </div>
-          <div style="padding-left: 24px; font-size: 12px; color: var(--muted);">
-            在新设备（如 iPad）上打开此页面，选择 <strong>导入</strong> 即可恢复数据。
-          </div>
         </li>
-
         <li style="display: flex; flex-direction: column; gap: 4px;">
           <div style="display: flex; gap: 10px;">
             <span style="color:var(--muted);">→</span>
             <span>Completely private. No data is shared with third parties.</span>
-          </div>
-          <div style="padding-left: 24px; font-size: 12px; color: var(--muted);">
-            完全私密。数据绝不与任何第三方共享。
           </div>
         </li>
       </ul>
@@ -784,44 +749,43 @@
   </div>
 </section>
 
-<!-- ACCESS GATEWAY (Footer 与首页一致) -->
+<!-- ACCESS GATEWAY -->
 <section id="access" style="background:var(--black);position:relative;overflow:hidden;z-index:1; border-top: 1px solid var(--border);">
   <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
   
   <div style="max-width:1200px;margin:0 auto;padding:80px 40px;position:relative;z-index:1;">
     
     <!-- SOURCE & SUPPORT SECTION -->
-<div style="max-width: 600px; margin: 40px 0 60px 0; text-align: left;">
-    <h2 style="font-family: var(--mono); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; color: #fff;">SOURCE CODE & SUPPORT</h2>
+    <div style="max-width: 600px; margin: 40px 0 60px 0; text-align: left;">
+        <h2 style="font-family: var(--mono); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; color: #fff;">SOURCE CODE & SUPPORT</h2>
 
-    <p style="font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 40px; line-height: 1.8;">
-        If this tool saved you time or added value to your workflow, consider buying me a coffee. It fuels the next update. <br>
-        <span style="color: rgba(255,255,255,0.5); font-size: 13px;">如果这个工具为您节省了时间或创造了价值，欢迎请我喝杯咖啡。这是我持续更新的动力。</span>
-    </p>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 40px; line-height: 1.8;">
+            If this tool saved you time or added value to your workflow, consider buying me a coffee. It fuels the next update.
+        </p>
 
-    <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 30px;">
-        <a href="https://axis-melb.github.io/tools-online/fasting.html" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); text-decoration: none; transition: all 0.2s;">
-            SOURCE (GITHUB) ↗
-        </a>
-        
-        <a href="https://buy.stripe.com/eVqaEXedSeuJeIUaQX0gw00" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: #fff; color: #000; border: 1px solid #fff; text-decoration: none; transition: all 0.2s; font-weight: bold;">
-            BUY ME A COFFEE ☕
-        </a>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 30px;">
+            <a href="https://axis-melb.github.io/tools-online/fasting.html" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); text-decoration: none; transition: all 0.2s;">
+                SOURCE (GITHUB) ↗
+            </a>
+            
+            <a href="https://buy.stripe.com/eVqaEXedSeuJeIUaQX0gw00" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: #fff; color: #000; border: 1px solid #fff; text-decoration: none; transition: all 0.2s; font-weight: bold;">
+                BUY ME A COFFEE ☕
+            </a>
+        </div>
+
+        <div style="margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left;">
+            <p style="margin-bottom: 8px; color: #fff;"><strong>DISCLAIMER:</strong></p>
+            <p style="margin-bottom: 8px;">This tool is a completely free, open-source resource provided for personal use and informational purposes only. It does not constitute medical, health, or professional advice. Use at your own risk.</p>
+        </div>
     </div>
 
-    <div style="margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left;">
-    <p style="margin-bottom: 8px; color: #fff;"><strong>DISCLAIMER / 免责声明:</strong></p>
-    <p style="margin-bottom: 8px;">This tool is a completely free, open-source resource provided for personal use and informational purposes only. It does not constitute medical, health, or professional advice. Use at your own risk.</p>
-    <p>本工具为完全免费的开源资源，仅供个人参考使用，不构成任何医疗、健康或专业建议。请根据自身情况酌情使用，风险自担。</p>
-
-</div>
     <!-- STANDARD FOOTER INFO -->
     <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
       <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4);">
         PROJECT AXIS — AX-2024.003 — TOOL LAYER
       </div>
       <div style="display: flex; gap: 24px;">
-        <a href="/#lab" style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,0.4); transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+        <a href="https://projectaxis.com.au/#lab" style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,0.4); transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
           ← BACK TO LAB
         </a>
       </div>
@@ -830,7 +794,7 @@
   </div>
 </section>
 
-<!-- 内联汉堡菜单交互脚本（以防外部 main.js 加载失败） -->
+<!-- Mobile Menu script -->
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -840,7 +804,6 @@
       mobileMenuBtn.addEventListener('click', () => {
         mobileMenu.classList.toggle('open');
       });
-      // 点击菜单项后自动关闭
       mobileMenu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
           mobileMenu.classList.remove('open');
@@ -850,7 +813,7 @@
   });
 </script>
 
-<!-- 引入您站点的外部 JS 文件 -->
-<script src="/main.js"></script>
+<!-- Absolute path to original script -->
+<script src="https://projectaxis.com.au/main.js"></script>
 </body>
 </html>
