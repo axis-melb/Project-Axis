@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Consumer Side — PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/style.css">
+<style>
+  .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
+  .post-body p { margin-bottom: 1.6em; }
+  .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-body .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .post-body .highlight-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: var(--near-black); min-width: 100px; }
+  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
+  @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
+  .post-sidebar { position: sticky; top: 80px; }
+  .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
+  .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
+  .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
+  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
+  .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
+  .series-note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.35); white-space: nowrap; padding-top: 2px; }
+  .series-note-text { font-size: 12px; color: rgba(29,29,31,0.5); line-height: 1.6; }
+  .case-block { border: 1px solid var(--line-dark); padding: 20px 24px; margin: 2em 0; background: rgba(29,29,31,0.015); }
+  .case-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .case-block p { font-size: 13px; color: rgba(29,29,31,0.65); margin-bottom: 0.8em; line-height: 1.75; }
+  .case-block p:last-child { margin-bottom: 0; }
+
+  /* Timeline */
+  .timeline { margin: 2em 0; border: 1px solid var(--line-dark); overflow: hidden; }
+  .timeline-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); padding: 12px 20px; border-bottom: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); }
+  .timeline-row { display: grid; grid-template-columns: 80px 1fr; border-bottom: 1px solid var(--line); }
+  .timeline-row:last-child { border-bottom: none; }
+  .timeline-time { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: rgba(29,29,31,0.35); padding: 14px 16px; border-right: 1px solid var(--line); display: flex; align-items: flex-start; }
+  .timeline-content { padding: 14px 18px; }
+  .timeline-title { font-size: 12px; font-weight: 500; color: var(--near-black); margin-bottom: 4px; }
+  .timeline-desc { font-size: 12px; color: rgba(29,29,31,0.72); line-height: 1.65; }
+  .timeline-cost { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.15em; color: rgba(29,29,31,0.45); margin-top: 5px; text-transform: uppercase; }
+
+  /* Lang button */
+  .lang-btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line-dark); padding: 5px 14px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(29,29,31,0.45); text-decoration: none; transition: all 0.15s; }
+  .lang-btn:hover { border-color: var(--near-black); color: var(--near-black); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <a href="/posts/the-consumer-side/cn/" class="lang-btn">中文版 CN</a>
+    </div>
+  </div>
+</nav>
+
+<section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
+  <div style="margin-bottom:48px;">
+    <a href="/#log" style="text-decoration:none; color:rgba(29,29,31,0.4); font-family:'Space Mono'; font-size:10px; letter-spacing:0.3em;">← BACK TO LOG</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;">
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.002 — SERIES 03</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-05-02</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">RISK / INSURANCE</span>
+  </div>
+
+  <div style="position:relative;">
+    <div class="post-log-num">002</div>
+    <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
+      The Consumer<br>Side
+    </h1>
+    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:12px;">Domestic Building Insurance exists. Whether it works — at your contract value, at your build stage, in your timeline — is a different question.</p>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="post-tag">DBI</span>
+      <span class="post-tag">BPC</span>
+      <span class="post-tag">VCAT</span>
+      <span class="post-tag">Porter Davis</span>
+      <span class="post-tag">Consumer</span>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:0 32px 120px;position:relative;">
+  <div class="post-layout">
+    <article>
+      <div class="post-body">
+
+        <div class="series-note">
+          <div class="series-note-label">Series</div>
+          <div class="series-note-text">Part 3 of an ongoing series on risk, insurance, and liability in Victoria's building industry. <a href="/posts/risk-liability/" style="color:rgba(29,29,31,0.6);text-decoration:underline;">Part 1</a> covered how PI insurance works for practitioners. <a href="/posts/retirement-trap/" style="color:rgba(29,29,31,0.6);text-decoration:underline;">Part 2</a> examined the liability tail at retirement. This part turns to the consumer side of the same system.</div>
+        </div>
+
+        <h3>Let's Start With a Scenario</h3>
+
+        <p>
+          You sign a building contract for $1.5 million. Construction is going reasonably well — frame up, roof on, windows in, plastering complete. You're at what the industry calls fixing stage: joinery being installed, electricals being rough-in, maybe 85% done by cost. You have paid your builder in staged instalments, as the contract required.
+        </p>
+
+        <p>
+          Then the builder goes into administration. Your project stops overnight. You have a half-finished house, an active building permit, no occupancy permit, and a contract with a company that no longer exists in any meaningful sense. You have Domestic Building Insurance. You paid for it — it was folded into the build cost. The certificate is sitting in your files.
+        </p>
+
+        <p>
+          Here's what you are about to find out: the maximum you can recover under that policy is $300,000. Not $300,000 for incomplete works, plus $300,000 for defects, plus $300,000 for anything else. $300,000 in total. For everything. That is the aggregate cap for all claims under a single DBI policy against a single dwelling. It has been $300,000 since 2014.
+        </p>
+
+        <blockquote>
+          The cost of engaging a new builder to take over a $1.5M project at fixing stage — mobilisation, re-quoting, remediation of defective work, the premium that any builder charges to inherit someone else's half-finished project — can easily exceed $300,000. The insurance does not scale with your contract value. It is fixed.
+        </blockquote>
+
+        <h3>What DBI Is, And Who Actually Buys It</h3>
+
+        <p>
+          Domestic Building Insurance is mandatory for any residential building project in Victoria valued above $16,000. It is purchased by the builder, on the homeowner's behalf, before work commences or any payment is received. The homeowner pays for it — the premium is embedded in the build cost — but has no direct relationship with the insurer. They receive a certificate. They are told they are covered. And then they proceed with construction, rarely thinking about the instrument again until something goes wrong.
+        </p>
+
+        <p>
+          This asymmetry — where the person most exposed to the risk is the least likely to understand the product — is the foundational design problem with DBI. It is not unique to Australia. But it is particularly acute here, because the product is statutory and quasi-monopolistic. There is no competitive market for homeowners to compare coverage. The policy terms are set by ministerial order. What you get is what you get.
+        </p>
+
+        <h3>The $300K Question: Per Policy, Not Per Claim</h3>
+
+        <p>
+          One of the most common misunderstandings about DBI — and one I hear asked by people who should know better — is whether the $300,000 cap applies per claim event, or as an aggregate total. The answer matters enormously.
+        </p>
+
+        <p>
+          If it were per claim, a homeowner could theoretically claim $300,000 for incomplete works, then make a separate $300,000 claim for structural defects, and further claims for non-structural defects. You might wonder: could you even split the permits — one for the slab, one for the frame, one for fit-out — and get a separate $300,000 policy for each?
+        </p>
+
+        <p>
+          The answer to all of these is no. The legislation is explicit: the $300,000 is the aggregate liability limit for <em>all claims in respect of any one home</em>. Incomplete works, structural defects, non-structural defects, alternative accommodation, legal costs — every dollar claimed under any category draws from the same pool. Once it's gone, it's gone.
+        </p>
+
+        <p>
+          As for staging permits to obtain multiple policies on a single dwelling: the Auditor-General's 2025 review specifically flagged this practice as a known compliance risk, noting a case where a building surveyor was intentionally issuing staged permits just below the $16,000 threshold to avoid the DBI requirement altogether. The guidance since then has tightened. Attempting to manufacture multiple DBI policies on a single home through permit staging would be a compliance breach, not a coverage strategy.
+        </p>
+
+        <div class="highlight-row">
+          <div class="highlight-num">$300K</div>
+          <div>The aggregate policy limit for all claims on a single dwelling — incomplete works, structural defects, non-structural defects, accommodation, and legal costs combined. Not per claim type. Not per stage. Total.</div>
+        </div>
+
+        <div class="highlight-row">
+          <div class="highlight-num">20%</div>
+          <div>The incomplete works sub-limit, applied to the original contract price. On a $1.5M contract, 20% is $300,000 — which is also the total aggregate ceiling. That means on a large contract, the incomplete works component alone can consume the entire policy. Any defect claims on top of that recover nothing.</div>
+        </div>
+
+        <div class="highlight-row">
+          <div class="highlight-num">$16K</div>
+          <div>Minimum contract value triggering the DBI requirement. Below this threshold, no mandatory insurance is required — a gap that has created its own compliance problems.</div>
+        </div>
+
+        <h3>The Stage-of-Build Problem</h3>
+
+        <p>
+          The $300,000 cap does not affect all homeowners equally. Where you are in your build when a builder collapses determines almost everything.
+        </p>
+
+        <p>
+          At slab stage, a homeowner has typically paid the deposit (usually 5%) and the base/slab progress payment. The remaining contract value is largely unpaid. DBI's 20% incomplete works cover, applied to a $1.5M contract, gives you $300,000 — which may be enough to complete a project that has barely started, because most of the cost is still ahead.
+        </p>
+
+        <p>
+          At fixing stage — plaster done, joinery going in, near-complete — the picture flips. The homeowner has paid for 80–85% of a finished house. What remains looks small on paper. But the actual cost of completion has nothing to do with the percentage of work left. A new builder won't quote based on remaining contract value. They'll quote based on what it actually costs to mobilise onto an unfamiliar site with someone else's construction history, verify prior work, re-coordinate trades, and deliver a certificate of occupancy — all while absorbing the liability risk of signing off on work they didn't supervise from the start.
+        </p>
+
+        <p>
+          Porter Davis proved this precisely. When the company collapsed in March 2023, homeowners at every stage of construction entered the DBI system. Those near completion consistently found the gap between their actual costs and the $300,000 ceiling to be the most painful. They were closest to the finish line, and furthest from adequate coverage.
+        </p>
+
+        <div class="case-block">
+          <div class="case-block-label">Porter Davis Homes — March 2023</div>
+          <p>Porter Davis entered insolvency in March 2023, affecting approximately 1,700 homeowners across Victoria and Queensland. It was one of the largest residential builder collapses in Australian history.</p>
+          <p>The surge in DBI claims pushed VMIA's payouts to $112 million in FY2022–23, a 45% increase year-on-year. In response, DBI premiums across Victoria increased 43% — costs that are now embedded in every new build contract statewide, paid by homeowners who had nothing to do with Porter Davis.</p>
+          <p>Some homeowners who had paid tender-stage deposits without DBI being formally issued were eligible for a separate Customer Support Payment Scheme — capped at 5% of contract value. That scheme closed in mid-2023. The Victorian Ombudsman subsequently launched an investigation into whether VMIA managed the resulting claims fairly, with particular focus on delays and inconsistent decisions about how costs were classified.</p>
+        </div>
+
+        <h3>What It Actually Takes to Claim</h3>
+
+        <p>
+          Here is where the "insurance exists" and "insurance works" gap becomes most visible. Making a DBI claim is not the same as making a car insurance claim. You cannot call a number, lodge the damage, and wait for a cheque. The policy is — by legislative design — a last resort instrument. Before it activates, you must first exhaust every other avenue of recovery.
+        </p>
+
+        <p>
+          What that means in practice, for a homeowner whose builder is not insolvent but is simply not responding, not fixing, not engaging:
+        </p>
+
+        <div class="timeline">
+          <div class="timeline-label">Claim Pathway — Builder Non-Responsive, Not Yet Insolvent (Pre-BPC / Typical Pattern)</div>
+
+          <div class="timeline-row">
+            <div class="timeline-time">Month 0</div>
+            <div class="timeline-content">
+              <div class="timeline-title">Defect identified. Written notice sent to builder.</div>
+              <div class="timeline-desc">Builder acknowledges receipt. Promises to attend. Does not attend. Sends a follow-up message six weeks later saying they're "looking into it." DBI cannot be triggered — builder is contactable.</div>
+              <div class="timeline-cost">Cost to homeowner: time, stress, formal legal notice drafting</div>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-time">Month 2–3</div>
+            <div class="timeline-content">
+              <div class="timeline-title">DBDRV conciliation attempted.</div>
+              <div class="timeline-desc">Free service, but the outcome depends on both parties engaging in good faith. Builder attends once, denies liability, goes quiet again. Conciliation fails. Certificate of conciliation failure issued — this is required before VCAT will accept an application.</div>
+              <div class="timeline-cost">Cost to homeowner: 6–10 weeks elapsed, no resolution</div>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-time">Month 4–5</div>
+            <div class="timeline-content">
+              <div class="timeline-title">VCAT application lodged.</div>
+              <div class="timeline-desc">Application filed. Filing fees paid. VCAT's current average wait time for a building dispute hearing is approximately 26 weeks from application. The first event is typically a directions hearing — a procedural hearing, not a substantive one — where the member directs timelines for evidence, expert reports, and mediation.</div>
+              <div class="timeline-cost">Cost to homeowner: VCAT filing fee + legal representation begins</div>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-time">Month 12–16</div>
+            <div class="timeline-content">
+              <div class="timeline-title">Directions hearing. Mediation ordered.</div>
+              <div class="timeline-desc">Points of claim, points of defence, expert witness reports, discovery — each with its own deadline. A compulsory conference is typically ordered as a last attempt at settlement before trial. If it fails, a trial date is allocated. For a complex building dispute, trial may be set 6–12 months further out.</div>
+              <div class="timeline-cost">Cost to homeowner: solicitor + barrister fees accumulating. Mortgage interest continuing. Rent continuing if property is unoccupied without OP.</div>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-time">Month 24–36</div>
+            <div class="timeline-content">
+              <div class="timeline-title">Trial. VCAT order obtained.</div>
+              <div class="timeline-desc">Builder ordered to rectify. Builder does not comply. Homeowner must return to VCAT or enforce through court. Non-compliance with a VCAT order is, under the post-2015 DBI rules, now a trigger event — but establishing non-compliance is itself a further procedural step.</div>
+              <div class="timeline-cost">Total elapsed: 2–3 years. Legal costs: potentially $50,000–$150,000+ depending on complexity.</div>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-time">Then:</div>
+            <div class="timeline-content">
+              <div class="timeline-title">DBI finally activates. Maximum recovery: $300,000.</div>
+              <div class="timeline-desc">Legal costs may or may not be partially recoverable, and only if the claim against the insurer succeeds. They draw from the same $300,000 aggregate pool. The homeowner who has spent two to three years and tens of thousands in legal fees to get here now has a reduced ceiling for what the insurance will actually pay.</div>
+              <div class="timeline-cost">Net recovery after legal costs: potentially well under $300,000.</div>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          The question worth sitting with is not whether this process is theoretically navigable. It is. The question is: how many homeowners, in the middle of a building crisis, with a mortgage ticking, rent to pay, and no occupancy permit on a near-finished house, have the financial and psychological endurance to run this gauntlet for two to three years — for a maximum outcome of $300,000?
+        </p>
+
+        <p>
+          Most don't. Most settle. They accept whatever the builder offers, or they find another way, or they absorb the loss. That is not a failure of individual resolve. It is a predictable outcome of a system that was designed to be hard to access.
+        </p>
+
+        <h3>What the BPC Reform Changes</h3>
+
+        <p>
+          The 2025 consolidation of VBA, DBDRV, and VMIA's DBI function into the Building and Plumbing Commission is a genuine structural improvement. Having one body with visibility across regulation, dispute resolution, and insurance removes the fragmentation that allowed builders to exploit gaps between agencies.
+        </p>
+
+        <p>
+          The most important substantive change is the expanded DBI trigger. Under the BPC regime, a builder who fails to comply with a BPC rectification order — not just one who has died, disappeared, or become insolvent — can now trigger the insurance. The "technically contactable but doing nothing" trap, which was the most common pattern of consumer harm before, now has a mechanism to break through it sooner.
+        </p>
+
+        <p>
+          What has not changed is the $300,000 aggregate cap, set in 2014. Residential construction costs in metropolitan Melbourne have moved materially in the twelve years since. The gap between the insurance ceiling and the actual cost of a building failure at the upper end of the residential market is structural, not incidental. It reflects a policy design that was calibrated for a different cost environment and has not been updated.
+        </p>
+
+        <h3>The Occupancy Permit Wrinkle</h3>
+
+        <p>
+          There is one more dimension to this that rarely gets discussed outside the industry. When a builder collapses mid-project, the building permit remains live. But the builder — the entity named on that permit — is gone. A new builder must be engaged to complete the work. And at the end of that process, someone must issue the occupancy permit.
+        </p>
+
+        <p>
+          That someone is the building surveyor. And this is where the scenario splits. If the original building surveyor remains on the project throughout — which is possible, as their appointment is separate from the builder's — they have continuous knowledge of the construction history. They know what they inspected, what passed, and what didn't. Their position, while still carrying full s134 liability from the occupancy permit date, is at least grounded in that continuity.
+        </p>
+
+        <p>
+          But if the incoming builder brings their own preferred building surveyor — or if the original surveyor declines to continue — the new surveyor is being asked to inspect and certify stages of work they had no hand in supervising. They can commission their own inspections and expert reports. They cannot go back in time. Their s134 liability exposure begins from the date of the occupancy permit they issue, for a construction history they can assess but did not observe. That is a materially different risk profile from a project they have followed from permit to completion.
+        </p>
+
+        <p>
+          This is not hypothetical. This is what building surveyors across Victoria were navigating in the months after Porter Davis collapsed, as Simonds, Metricon, and others were brought in to complete over a thousand unfinished homes. The DBI system's response to builder insolvency creates downstream pressure on the practitioners who close out those projects — and that pressure is invisible in the DBI coverage structure.
+        </p>
+
+        <h3>Still a Last-Resort Instrument</h3>
+
+        <p>
+          DBI has been improved. The BPC reform is real. The expanded trigger is meaningful. But in its essential character, DBI remains a last-resort product with a fixed cap in a variable-cost environment, accessed through a process that takes years and costs money before a single dollar is recovered.
+        </p>
+
+        <p>
+          The umbrella metaphor from Part 1 of this series applies here too, with one modification. The DBI umbrella is not just untested until it rains. It is an umbrella with a maximum coverage radius — and if the storm is larger than the radius, you are getting wet regardless of whether the umbrella opens.
+        </p>
+
+        <blockquote>
+          "Insurance exists" is a true statement. It is not the same as "insurance works" — not at every contract value, not at every build stage, and not without a process that costs time, money, and resilience that not every homeowner has in reserve.
+        </blockquote>
+
+        <p style="font-style: italic; color: rgba(29,29,31,0.5); font-size: 12px; margin-top: 40px;">
+          Next in this series: The Cross-Border Lens — what Hong Kong's consumer-facing insurance culture reveals about how differently risk can be distributed when it is made visible rather than embedded in institutional mandates.
+        </p>
+
+        <div style="margin-top:40px;border:1px solid var(--line-dark);padding:20px 24px;display:flex;align-items:flex-start;gap:20px;">
+          <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(29,29,31,0.3);white-space:nowrap;padding-top:3px;">PREV</div>
+          <div>
+            <a href="/posts/retirement-trap/" style="text-decoration:none;color:var(--near-black);">
+              <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:6px;">← The Retirement Trap</div>
+              <div style="font-size:12px;color:rgba(29,29,31,0.5);line-height:1.65;">Stopping work doesn't stop the clock. Run-off cover, s134, and what the 2023 Shangri-La case means for every practitioner planning to retire.</div>
+            </a>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+
+        <div class="disclaimer-box">
+          <div class="sidebar-label" style="margin-bottom:10px;">DISCLAIMER</div>
+          <p>The views expressed are solely those of the author in a personal capacity. This does not constitute legal, insurance, or financial advice. References to legislation, regulatory bodies, and published reports are general in nature and should not be relied upon as legal interpretation.</p>
+          <p>VCAT timeframes cited reflect published averages and are subject to change. Readers should seek independent professional advice regarding their specific circumstances.</p>
+        </div>
+
+      </div>
+    </article>
+
+    <aside class="post-sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-label">PUBLISHED</div>
+        <div class="sidebar-value">2026-05-02</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">LANGUAGE</div>
+        <div style="margin-top:6px;">
+          <a href="/posts/the-consumer-side/cn/" class="lang-btn" style="margin-right:6px;">中文 CN</a>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">CATEGORY</div>
+        <div class="sidebar-value">RISK / INSURANCE</div>
+        <div class="sidebar-value-sub">Consumer Protection</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">SERIES</div>
+        <div class="sidebar-value">Risk & Liability Architecture</div>
+        <div class="sidebar-value-sub">Entry 03 of ongoing</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">READ TIME</div>
+        <div class="sidebar-value">~ 9 MIN</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">KEY FIGURES</div>
+        <div style="margin-top:8px;">
+          <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);align-items:baseline;">
+            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;min-width:56px;">$300K</div>
+            <div style="font-size:10px;color:rgba(29,29,31,0.5);line-height:1.5;">Aggregate policy cap — all claims, one dwelling</div>
+          </div>
+          <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);align-items:baseline;">
+            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;min-width:56px;">26 WK</div>
+            <div style="font-size:10px;color:rgba(29,29,31,0.5);line-height:1.5;">Avg. wait for VCAT building hearing (from application)</div>
+          </div>
+          <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);align-items:baseline;">
+            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;min-width:56px;">3 YR</div>
+            <div style="font-size:10px;color:rgba(29,29,31,0.5);line-height:1.5;">Average end-to-end dispute timeline (DBDRV → VCAT trial)</div>
+          </div>
+          <div style="display:flex;gap:12px;padding:8px 0;align-items:baseline;">
+            <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;min-width:56px;">2014</div>
+            <div style="font-size:10px;color:rgba(29,29,31,0.5);line-height:1.5;">Year the $300K cap was last set. It has not changed.</div>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">TAGS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="post-tag">DBI</span>
+          <span class="post-tag">BPC</span>
+          <span class="post-tag">VMIA</span>
+          <span class="post-tag">VCAT</span>
+          <span class="post-tag">Porter Davis</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</body>
+</html>
