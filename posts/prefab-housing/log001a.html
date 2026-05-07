@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prefab Housing — The Framework Already Exists — PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --near-black: rgba(29, 29, 31, 1);
+    --line: rgba(29, 29, 31, 0.1);
+    --line-dark: rgba(29, 29, 31, 0.08);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--near-black); }
+  .mono { font-family: 'Space Mono', monospace; }
+  .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
+  .post-body p { margin-bottom: 1.6em; }
+  .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
+  @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
+  .post-sidebar { position: sticky; top: 80px; }
+  .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
+  .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
+  .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
+  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
+  .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
+  .series-note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.35); white-space: nowrap; padding-top: 2px; }
+  .series-note-text { font-size: 12px; color: rgba(29,29,31,0.5); line-height: 1.6; }
+  .series-note-text a { color: rgba(29,29,31,0.6); text-decoration: underline; }
+  .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .highlight-num { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; color: var(--near-black); min-width: 120px; }
+  .nav-between { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-top: 1px solid var(--line); margin-top: 3em; gap: 16px; }
+  .nav-between a { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(29,29,31,0.4); text-decoration: none; }
+  .nav-between a:hover { color: var(--near-black); }
+  .author-block { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.015); padding: 20px 24px; margin: 2.4em 0; }
+  .author-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .author-block p { font-size: 12px; color: rgba(29,29,31,0.55); margin-bottom: 0; line-height: 1.75; }
+</style>
+</head>
+<body class="bg-white">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--line)]">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <a href="https://projectaxis.com.au/posts/prefab-housing/cn/" class="mono" style="font-size:10px;border:1px solid var(--line-dark);padding:4px 12px;text-decoration:none;color:inherit;border-radius:2px;">CN 中文</a>
+    </div>
+  </div>
+</nav>
+
+<section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
+  <div style="margin-bottom:48px;">
+    <a href="/#log" class="mono" style="text-decoration:none;color:rgba(29,29,31,0.4);font-size:10px;letter-spacing:0.3em;">← BACK TO LOG</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap;">
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.001-A — SERIES 01</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-03-31</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">PREFAB / COMPLIANCE // BY PROJECT AXIS</span>
+  </div>
+
+  <div style="position:relative;">
+    <div class="post-log-num">001</div>
+    <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
+      Prefabricated<br>Housing
+    </h1>
+    <p style="font-size:16px;color:rgba(29,29,31,0.6);margin-top:10px;font-weight:400;">Part 1 — The Framework Already Exists</p>
+    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:6px;">The real issue isn't regulation. It's that most people never read the rules until something goes wrong.</p>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="post-tag">NCC 2022</span>
+      <span class="post-tag">Prefab Housing</span>
+      <span class="post-tag">Compliance</span>
+      <span class="post-tag">Building Regulation</span>
+      <span class="post-tag">Series</span>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:0 32px 120px;position:relative;">
+  <div class="post-layout">
+    <article>
+      <div class="post-body">
+
+        <div class="series-note">
+          <div class="series-note-label">Series</div>
+          <div class="series-note-text">Part 1 of 4 — Prefabricated Housing: A Compliance Framework Analysis. Continue to <a href="log001b.html">Part 2: Where Complexity Lives →</a></div>
+        </div>
+
+        <h3>The Question Most People Never Ask</h3>
+
+        <p>Here's a question worth asking: does everyone know you need a building permit to add a deck to your backyard? Or a pod? Most people don't — until they're selling the property and it becomes someone else's problem.</p>
+
+        <p>This isn't a gap in legislation. The NCC exists. Building regulations exist. Planning schemes exist. The framework is there, and it's detailed.</p>
+
+        <p>The real issue is two things: <strong>enforcement</strong> and <strong>public literacy</strong>.</p>
+
+        <p>Everyone knows speeding gets you a fine. That awareness didn't happen by accident — it's decades of consistent enforcement, signage, cameras, and consequences. Building compliance doesn't have that same cultural weight. An owner can place a non-compliant structure in their backyard and nothing happens — until it does.</p>
+
+        <p>Prefab sits in the middle of this.</p>
+
+        <h3>The Code Is Method-Neutral</h3>
+
+        <p>One of the most commonly misunderstood points in the Australian prefab industry is this: <strong>NCC 2022 does not treat prefabricated construction as a separate category requiring special dispensation.</strong></p>
+
+        <p>A volumetric module — a three-dimensional structural unit manufactured off-site and assembled on-site — is assessed against the same performance requirements as any other building element. The code doesn't care where the wall was built. It cares whether the wall performs.</p>
+
+        <p>This means a prefabricated module must satisfy the same compliance pathways as a conventionally constructed equivalent:</p>
+
+        <div class="highlight-row">
+          <div class="highlight-num">DTS</div>
+          <div><strong>Deemed-to-Satisfy</strong> — the module meets the NCC's specific technical provisions directly. The most straightforward path for standardised volumetric products.</div>
+        </div>
+        <div class="highlight-row">
+          <div class="highlight-num">PERFORMANCE</div>
+          <div><strong>Performance Solution</strong> — compliance is demonstrated through evidence: expert judgment, comparative assessment, or verification methods. More appropriate for innovative or non-standard systems.</div>
+        </div>
+        <div class="highlight-row" style="border-bottom:none;">
+          <div class="highlight-num">COMBO</div>
+          <div><strong>Combination</strong> — elements of both, applied to different parts of the same building. Common where prefab modules integrate with conventional structural systems.</div>
+        </div>
+
+        <p style="font-size:12px;color:rgba(29,29,31,0.4);margin-top:1.2em;font-style:italic;">Note: NCC 2025 came into effect in May 2026. Based on current indications, changes to volumetric module provisions are not expected to be as significant as the 2022 revision. A follow-up note will be published at a later stage.</p>
+
+        <h3>The Visibility Problem</h3>
+
+        <p>The structures that get photographed and shared online are rarely the compliant ones. Social media is full of backyard container conversions and prefab installs with no permits or approvals, because those are the projects that attract attention. The compliant bathroom pods and properly approved modular builds almost never get posted — even though they make up the quieter, legitimate side of the industry.</p>
+
+        <p>That's the image prefab is fighting against — and it's not a regulation problem. It's a visibility problem.</p>
+
+        <p>Done properly, through the right channels, prefab components comply with the same NCC requirements as any other build. The engineering is assessed. The permits are pulled. It's construction, not a loophole.</p>
+
+        <blockquote>
+          The off-site production environment actually creates an opportunity for better compliance documentation — factory QA systems, material traceability, dimensional consistency — that on-site construction rarely achieves consistently.
+        </blockquote>
+
+        <h3>What This Series Covers</h3>
+
+        <p>This is the first in a four-part series on prefabricated housing compliance in Australia. The framework is navigable. But navigating it requires understanding where the layers are — and why they exist.</p>
+
+        <div class="highlight-row">
+          <div class="highlight-num" style="font-size:11px;min-width:80px;">PART 1</div>
+          <div>The Framework Already Exists — NCC, method-neutrality, and the visibility problem <em>(this article)</em></div>
+        </div>
+        <div class="highlight-row">
+          <div class="highlight-num" style="font-size:11px;min-width:80px;">PART 2</div>
+          <div><a href="log001b.html" style="color:rgba(29,29,31,0.7);text-decoration:underline;">Where Complexity Lives</a> — State-level planning overlays and why the NCC is only half the story</div>
+        </div>
+        <div class="highlight-row">
+          <div class="highlight-num" style="font-size:11px;min-width:80px;">PART 3</div>
+          <div><a href="log001c.html" style="color:rgba(29,29,31,0.7);text-decoration:underline;">The Building Permit & The Import Layer</a> — what the permit process actually requires for prefab, and what changes when components cross a border</div>
+        </div>
+        <div class="highlight-row" style="border-bottom:none;">
+          <div class="highlight-num" style="font-size:11px;min-width:80px;">PART 4</div>
+          <div><a href="log001d.html" style="color:rgba(29,29,31,0.7);text-decoration:underline;">What the Market Gets Wrong</a> — the three compliance failures that keep recurring, and a practical checklist</div>
+        </div>
+
+        <div class="author-block" style="margin-top:2.8em;">
+          <div class="author-block-label">About the Author</div>
+          <p>The author is a Registered Building Surveyor (Victoria), with a background in automotive lean manufacturing. Current research focus: the practical feasibility and on-ground implementation of prefabricated housing in the Australian market.</p>
+        </div>
+
+        <div class="nav-between">
+          <span style="color:rgba(29,29,31,0.2);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;">← PREV</span>
+          <a href="log001b.html">PART 2: WHERE COMPLEXITY LIVES →</a>
+        </div>
+
+        <p style="font-size:11px;color:rgba(29,29,31,0.35);font-style:italic;margin-top:0.5em;">A condensed version of this series was originally published on <a href="https://www.linkedin.com/in/" style="color:rgba(29,29,31,0.5);text-decoration:underline;">LinkedIn</a> on 31 March 2026.</p>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+
+        <div class="disclaimer-box">
+          <div class="sidebar-label" style="margin-bottom:10px;">DISCLAIMER</div>
+          <p>The views expressed are solely those of the author in a personal capacity. This does not constitute legal, building, or professional advice. Readers should seek independent professional advice regarding their specific circumstances.</p>
+        </div>
+
+        <div style="margin-top: 40px; border-top: 1px solid var(--line-dark); padding-top: 20px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(29,29,31,0.5);margin-bottom:4px;">Written by</div>
+          <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--near-black);margin-bottom:12px;">Project Axis Solutions</div>
+          <div style="font-size:10px;color:rgba(29,29,31,0.3);letter-spacing:0.05em;">© 2026 Project Axis Solutions. All rights reserved.</div>
+        </div>
+
+      </div>
+    </article>
+
+    <aside class="post-sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-label">PUBLISHED</div>
+        <div class="sidebar-value">2026-03-31</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">CATEGORY</div>
+        <div class="sidebar-value">PREFAB / COMPLIANCE</div>
+        <div class="sidebar-value-sub">Compliance framework analysis</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">SERIES</div>
+        <div class="sidebar-value">Prefabricated Housing</div>
+        <div class="sidebar-value-sub">Part 01 of 04</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">READ TIME</div>
+        <div class="sidebar-value">~ 4 MIN</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">ABOUT THE AUTHOR</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;">VIC Registered Building Surveyor<br>Background in automotive lean manufacturing<br>Research: prefab housing feasibility in Australia</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">IN THIS SERIES</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <span class="mono" style="font-size:9px;color:var(--near-black);letter-spacing:0.1em;">→ PART 1 (THIS)</span>
+          <a href="log001b.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">PART 2</a>
+          <a href="log001c.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">PART 3</a>
+          <a href="log001d.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">PART 4</a>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">TAGS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="post-tag">NCC</span>
+          <span class="post-tag">Prefab</span>
+          <span class="post-tag">DTS</span>
+          <span class="post-tag">Compliance</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</body>
+</html>

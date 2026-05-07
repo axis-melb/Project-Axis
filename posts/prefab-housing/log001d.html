@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prefab Housing — What the Market Gets Wrong — PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --near-black: rgba(29, 29, 31, 1);
+    --line: rgba(29, 29, 31, 0.1);
+    --line-dark: rgba(29, 29, 31, 0.08);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--near-black); }
+  .mono { font-family: 'Space Mono', monospace; }
+  .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
+  .post-body p { margin-bottom: 1.6em; }
+  .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
+  @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
+  .post-sidebar { position: sticky; top: 80px; }
+  .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
+  .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
+  .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
+  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
+  .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
+  .series-note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.35); white-space: nowrap; padding-top: 2px; }
+  .series-note-text { font-size: 12px; color: rgba(29,29,31,0.5); line-height: 1.6; }
+  .series-note-text a { color: rgba(29,29,31,0.6); text-decoration: underline; }
+  .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .highlight-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: var(--near-black); min-width: 60px; }
+  .nav-between { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-top: 1px solid var(--line); margin-top: 3em; gap: 16px; }
+  .nav-between a { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(29,29,31,0.4); text-decoration: none; }
+  .nav-between a:hover { color: var(--near-black); }
+  .checklist-block { border: 1px solid var(--line-dark); padding: 24px 28px; margin: 2em 0; background: rgba(29,29,31,0.015); }
+  .checklist-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 16px; }
+  .checklist-section { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(29,29,31,0.4); margin: 16px 0 8px; }
+  .checklist-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .checklist-item input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; accent-color: var(--near-black); width: 13px; height: 13px; }
+  .checklist-item label { font-size: 12px; color: rgba(29,29,31,0.65); line-height: 1.6; cursor: pointer; }
+  .author-block { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.015); padding: 20px 24px; margin: 2.4em 0; }
+  .author-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .author-block p { font-size: 12px; color: rgba(29,29,31,0.55); margin-bottom: 0.6em; line-height: 1.75; }
+  .author-block p:last-child { margin-bottom: 0; }
+  .ongoing-note { border-left: 2px solid rgba(29,29,31,0.15); padding: 12px 0 12px 20px; margin: 2.4em 0; }
+  .ongoing-note p { font-size: 12px; color: rgba(29,29,31,0.45); margin-bottom: 0; line-height: 1.75; font-style: italic; }
+</style>
+</head>
+<body class="bg-white">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--line)]">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <a href="https://projectaxis.com.au/posts/prefab-housing/cn/" class="mono" style="font-size:10px;border:1px solid var(--line-dark);padding:4px 12px;text-decoration:none;color:inherit;border-radius:2px;">CN 中文</a>
+    </div>
+  </div>
+</nav>
+
+<section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
+  <div style="margin-bottom:48px;">
+    <a href="/#log" class="mono" style="text-decoration:none;color:rgba(29,29,31,0.4);font-size:10px;letter-spacing:0.3em;">← BACK TO LOG</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap;">
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.001-D — SERIES 01</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-04-20</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">PREFAB / COMPLIANCE // BY PROJECT AXIS</span>
+  </div>
+
+  <div style="position:relative;">
+    <div class="post-log-num">001</div>
+    <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
+      Prefabricated<br>Housing
+    </h1>
+    <p style="font-size:16px;color:rgba(29,29,31,0.6);margin-top:10px;font-weight:400;">Part 4 — What the Market Gets Wrong</p>
+    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:6px;">The compliance framework isn't hostile to prefab. The challenge is the gap between what it requires and what most participants actually know.</p>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="post-tag">Market Analysis</span>
+      <span class="post-tag">Compliance Failures</span>
+      <span class="post-tag">Checklist</span>
+      <span class="post-tag">Victoria</span>
+      <span class="post-tag">Series</span>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:0 32px 120px;position:relative;">
+  <div class="post-layout">
+    <article>
+      <div class="post-body">
+
+        <div class="series-note">
+          <div class="series-note-label">Series</div>
+          <div class="series-note-text">Part 4 of 4 — Prefabricated Housing: A Compliance Framework Analysis. <a href="log001c.html">← Part 3: The Building Permit & The Import Layer</a></div>
+        </div>
+
+        <p>Three compliance failures keep recurring in the Australian prefab market. They are not caused by bad regulation. They are caused by bad sequencing — questions asked too late, costs discovered too far into a project to correct without pain.</p>
+
+        <h3>Failure One — Mis-Priced Projects</h3>
+
+        <div class="highlight-row">
+          <div class="highlight-num">01</div>
+          <div>Prefab projects that don't account for engineering certification, planning permit costs, mandatory inspection logistics, and import compliance costs will be underquoted.</div>
+        </div>
+
+        <p>The apparent cost advantage of prefab erodes — or disappears entirely — when compliance costs are discovered mid-project rather than at the design stage. This is not unique to prefab. It is a structural problem in how prefab is marketed.</p>
+
+        <p>The commercialisation narrative in the Australian prefab industry tends to lead with cost and speed. Both can be real advantages — but only in a project that has been correctly scoped from the start. A 15-week supply and assembly programme means nothing if the planning permit process wasn't started 8 weeks before module fabrication. A cost-competitive landed price from an overseas manufacturer doesn't hold if engineering re-certification and biosecurity compliance weren't costed at procurement.</p>
+
+        <blockquote>
+          The real question isn't "is prefab cheaper?" It's "is this prefab project correctly costed?" Those are different questions, and the industry doesn't distinguish between them often enough.
+        </blockquote>
+
+        <h3>Failure Two — Regulatory Exposure for Owners</h3>
+
+        <div class="highlight-row">
+          <div class="highlight-num">02</div>
+          <div>A non-compliant structure — even one that looks and functions perfectly — is a liability that travels with the property.</div>
+        </div>
+
+        <p>A non-compliant structure can affect insurance coverage, resale value, and refinancing. Many prefab vendors avoid discussing compliance obligations because, in most cases, the responsibility for obtaining permits and ensuring regulatory compliance ultimately sits with the property owner — not the vendor selling the product. As a result, some buyers assume they are purchasing a complete building solution, when in reality they may also be inheriting a significant compliance responsibility.</p>
+
+        <p>Some vendors stay silent on compliance to make a quick sale. The owner carries the risk. The vendor moves on. And when the council orders an inspection, or the property goes to market, or an insurance claim is made, the compliance history of the structure becomes the owner's problem to solve — at the owner's cost.</p>
+
+        <h3>Failure Three — Reputational Damage to the Industry</h3>
+
+        <div class="highlight-row" style="border-bottom:none;">
+          <div class="highlight-num">03</div>
+          <div>The structures that get photographed and shared online are rarely the compliant ones.</div>
+        </div>
+
+        <p>Nobody posts about a pod that successfully passed its inspections and received an occupancy certificate or a certificate of final. What gets shared online is usually the backyard container with no permit, no approvals, and no oversight.</p>
+
+        <p>As a result, public perception of prefab construction is often shaped by the least compliant examples, rather than the industry's legitimate and properly approved work.</p>
+
+        <h3>Compliance Checklist — Prefab Housing in Victoria</h3>
+
+        <p style="font-size:13px;color:rgba(29,29,31,0.5);">For anyone working through a prefabricated housing project in Victoria — address these before a product is selected, before a contract is signed.</p>
+
+        <div class="checklist-block">
+          <div class="checklist-block-label">Pre-Design Compliance Checklist</div>
+
+          <div class="checklist-section">Planning</div>
+          <div class="checklist-item"><input type="checkbox" id="c1"><label for="c1">Zone and overlay check completed via VPPAS</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c2"><label for="c2">Planning permit requirement confirmed (or confirmed as not required)</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c3"><label for="c3">Bushfire Attack Level (BAL) assessed if BMO or BMO-HZ applies</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c4"><label for="c4">Flood overlay requirements identified if LSIO or SBO applies</label></div>
+
+          <div class="checklist-section">Building</div>
+          <div class="checklist-item"><input type="checkbox" id="c5"><label for="c5">NCC 2022/2025 compliance pathway confirmed — DTS, Performance Solution, or Combination</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c6"><label for="c6">Structural engineering documentation confirmed as prepared or reviewed by a Victorian-registered engineer</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c7"><label for="c7">Mandatory inspection strategy for off-site modules agreed with RBS before fabrication begins</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c8"><label for="c8">Energy efficiency documentation scope confirmed</label></div>
+
+          <div class="checklist-section">Import (if applicable)</div>
+          <div class="checklist-item"><input type="checkbox" id="c9"><label for="c9">Product compliance documentation — JAS-ANZ accredited certification or equivalent for imported components</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c10"><label for="c10">Biosecurity treatment certification confirmed for timber and organic materials</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c11"><label for="c11">Tariff classification and duty rate confirmed by licensed customs broker</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c12"><label for="c12">GST at importation costed into project budget</label></div>
+
+          <div class="checklist-section">General</div>
+          <div class="checklist-item"><input type="checkbox" id="c13"><label for="c13">Registered Building Surveyor engaged before design is finalised</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c14"><label for="c14">All compliance costs included in project budget at feasibility stage</label></div>
+        </div>
+
+        <h3>The Path Forward</h3>
+
+        <p>The prefab industry in Australia doesn't need simpler regulations. It needs better-informed participants — buyers who ask the right questions before they commit, vendors who are transparent about compliance obligations from the first conversation, and developers who understand that a correctly-scoped prefab project is not more expensive than a non-compliant one. It is simply honest about its costs from the start.</p>
+
+        <p>And practitioners — surveyors, engineers, certifiers — who engage with the prefab supply chain early enough to influence the design, not just assess the outcome.</p>
+
+        <div class="author-block">
+          <div class="author-block-label">About the Author</div>
+          <p>The author is a Registered Building Surveyor (Victoria), with a background in automotive lean manufacturing and lean supply chain. Currently completing honours research in construction management, with a focus on the practical feasibility and on-ground implementation of prefabricated housing in the Australian market.</p>
+          <p>Future series will cover PI insurance risk architecture, building surveyor liability, owner obligations under the Building Act, and the application of lean and Six Sigma principles to prefab supply chain design.</p>
+        </div>
+
+        <div class="ongoing-note">
+          <p>This is an active area of research. The regulatory landscape around prefabricated housing in Australia — including NCC 2025 and its implications for volumetric construction — continues to evolve. This series will be updated on an irregular basis as new material, case references, and research findings become available. Last reviewed: May 2026.</p>
+        </div>
+
+        <div class="nav-between">
+          <a href="log001c.html">← PART 3: PERMIT & IMPORT</a>
+          <span style="color:rgba(29,29,31,0.2);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;">END OF SERIES</span>
+        </div>
+
+        <p style="font-size:11px;color:rgba(29,29,31,0.35);font-style:italic;margin-top:0.5em;">A condensed version of this series was originally published on <a href="https://www.linkedin.com/in/" style="color:rgba(29,29,31,0.5);text-decoration:underline;">LinkedIn</a> on 31 March 2026.</p>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+
+        <div class="disclaimer-box">
+          <div class="sidebar-label" style="margin-bottom:10px;">DISCLAIMER</div>
+          <p>The views expressed are solely those of the author in a personal capacity. This does not constitute legal, building, or professional advice. Readers should seek independent professional advice regarding their specific circumstances.</p>
+        </div>
+
+        <div style="margin-top: 40px; border-top: 1px solid var(--line-dark); padding-top: 20px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(29,29,31,0.5);margin-bottom:4px;">Written by</div>
+          <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--near-black);margin-bottom:12px;">Project Axis Solutions</div>
+          <div style="font-size:10px;color:rgba(29,29,31,0.3);letter-spacing:0.05em;">© 2026 Project Axis Solutions. All rights reserved.</div>
+        </div>
+
+      </div>
+    </article>
+
+    <aside class="post-sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-label">PUBLISHED</div>
+        <div class="sidebar-value">2026-04-20</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">CATEGORY</div>
+        <div class="sidebar-value">PREFAB / COMPLIANCE</div>
+        <div class="sidebar-value-sub">Market analysis & checklist</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">SERIES</div>
+        <div class="sidebar-value">Prefabricated Housing</div>
+        <div class="sidebar-value-sub">Part 04 of 04</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">READ TIME</div>
+        <div class="sidebar-value">~ 4 MIN</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">ABOUT THE AUTHOR</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;">VIC Registered Building Surveyor<br>Background in automotive lean manufacturing<br>Honours research: prefab housing feasibility in Australia</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">STATUS</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;color:rgba(29,29,31,0.5);">Series complete — updated irregularly as research continues. Last reviewed May 2026.</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">IN THIS SERIES</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <a href="log001a.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">PART 1</a>
+          <a href="log001b.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">PART 2</a>
+          <a href="log001c.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">PART 3</a>
+          <span class="mono" style="font-size:9px;color:var(--near-black);letter-spacing:0.1em;">→ PART 4 (THIS)</span>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">TAGS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="post-tag">Market</span>
+          <span class="post-tag">Checklist</span>
+          <span class="post-tag">Prefab</span>
+          <span class="post-tag">Victoria</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</body>
+</html>

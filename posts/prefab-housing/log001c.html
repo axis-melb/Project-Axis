@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prefab Housing — The Building Permit & The Import Layer — PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --near-black: rgba(29, 29, 31, 1);
+    --line: rgba(29, 29, 31, 0.1);
+    --line-dark: rgba(29, 29, 31, 0.08);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--near-black); }
+  .mono { font-family: 'Space Mono', monospace; }
+  .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
+  .post-body p { margin-bottom: 1.6em; }
+  .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
+  @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
+  .post-sidebar { position: sticky; top: 80px; }
+  .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
+  .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
+  .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
+  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
+  .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
+  .series-note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.35); white-space: nowrap; padding-top: 2px; }
+  .series-note-text { font-size: 12px; color: rgba(29,29,31,0.5); line-height: 1.6; }
+  .series-note-text a { color: rgba(29,29,31,0.6); text-decoration: underline; }
+  .case-block { border: 1px solid var(--line-dark); padding: 20px 24px; margin: 2em 0; background: rgba(29,29,31,0.015); }
+  .case-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .case-block p { font-size: 13px; color: rgba(29,29,31,0.65); margin-bottom: 0.8em; line-height: 1.75; }
+  .case-block p:last-child { margin-bottom: 0; }
+  .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .highlight-num { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: var(--near-black); min-width: 100px; letter-spacing: 0.05em; }
+  .nav-between { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-top: 1px solid var(--line); margin-top: 3em; gap: 16px; }
+  .nav-between a { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(29,29,31,0.4); text-decoration: none; }
+  .nav-between a:hover { color: var(--near-black); }
+  .author-block { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.015); padding: 20px 24px; margin: 2.4em 0; }
+  .author-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .author-block p { font-size: 12px; color: rgba(29,29,31,0.55); margin-bottom: 0; line-height: 1.75; }
+</style>
+</head>
+<body class="bg-white">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--line)]">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <a href="https://projectaxis.com.au/posts/prefab-housing/cn/" class="mono" style="font-size:10px;border:1px solid var(--line-dark);padding:4px 12px;text-decoration:none;color:inherit;border-radius:2px;">CN 中文</a>
+    </div>
+  </div>
+</nav>
+
+<section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
+  <div style="margin-bottom:48px;">
+    <a href="/#log" class="mono" style="text-decoration:none;color:rgba(29,29,31,0.4);font-size:10px;letter-spacing:0.3em;">← BACK TO LOG</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap;">
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.001-C — SERIES 01</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-04-15</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">PREFAB / COMPLIANCE // BY PROJECT AXIS</span>
+  </div>
+
+  <div style="position:relative;">
+    <div class="post-log-num">001</div>
+    <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
+      Prefabricated<br>Housing
+    </h1>
+    <p style="font-size:16px;color:rgba(29,29,31,0.6);margin-top:10px;font-weight:400;">Part 3 — The Building Permit & The Import Layer</p>
+    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:6px;">The engineering documentation doesn't disappear because something was built off-site. If anything, the expectations are higher.</p>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="post-tag">Building Permit</span>
+      <span class="post-tag">Import Compliance</span>
+      <span class="post-tag">JAS-ANZ</span>
+      <span class="post-tag">Biosecurity</span>
+      <span class="post-tag">Series</span>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:0 32px 120px;position:relative;">
+  <div class="post-layout">
+    <article>
+      <div class="post-body">
+
+        <div class="series-note">
+          <div class="series-note-label">Series</div>
+          <div class="series-note-text">Part 3 of 4 — Prefabricated Housing: A Compliance Framework Analysis. <a href="log001b.html">← Part 2: Where Complexity Lives</a> · <a href="log001d.html">Part 4: What the Market Gets Wrong →</a></div>
+        </div>
+
+        <h3>What a Building Permit Actually Covers for Prefab</h3>
+
+        <p>A building permit is not a single document. It is a process — involving design documentation, engineering certification, and mandatory inspections at prescribed stages. For a prefabricated volumetric building, this process has specific requirements that are frequently misunderstood, and just as frequently undercosted.</p>
+
+        <div class="case-block">
+          <div class="case-block-label">Design Documentation Required</div>
+          <p>Architectural drawings showing the module layout, site placement, and interface with site works. Structural engineering drawings and calculations — including connection details between modules, and between modules and the foundation system. Energy efficiency documentation (NatHERS or equivalent) for the assembled building. Wet area and services documentation where applicable.</p>
+          <p>None of this changes because the structure was built in a factory.</p>
+        </div>
+
+        <h3>The Engineering Certification Gap</h3>
+
+        <p>If modules are manufactured interstate or overseas, the engineering documentation must be prepared or reviewed by a registered engineer in the jurisdiction where the building will be erected. A module manufactured in China, with Chinese engineering documentation, does not satisfy Victorian building permit requirements on its own.</p>
+
+        <p>The documentation needs to be reviewed and certified by an Australian registered structural engineer. This step is not optional. It is also consistently absent from early project costings — which means it surfaces as an unexpected cost mid-project, at the worst possible time.</p>
+
+        <h3>The Frame Inspection Problem</h3>
+
+        <p>Building permits require inspections at prescribed stages. For prefab, the frame inspection is the point of most practical complexity, because the "frame" arrives as a completed module. The Registered Building Surveyor (RBS) responsible for the permit needs to determine how the mandatory frame inspection requirement is satisfied for a module assembled off-site — often in another country.</p>
+
+        <div class="highlight-row">
+          <div class="highlight-num">FACTORY</div>
+          <div>Inspection during production by an approved inspector — the most thorough option, but requires forward planning and adds to the pre-shipment timeline.</div>
+        </div>
+        <div class="highlight-row">
+          <div class="highlight-num">3RD PARTY</div>
+          <div>QA certification from the manufacturer, reviewed and accepted by the RBS. Quality of documentation varies significantly between suppliers.</div>
+        </div>
+        <div class="highlight-row" style="border-bottom:none;">
+          <div class="highlight-num">ON-SITE</div>
+          <div>Inspection of connection points and interface details on-site, post-delivery. Limited visibility into what is now enclosed within the module.</div>
+        </div>
+
+        <blockquote>
+          The RBS has discretion in how they discharge this obligation. This is why the relationship with a competent Building Surveyor is not a bureaucratic formality — it is a technical necessity, and one worth establishing before the module ships.
+        </blockquote>
+
+        <h3>The Import Layer</h3>
+
+        <p>Prefabricated components sourced from overseas introduce a further compliance dimension that is almost entirely absent from public discourse in the Australian prefab market. There are three distinct layers.</p>
+
+        <div class="case-block">
+          <div class="case-block-label">Product Certification</div>
+          <p>Building products used in Australian construction must comply with NCC performance requirements. For imported prefab components, this requires evidence of assessment against applicable Australian Standards, and third-party certification from a body accredited by JAS-ANZ (Joint Accreditation System of Australia and New Zealand), or equivalent evidence of compliance.</p>
+          <p>There is no blanket recognition of overseas product certifications. A product certified to Chinese GB standards, European CE marking, or US ICC standards is not automatically compliant in Australia. Assuming equivalence is a documented compliance risk.</p>
+        </div>
+
+        <div class="case-block">
+          <div class="case-block-label">Biosecurity</div>
+          <p>Prefabricated modules and components imported into Australia are subject to biosecurity screening by the Department of Agriculture, Fisheries and Forestry. Timber components in particular require treatment certification to prevent the introduction of pests and pathogens.</p>
+          <p>Incomplete treatment documentation causes delays at the border. In a prefab project where the module is on the critical path — and it almost always is — a biosecurity hold has direct programme and cost consequences. Discovering this at port is too late.</p>
+        </div>
+
+        <div class="case-block">
+          <div class="case-block-label">Duty, GST & Tariff Classification</div>
+          <p>The importation of prefabricated modules or building components attracts GST at the point of importation. Customs duty rates vary by product classification and country of origin. Australia's free trade agreement with China (ChAFTA) provides preferential duty rates for eligible goods — but the applicable tariff classification must be correctly determined. Misclassification is common, and the cost of correction is real. This is a task for a licensed customs broker, not an assumption made at procurement.</p>
+        </div>
+
+        <h3>The Supply Chain Logic</h3>
+
+        <p>Working across China-Australia prefab supply chains, the import compliance layer is not an obstacle — it is a discipline. Managed properly, with the right documentation sequenced at the right points in the production and shipping timeline, it is entirely navigable.</p>
+
+        <p>The failures come consistently from one source: treating import compliance as a post-production problem rather than a design-stage one. By the time a module is manufactured, packed, and on a vessel, the window for cost-effective compliance correction has closed.</p>
+
+        <blockquote>
+          Lean supply chain principles apply here directly. Build compliance checkpoints into the production sequence — not the customs queue.
+        </blockquote>
+
+        <div class="author-block">
+          <div class="author-block-label">About the Author</div>
+          <p>The author is a Registered Building Surveyor (Victoria), with a background in automotive lean manufacturing. Current research focus: the practical feasibility and on-ground implementation of prefabricated housing in the Australian market.</p>
+        </div>
+
+        <div class="nav-between">
+          <a href="log001b.html">← PART 2: OVERLAYS</a>
+          <a href="log001d.html">PART 4: MARKET FAILURES →</a>
+        </div>
+
+        <p style="font-size:11px;color:rgba(29,29,31,0.35);font-style:italic;margin-top:0.5em;">A condensed version of this series was originally published on <a href="https://www.linkedin.com/in/" style="color:rgba(29,29,31,0.5);text-decoration:underline;">LinkedIn</a> on 31 March 2026.</p>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+
+        <div class="disclaimer-box">
+          <div class="sidebar-label" style="margin-bottom:10px;">DISCLAIMER</div>
+          <p>The views expressed are solely those of the author in a personal capacity. This does not constitute legal, building, or professional advice. Readers should seek independent professional advice regarding their specific circumstances.</p>
+        </div>
+
+        <div style="margin-top: 40px; border-top: 1px solid var(--line-dark); padding-top: 20px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(29,29,31,0.5);margin-bottom:4px;">Written by</div>
+          <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--near-black);margin-bottom:12px;">Project Axis Solutions</div>
+          <div style="font-size:10px;color:rgba(29,29,31,0.3);letter-spacing:0.05em;">© 2026 Project Axis Solutions. All rights reserved.</div>
+        </div>
+
+      </div>
+    </article>
+
+    <aside class="post-sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-label">PUBLISHED</div>
+        <div class="sidebar-value">2026-04-15</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">CATEGORY</div>
+        <div class="sidebar-value">PREFAB / COMPLIANCE</div>
+        <div class="sidebar-value-sub">Permit & import analysis</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">SERIES</div>
+        <div class="sidebar-value">Prefabricated Housing</div>
+        <div class="sidebar-value-sub">Part 03 of 04</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">READ TIME</div>
+        <div class="sidebar-value">~ 4 MIN</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">ABOUT THE AUTHOR</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;">VIC Registered Building Surveyor<br>Background in automotive lean manufacturing<br>Research: prefab housing feasibility in Australia</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">IN THIS SERIES</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <a href="log001a.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">PART 1</a>
+          <a href="log001b.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">PART 2</a>
+          <span class="mono" style="font-size:9px;color:var(--near-black);letter-spacing:0.1em;">→ PART 3 (THIS)</span>
+          <a href="log001d.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">PART 4</a>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">IMPORT LAYERS</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;">JAS-ANZ Product Certification<br>DAFF Biosecurity<br>ChAFTA / Customs Duty<br>GST at Importation</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">TAGS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="post-tag">Import</span>
+          <span class="post-tag">JAS-ANZ</span>
+          <span class="post-tag">Permit</span>
+          <span class="post-tag">ChAFTA</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</body>
+</html>
