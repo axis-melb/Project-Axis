@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>预制房屋 — 建筑许可证与进口合规层 — PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --near-black: rgba(29, 29, 31, 1);
+    --line: rgba(29, 29, 31, 0.1);
+    --line-dark: rgba(29, 29, 31, 0.08);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--near-black); }
+  .mono { font-family: 'Space Mono', monospace; }
+  .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
+  .post-body p { margin-bottom: 1.6em; }
+  .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
+  @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
+  .post-sidebar { position: sticky; top: 80px; }
+  .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
+  .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
+  .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
+  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
+  .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
+  .series-note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.35); white-space: nowrap; padding-top: 2px; }
+  .series-note-text { font-size: 12px; color: rgba(29,29,31,0.5); line-height: 1.6; }
+  .series-note-text a { color: rgba(29,29,31,0.6); text-decoration: underline; }
+  .case-block { border: 1px solid var(--line-dark); padding: 20px 24px; margin: 2em 0; background: rgba(29,29,31,0.015); }
+  .case-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .case-block p { font-size: 13px; color: rgba(29,29,31,0.65); margin-bottom: 0.8em; line-height: 1.75; }
+  .case-block p:last-child { margin-bottom: 0; }
+  .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .highlight-num { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: var(--near-black); min-width: 100px; letter-spacing: 0.05em; }
+  .nav-between { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-top: 1px solid var(--line); margin-top: 3em; gap: 16px; }
+  .nav-between a { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(29,29,31,0.4); text-decoration: none; }
+  .nav-between a:hover { color: var(--near-black); }
+  .author-block { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.015); padding: 20px 24px; margin: 2.4em 0; }
+  .author-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .author-block p { font-size: 12px; color: rgba(29,29,31,0.55); margin-bottom: 0; line-height: 1.75; }
+</style>
+</head>
+<body class="bg-white">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--line)]">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <a href="https://projectaxis.com.au/posts/prefab-housing/log001c" class="mono" style="font-size:10px;border:1px solid var(--line-dark);padding:4px 12px;text-decoration:none;color:inherit;border-radius:2px;">EN English</a>
+    </div>
+  </div>
+</nav>
+
+<section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
+  <div style="margin-bottom:48px;">
+    <a href="/#log" class="mono" style="text-decoration:none;color:rgba(29,29,31,0.4);font-size:10px;letter-spacing:0.3em;">← 返回日志</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap;">
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.001-C — SERIES 01</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-04-15</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">PREFAB / COMPLIANCE // BY PROJECT AXIS</span>
+  </div>
+
+  <div style="position:relative;">
+    <div class="post-log-num">001</div>
+    <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
+      预制类房屋
+    </h1>
+    <p style="font-size:16px;color:rgba(29,29,31,0.6);margin-top:10px;font-weight:400;">第三篇 — 建筑许可证与进口合规层</p>
+    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:6px;">工程文件不会因为构件在工厂生产就被豁免。恰恰相反，要求只会更高。</p>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="post-tag">建筑许可证</span>
+      <span class="post-tag">进口合规</span>
+      <span class="post-tag">JAS-ANZ</span>
+      <span class="post-tag">生物安全</span>
+      <span class="post-tag">系列</span>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:0 32px 120px;position:relative;">
+  <div class="post-layout">
+    <article>
+      <div class="post-body">
+
+        <div class="series-note">
+          <div class="series-note-label">系列</div>
+          <div class="series-note-text">第 3 篇，共 4 篇 — 预制房屋：合规框架分析。<a href="cn/log001b.html">← 第二篇：复杂性的所在</a> · <a href="cn/log001d.html">第四篇：市场的误区 →</a></div>
+        </div>
+
+        <h3>建筑许可证对预制建筑的实际要求</h3>
+
+        <p>建筑许可证不是一份单一文件，而是一套流程体系——涵盖设计文件、工程认证，节能设计，可居住性设计，以及在法定阶段进行的强制检查。对于预制化模块建筑而言，这套流程有着具体要求，而这些要求往往被误解，同样频繁地被低估成本。</p>
+
+        <div class="case-block">
+          <div class="case-block-label">所需设计文件</div>
+          <p>显示模块布局、场地安置及与场地工程连接方式的建筑图纸，结构工程图纸，合规证书以及工程计算书——包括模块间的连接节点详图，以及模块与地基系统之间的连接详图。针对整体建筑（而非单独模块）的节能性能文件（NatHERS 或同等标准）。适用时，还需提供湿区及设备文件。</p>
+          <p>这些要求不因建筑在工厂建造而有任何改变。</p>
+        </div>
+
+        <h3>工程认证的缺口</h3>
+
+        <p>如果模块在州际或海外制造，工程文件必须由建筑所在司法管辖区的注册工程师设计或审核。一份中国制造的模块附带的中文工程文件，不能自动满足维多利亚州建筑许可证的要求。</p>
+
+        <p>这些文件需要由澳大利亚各州注册的结构工程师审核并认证。这个步骤不是可选项。然而它也常常在早期项目预算中缺席——意味着户主会在项目进行到一半时，在一个尴尬的时机，以意外成本的形式浮现。</p>
+
+        <h3>框架检查的难题</h3>
+
+        <p>建筑许可证要求在规定阶段进行检查。对于预制建筑，框架检查是实操复杂性最高的节点，因为"框架"通常是以完整模块的形式抵达现场的。负责该许可证的注册建筑测量师（RBS）需要判断：对于一个在异地——往往是在另一个国家——组装完成的模块，如何履行强制性框架检查义务。</p>
+
+        <div class="highlight-row">
+          <div class="highlight-num">工厂检查</div>
+          <div>在生产过程中由认可检查员进行现场检查——最为彻底的方式，但需要提前规划，并会延长发货前的时间线。</div>
+        </div>
+        <div class="highlight-row">
+          <div class="highlight-num">第三方认证</div>
+          <div>由制造商出具质量保证认证，经 RBS 审核认可。不同供应商的文件质量可能差异显著，也会有不被RBS认可的风险。</div>
+        </div>
+        <div class="highlight-row" style="border-bottom:none;">
+          <div class="highlight-num">现场检查</div>
+          <div>模块交付后，在现场对连接节点及接口细节进行检查。对于已封闭在模块内部的内容，可见性十分有限。</div>
+        </div>
+
+        <blockquote>
+          RBS 对如何履行这项义务拥有自由裁量权。也正是因为这点，在项目早期阶段，尽早咨询一位称职的建筑测量师，可以避免后续生成完成后无法审批的问题。
+        </blockquote>
+
+        <h3>进口合规层</h3>
+
+        <p>从海外采购的预制构件——最常见的是来自中国，其次是东南亚和欧洲制造商——引入了一个几乎完全缺席于澳大利亚预制市场公共讨论的合规维度。这一层分为三个部分。</p>
+
+        <div class="case-block">
+          <div class="case-block-label">产品认证</div>
+          <p>用于澳大利亚建造的建筑产品必须符合 NCC 性能要求。对于进口预制构件，这通常要求提供针对适用澳大利亚标准的评估证明，以及来自 JAS-ANZ（澳大利亚与新西兰联合认可体系）认可机构的第三方认证，或同等合规证明。</p>
+          <p>澳大利亚不承认海外的产品认证。获得中国 GB 标准认证、欧洲 CE 标志或美国 ICC 标准认证的产品，在澳大利亚并不自动合规。想当然地认为等效，是一个非常大的合规风险。</p>
+        </div>
+
+        <div class="case-block">
+          <div class="case-block-label">生物安全</div>
+          <p>进口至澳大利亚的预制模块和构件须经澳洲联邦政府：农业、渔业与林业部的生物安全筛查。木材构件尤其需要处理认证，以防止病虫害传入。</p>
+          <p>认证文件不完整会导致产品在口岸被扣押延误。在预制项目中，——发现这个问题时通常产品已到达澳洲港口，为时已晚。</p>
+        </div>
+
+        <div class="case-block">
+          <div class="case-block-label">关税、GST 与税则归类</div>
+          <p>进口预制模块或建筑构件在进口环节须缴纳 GST。关税税率因产品归类和原产国而异。澳中自由贸易协定（ChAFTA）为符合条件的货物提供优惠税率——但适用的税则归类必须正确确定。申报错误归类造成的额外费用十分常见。这项工作需要持牌报关行来处理，不能在采购环节凭假设决定。</p>
+        </div>
+
+        <h3>供应链逻辑</h3>
+
+        <p>过去的供应链管理经验告诉我，进口合规层不是障碍，而是一种规范。管理得当、在生产和运输时间线的正确节点完成相应文件，这个流程完全可以掌控。</p>
+
+        <p>不同的失败始终如一地来自同一个根源：把进口合规当作生产后的问题来处理，而不是在设计阶段就纳入考量。当模块已经制造完成、打包装箱、登上货轮，低成本纠正合规问题的窗口就已经关闭。</p>
+
+        <blockquote>
+          精益供应链原则在此可以直接适用：把合规检查节点嵌入生产流程，而不是留到报关的时候再处理。
+        </blockquote>
+
+        <div class="author-block">
+          <div class="author-block-label">关于作者</div>
+          <p>作者为维多利亚州注册建筑测量师，具有汽车行业精益制造背景。当前研究方向：预制房屋在澳大利亚市场的落地可行性与实践路径。</p>
+        </div>
+
+        <div class="nav-between">
+          <a href="cn/log001b.html">← 第二篇：叠加层</a>
+          <a href="cn/log001d.html">第四篇：市场误区 →</a>
+        </div>
+
+        <p style="font-size:11px;color:rgba(29,29,31,0.35);font-style:italic;margin-top:0.5em;">本系列精简版最初于 2026 年 3 月 31 日发布于 <a href="https://www.linkedin.com/in/" style="color:rgba(29,29,31,0.5);text-decoration:underline;">LinkedIn</a>。</p>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+
+        <div class="disclaimer-box">
+          <div class="sidebar-label" style="margin-bottom:10px;">免责声明</div>
+          <p>本文所表达的观点仅代表作者个人立场，不构成任何法律、建筑或专业建议。读者应就具体情况寻求独立专业意见。</p>
+        </div>
+
+        <div style="margin-top: 40px; border-top: 1px solid var(--line-dark); padding-top: 20px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(29,29,31,0.5);margin-bottom:4px;">作者</div>
+          <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--near-black);margin-bottom:12px;">Project Axis Solutions</div>
+          <div style="font-size:10px;color:rgba(29,29,31,0.3);letter-spacing:0.05em;">© 2026 Project Axis Solutions. 保留所有权利。</div>
+        </div>
+
+      </div>
+    </article>
+
+    <aside class="post-sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-label">发布日期</div>
+        <div class="sidebar-value">2026-04-15</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">分类</div>
+        <div class="sidebar-value">PREFAB / COMPLIANCE</div>
+        <div class="sidebar-value-sub">许可证与进口分析</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">系列</div>
+        <div class="sidebar-value">预制房屋</div>
+        <div class="sidebar-value-sub">第 03 篇，共 04 篇</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">阅读时间</div>
+        <div class="sidebar-value">约 4 分钟</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">关于作者</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;">维多利亚州注册建筑测量师<br>汽车行业精益制造背景<br>研究方向：预制房屋在澳大利亚的落地可行性</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">本系列文章</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <a href="cn/log001a.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">第一篇</a>
+          <a href="cn/log001b.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">第二篇</a>
+          <span class="mono" style="font-size:9px;color:var(--near-black);letter-spacing:0.1em;">→ 第三篇（当前）</span>
+          <a href="cn/log001d.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">第四篇</a>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">进口合规层</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;">JAS-ANZ 产品认证<br>DAFF 生物安全<br>ChAFTA / 关税<br>进口环节 GST</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">标签</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="post-tag">Import</span>
+          <span class="post-tag">JAS-ANZ</span>
+          <span class="post-tag">Permit</span>
+          <span class="post-tag">ChAFTA</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</body>
+</html>

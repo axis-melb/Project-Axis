@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>预制房屋 — 法规的复杂性 — PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --near-black: rgba(29, 29, 31, 1);
+    --line: rgba(29, 29, 31, 0.1);
+    --line-dark: rgba(29, 29, 31, 0.08);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--near-black); }
+  .mono { font-family: 'Space Mono', monospace; }
+  .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
+  .post-body p { margin-bottom: 1.6em; }
+  .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
+  @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
+  .post-sidebar { position: sticky; top: 80px; }
+  .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
+  .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
+  .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
+  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
+  .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
+  .series-note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.35); white-space: nowrap; padding-top: 2px; }
+  .series-note-text { font-size: 12px; color: rgba(29,29,31,0.5); line-height: 1.6; }
+  .series-note-text a { color: rgba(29,29,31,0.6); text-decoration: underline; }
+  .case-block { border: 1px solid var(--line-dark); padding: 20px 24px; margin: 2em 0; background: rgba(29,29,31,0.015); }
+  .case-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .case-block p { font-size: 13px; color: rgba(29,29,31,0.65); margin-bottom: 0.8em; line-height: 1.75; }
+  .case-block p:last-child { margin-bottom: 0; }
+  .nav-between { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-top: 1px solid var(--line); margin-top: 3em; gap: 16px; }
+  .nav-between a { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(29,29,31,0.4); text-decoration: none; }
+  .nav-between a:hover { color: var(--near-black); }
+  .author-block { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.015); padding: 20px 24px; margin: 2.4em 0; }
+  .author-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .author-block p { font-size: 12px; color: rgba(29,29,31,0.55); margin-bottom: 0; line-height: 1.75; }
+</style>
+</head>
+<body class="bg-white">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--line)]">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <a href="https://projectaxis.com.au/posts/prefab-housing/log001b" class="mono" style="font-size:10px;border:1px solid var(--line-dark);padding:4px 12px;text-decoration:none;color:inherit;border-radius:2px;">EN English</a>
+    </div>
+  </div>
+</nav>
+
+<section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
+  <div style="margin-bottom:48px;">
+    <a href="/#log" class="mono" style="text-decoration:none;color:rgba(29,29,31,0.4);font-size:10px;letter-spacing:0.3em;">← 返回日志</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap;">
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.001-B — SERIES 01</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-04-03</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">PREFAB / COMPLIANCE // BY PROJECT AXIS</span>
+  </div>
+
+  <div style="position:relative;">
+    <div class="post-log-num">001</div>
+    <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
+      预制类房屋
+    </h1>
+    <p style="font-size:16px;color:rgba(29,29,31,0.6);margin-top:10px;font-weight:400;">第二篇 — 法规的复杂性：州层级规划叠加</p>
+    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:6px;">大多数预制合规讨论止步于 NCC，这是第一个错误。</p>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="post-tag">规划叠加层</span>
+      <span class="post-tag">维多利亚州</span>
+      <span class="post-tag">建筑法</span>
+      <span class="post-tag">BMO</span>
+      <span class="post-tag">系列</span>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:0 32px 120px;position:relative;">
+  <div class="post-layout">
+    <article>
+      <div class="post-body">
+
+        <div class="series-note">
+          <div class="series-note-label">系列</div>
+          <div class="series-note-text">第 2 篇，共 4 篇 — 预制房屋：合规框架分析。<a href="cn/log001a.html">← 第一篇：澳洲建筑法规合规框架早已存在</a> · <a href="cn/log001c.html">第三篇：建筑许可证与进口合规 →</a></div>
+        </div>
+
+        <h3>两套体系，一个项目</h3>
+
+        <p>NCC 为全澳大利亚的建筑性能设定了最低技术标准。但建筑与规划在宪法层面隶属于各州和地区管辖。这意味着每一个正式安装的预制模块房屋，都必须应对一套完全超出于 NCC 之外的第二层——有时是第三层——法规要求。</p>
+
+        <p>这正是大多数预制项目遭遇麻烦的地方。不是因为规则不清晰，而是因为申请人误以为 NCC 就是全部。事实并非如此。</p>
+
+        <p>在维多利亚州，一栋预制住宅或模块必须同时应对两套相互独立运作的框架。</p>
+
+        <div class="case-block">
+          <div class="case-block-label">建筑框架</div>
+          <p>依据《1993 年建筑法》及《2018 年建筑条例》管理。涵盖建筑许可证、强制检查及结构技术标准。注册建筑测量师（RBS）是该体系中的法定权力机构，负责签发建筑许可证并在各强制检查节点确保合规。</p>
+        </div>
+
+        <div class="case-block">
+          <div class="case-block-label">规划框架</div>
+          <p>依据《1987 年规划与环境法》及《维多利亚规划条款（VPP）》管理。涵盖土地用途与建筑形态——即你想建造的东西，在特定地块、特定分区和叠加层下是否被<em>允许</em>。</p>
+        </div>
+
+        <blockquote>
+          建筑许可证不能凌驾于规划要求之上。规划许可证也不能替代建筑许可证。两者必须按正确顺序同时满足，才能合规建造。（编者注：维州在一些区域有对第二套房屋-SSD，也就是通常称作奶奶房的低于60平米的居住小屋进行规划豁免，但是仍有一些特殊要求，本文讨论的预制房屋并不是特指低于60平米的奶奶房，无论预制房的面积多少，对应的审批逻辑是一致的）
+        </blockquote>
+
+        <h3>规划叠加层 — 隐形过滤器</h3>
+
+        <p>规划叠加层是叠加在特定地块上的额外要求。这些信息可通过维多利亚规划信息系统公开查询——但大多数买家和许多小型开发商在选定预制产品之前，根本不会去查。</p>
+
+        <p>维多利亚州预制项目中最常遇到的叠加层：</p>
+
+        <div class="case-block">
+          <div class="case-block-label">森（丛）林火灾管理叠加层（BMO）</div>
+          <p>依据 AS 3959 标准，根据地块的森（丛）林火灾袭击等级（BAL）施加特定建造要求。这会直接影响预制模块房的外墙覆层规格、玻璃配置及外墙和地基组件。按标准规格设计的模块，若不经修改可能无法满足 BMO 要求——而这些修改需要经过工程评估和记录。</p>
+        </div>
+
+        <div class="case-block">
+          <div class="case-block-label">洪水叠加层（LSIO / SBO）</div>
+          <p>可能要求最低地板抬高（相对于海平面高度）及特定结构评估，从而影响模块设计和连接固定系统。一个地板标高固定的体积模块，可能需要重新设计或抬升，才能满足特定地块的洪水叠加层要求。</p>
+        </div>
+
+        <div class="case-block">
+          <div class="case-block-label">设计与开发叠加层（DDO）</div>
+          <p>可限制高度、退界和建筑形态，影响体积模块在特定地块的配置方式。在某个住宅地块上完全适用的模块，在受 DDO 约束的另一地块上，可能需要大幅修改设计，甚至完全不被允许。</p>
+        </div>
+
+        <div class="case-block">
+          <div class="case-block-label">环境重要性叠加层（ESO）</div>
+          <p>可能触发额外许可要求，为项目进度增加评估时间和条件。影响的是项目时间线，从而影响成本。</p>
+        </div>
+
+        <h3>顺序问题</h3>
+
+        <p>传统建造有一个自然的叠加层合规检查点：在设计阶段，建筑师或绘图员在从头设计一栋房子时，通常会在场地分析环节查阅规划方案。</p>
+
+        <p>预制类产品则引入了不同的风险。买家先选定产品——模块、卫生间舱体、面积大小——<em>然后</em>才尝试将其安装在特定地块上。产品的设计可能与该地块的叠加层要求毫无关联。</p>
+
+        <p>这种顺序错位，是澳大利亚预制市场最一贯的合规失败根源。产品本身符合NCC要求，但地块上的限制有产品未能满足的要求，买家在合同签署之后才发现问题。</p>
+
+        <blockquote>
+          解决方案是"地块优先"的合规分析——在选择或承诺购买任何预制产品之前，先弄清楚规划框架对特定地块的要求。在传统建造中，这是标准做法。在预制市场，这很少被考虑到。
+        </blockquote>
+
+        <h3>从业者说明</h3>
+
+        <p>作为在维多利亚州执业的注册建筑测量师，我经常遇到这种顺序问题。户主在申请建筑许可证时，从未核对过规划方案。叠加层问题在申请建筑许可证阶段才浮出水面——此时项目已经投入，产品往往已经下单生成，如果需要更改产品设计，代价是真实存在的。</p>
+
+        <p>我建议每一位预制房买家或开发商在签任何合同之前，都问一个问题：<em>这块地有哪些叠加层？产品是否已针对这些叠加层进行过评估？</em></p>
+
+        <p>如果供应商无法回答这个问题，就需要户主自己去咨询专业人士。</p>
+
+        <div class="author-block">
+          <div class="author-block-label">关于作者</div>
+          <p>作者为维多利亚州注册建筑测量师，具有汽车行业精益制造背景。当前研究方向：预制房屋在澳大利亚市场的落地可行性与实践路径。</p>
+        </div>
+
+        <div class="nav-between">
+          <a href="cn-log001a.html">← 第一篇：框架</a>
+          <a href="cn-log001c.html">第三篇：许可证与进口 →</a>
+        </div>
+
+        <p style="font-size:11px;color:rgba(29,29,31,0.35);font-style:italic;margin-top:0.5em;">本系列精简版最初于 2026 年 3 月 31 日发布于 <a href="https://www.linkedin.com/in/" style="color:rgba(29,29,31,0.5);text-decoration:underline;">LinkedIn</a>。</p>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+
+        <div class="disclaimer-box">
+          <div class="sidebar-label" style="margin-bottom:10px;">免责声明</div>
+          <p>本文所表达的观点仅代表作者个人立场，不构成任何法律、建筑或专业建议。读者应就具体情况寻求独立专业意见。</p>
+        </div>
+
+        <div style="margin-top: 40px; border-top: 1px solid var(--line-dark); padding-top: 20px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(29,29,31,0.5);margin-bottom:4px;">作者</div>
+          <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--near-black);margin-bottom:12px;">Project Axis Solutions</div>
+          <div style="font-size:10px;color:rgba(29,29,31,0.3);letter-spacing:0.05em;">© 2026 Project Axis Solutions. 保留所有权利。</div>
+        </div>
+
+      </div>
+    </article>
+
+    <aside class="post-sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-label">发布日期</div>
+        <div class="sidebar-value">2026-04-03</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">分类</div>
+        <div class="sidebar-value">PREFAB / COMPLIANCE</div>
+        <div class="sidebar-value-sub">州级规划分析</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">系列</div>
+        <div class="sidebar-value">预制房屋</div>
+        <div class="sidebar-value-sub">第 02 篇，共 04 篇</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">阅读时间</div>
+        <div class="sidebar-value">约 4 分钟</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">关于作者</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;">维多利亚州注册建筑测量师<br>汽车行业精益制造背景<br>研究方向：预制房屋在澳大利亚的落地可行性</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">本系列文章</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <a href="cn/log001a.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">第一篇</a>
+          <span class="mono" style="font-size:9px;color:var(--near-black);letter-spacing:0.1em;">→ 第二篇（当前）</span>
+          <a href="cn/log001c.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">第三篇</a>
+          <a href="cn/log001d.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">第四篇</a>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">涉及叠加层</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;">BMO — 丛林火灾<br>LSIO / SBO — 洪水<br>DDO — 设计与开发<br>ESO — 环境</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">标签</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="post-tag">VPP</span>
+          <span class="post-tag">Overlays</span>
+          <span class="post-tag">Victoria</span>
+          <span class="post-tag">Planning</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</body>
+</html>

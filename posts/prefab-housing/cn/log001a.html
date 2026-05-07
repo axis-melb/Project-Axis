@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>预制类房屋 — 澳洲建筑法规的框架早已存在 — PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --near-black: rgba(29, 29, 31, 1);
+    --line: rgba(29, 29, 31, 0.1);
+    --line-dark: rgba(29, 29, 31, 0.08);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--near-black); }
+  .mono { font-family: 'Space Mono', monospace; }
+  .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
+  .post-body p { margin-bottom: 1.6em; }
+  .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
+  @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
+  .post-sidebar { position: sticky; top: 80px; }
+  .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
+  .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
+  .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
+  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
+  .series-note { border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 2.4em; display: flex; gap: 12px; align-items: flex-start; }
+  .series-note-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.35); white-space: nowrap; padding-top: 2px; }
+  .series-note-text { font-size: 12px; color: rgba(29,29,31,0.5); line-height: 1.6; }
+  .series-note-text a { color: rgba(29,29,31,0.6); text-decoration: underline; }
+  .highlight-row { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .highlight-num { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; color: var(--near-black); min-width: 120px; }
+  .nav-between { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-top: 1px solid var(--line); margin-top: 3em; gap: 16px; }
+  .nav-between a { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(29,29,31,0.4); text-decoration: none; }
+  .nav-between a:hover { color: var(--near-black); }
+  .author-block { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.015); padding: 20px 24px; margin: 2.4em 0; }
+  .author-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .author-block p { font-size: 12px; color: rgba(29,29,31,0.55); margin-bottom: 0; line-height: 1.75; }
+</style>
+</head>
+<body class="bg-white">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--line)]">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <a href="https://projectaxis.com.au/posts/prefab-housing/log001a" class="mono" style="font-size:10px;border:1px solid var(--line-dark);padding:4px 12px;text-decoration:none;color:inherit;border-radius:2px;">EN English</a>
+    </div>
+  </div>
+</nav>
+
+<section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
+  <div style="margin-bottom:48px;">
+    <a href="/#log" class="mono" style="text-decoration:none;color:rgba(29,29,31,0.4);font-size:10px;letter-spacing:0.3em;">← 返回日志</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap;">
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.001-A — SERIES 01</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-03-31</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">PREFAB / COMPLIANCE // BY PROJECT AXIS</span>
+  </div>
+
+  <div style="position:relative;">
+    <div class="post-log-num">001</div>
+    <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
+      预制房屋
+    </h1>
+    <p style="font-size:16px;color:rgba(29,29,31,0.6);margin-top:10px;font-weight:400;">第一篇 — 澳洲建筑法规的框架早已存在</p>
+    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:6px;">目前最大的矛盾不在于法规缺失，而在于大多数人在问题出现之前从未认真读过规则。</p>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="post-tag">NCC 2022</span>
+      <span class="post-tag">预制房屋</span>
+      <span class="post-tag">建筑合规</span>
+      <span class="post-tag">建筑法规</span>
+      <span class="post-tag">系列</span>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:0 32px 120px;position:relative;">
+  <div class="post-layout">
+    <article>
+      <div class="post-body">
+
+        <div class="series-note">
+          <div class="series-note-label">系列</div>
+          <div class="series-note-text">第 1 篇，共 4 篇 — 预制类房屋：澳洲建筑法规合规框架分析。继续阅读 <a href="cn/log001b.html">第二篇：法规的复杂性 →</a></div>
+        </div>
+
+        <h3>大多数人从未想过的问题</h3>
+
+        <p>这是一个值得思考的问题：大家都知道在后院搭建一个露台需要申请建筑许可证吗？有没有人曾经给你过一种信息，比如“你跟政府说这个露台是 'landscaping' 就不要许可呢？如果是另一种情况，搭一个小屋子呢？大多数人不知道，也没有去仔细研究过——直到卖房的时候，才发现这可能成了一个麻烦。</p>
+
+        <p>然而这并不是立法的漏洞。NCC 存在。各州的建筑法存在。各州的规划方案也存在。法规框架完整，且相当详细。</p>
+
+        <p>真正的问题在于两件事：<strong>执法力度</strong>与<strong>公众意识</strong>。</p>
+
+        <p>几乎每个人都知道超速会被罚款。这种意识不是与生俱来的——它来自长久持续的执法、标志、摄像头和扣分以及罚单体系。建筑合规没有同等的文化印象。业主可以在后院放置一个没有任何许可的建筑，可能长期以来什么事都不会发生——直到有一天，事情发生了。</p>
+
+        <p>预制类房屋正处于这个困境的中心。</p>
+
+        <h3>法规对建造方式保持中立</h3>
+
+        <p>澳大利亚预制行业最常见的误解之一：预制房是否还需要遵循NCC？<strong>NCC 2022 并未将预制建筑视为需要特殊豁免的独立类别。</strong></p>
+
+        <p>预制模块——一种在工厂预制、在现场组装的结构——与其他任何建筑构件适用同样的性能要求。法规本身其实不强调墙体在哪里建造，它只关心墙体能否达标。</p>
+
+        <p>这意味着预制模块必须满足与传统建造方式完全相同的合规路径：</p>
+
+        <div class="highlight-row">
+          <div class="highlight-num">DTS</div>
+          <div><strong>视同满足（Deemed-to-Satisfy）</strong> — 模块的设计和生成直接满足 NCC 的具体技术条款。这是适用于标准模块化产品的最直接路径。</div>
+        </div>
+        <div class="highlight-row">
+          <div class="highlight-num">PERFORMANCE</div>
+          <div><strong>性能解决方案（Performance Solution）</strong> — 通过证据证明合规：例如专家判断、比较评估或实验室测试验证等方法。这种方式更适用于创新型产品或非传统标准系统。</div>
+        </div>
+        <div class="highlight-row" style="border-bottom:none;">
+          <div class="highlight-num">COMBO</div>
+          <div><strong>组合路径（Combination）</strong> — 在同一建筑内，不同部分分别采用以上两种路径。常见于预制模块与传统结构系统混合的项目。</div>
+        </div>
+
+        <p style="font-size:12px;color:rgba(29,29,31,0.4);margin-top:1.2em;font-style:italic;">注：NCC 2025 于2026年5月正式生效。根据目前的信息，对建筑模块条款的修改没有像 2022 版对比 2019 版那样有重大变化。详细审阅完相关章节后，将另行发布说明。</p>
+
+        <h3>可见性问题</h3>
+
+        <p>网络上被拍照传播的建筑，鲜少是合规的那一类。这就像很少有人特意发帖说今天是普通如常的一天，但是会有人发类似“避雷，今天好倒霉！”或者“今天被council查了”这种帖子。网上流传的，更多的是没有申请许可，就直接放在后院的集装箱。</p>
+
+        <p>这才是预制房行业中真正想摆脱的刻板印象——而这不是法规问题，是可见性问题。</p>
+
+        <p>通过正规渠道、按规范操作的预制建筑，与任何其他建造方式满足同样的 NCC 要求：工程经过评估，许可证正规申请，这是跟房屋一样按永久建筑做出的一样申请，并不是钻空子。</p>
+
+        <blockquote>
+          工厂流水线化生产环境，在现实中，可以为更好的合规文件创造条件——工厂质量保证体系、材料可追溯性、尺寸一致性——这些是现场施工难以稳定实现的。
+        </blockquote>
+
+        <h3>本系列内容</h3>
+
+        <p>这是关于澳大利亚预制房屋合规的四篇系列文章的第一篇。框架是可以驾驭的，但前提是理解各层法规和规范的要求——以及它们存在的逻辑。</p>
+
+        <div class="highlight-row">
+          <div class="highlight-num" style="font-size:11px;min-width:80px;">第一篇</div>
+          <div>澳洲建筑法规的框架早已存在 — NCC、建造方式与可见性问题 <em>（本文）</em></div>
+        </div>
+        <div class="highlight-row">
+          <div class="highlight-num" style="font-size:11px;min-width:80px;">第二篇</div>
+          <div><a href="cn/log001b.html" style="color:rgba(29,29,31,0.7);text-decoration:underline;">法规的复杂性</a> — 州层级规划叠加，以及为什么 NCC 只是全貌的开始</div>
+        </div>
+        <div class="highlight-row">
+          <div class="highlight-num" style="font-size:11px;min-width:80px;">第三篇</div>
+          <div><a href="cn/log001c.html" style="color:rgba(29,29,31,0.7);text-decoration:underline;">建筑许可证与进口合规层</a> — 预制建筑许可证流程的实际要求，以及预制件跨境进口时的要求</div>
+        </div>
+        <div class="highlight-row" style="border-bottom:none;">
+          <div class="highlight-num" style="font-size:11px;min-width:80px;">第四篇</div>
+          <div><a href="cn/log001d.html" style="color:rgba(29,29,31,0.7);text-decoration:underline;">市场的误区</a> — 反复出现的三种合规失败，以及一份实用核查清单</div>
+        </div>
+
+        <div class="author-block" style="margin-top:2.8em;">
+          <div class="author-block-label">关于作者</div>
+          <p>作者为维多利亚州注册建筑测量师，具有汽车行业精益制造背景。当前研究方向：预制房屋在澳大利亚市场的落地可行性与实践路径。</p>
+        </div>
+
+        <div class="nav-between">
+          <span style="color:rgba(29,29,31,0.2);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;">← 上一篇</span>
+          <a href="cn/log001b.html">第二篇：法规的复杂性 →</a>
+        </div>
+
+        <p style="font-size:11px;color:rgba(29,29,31,0.35);font-style:italic;margin-top:0.5em;">本系列精简版最初于 2026 年 3 月 31 日发布于 <a href="https://www.linkedin.com/in/" style="color:rgba(29,29,31,0.5);text-decoration:underline;">LinkedIn</a>。</p>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+
+        <div class="disclaimer-box">
+          <div class="sidebar-label" style="margin-bottom:10px;">免责声明</div>
+          <p>本文所表达的观点仅代表作者个人立场，不构成任何法律、建筑或专业建议。读者应就具体情况寻求独立专业意见。</p>
+        </div>
+
+        <div style="margin-top: 40px; border-top: 1px solid var(--line-dark); padding-top: 20px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(29,29,31,0.5);margin-bottom:4px;">作者</div>
+          <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--near-black);margin-bottom:12px;">Project Axis Solutions</div>
+          <div style="font-size:10px;color:rgba(29,29,31,0.3);letter-spacing:0.05em;">© 2026 Project Axis Solutions. 保留所有权利。</div>
+        </div>
+
+      </div>
+    </article>
+
+    <aside class="post-sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-label">发布日期</div>
+        <div class="sidebar-value">2026-03-31</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">分类</div>
+        <div class="sidebar-value">PREFAB / COMPLIANCE</div>
+        <div class="sidebar-value-sub">合规框架分析</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">系列</div>
+        <div class="sidebar-value">预制房屋</div>
+        <div class="sidebar-value-sub">第 01 篇，共 04 篇</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">阅读时间</div>
+        <div class="sidebar-value">约 4 分钟</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">关于作者</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;">维多利亚州注册建筑测量师<br>汽车行业精益制造背景<br>研究方向：预制房屋在澳大利亚的落地可行性</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">本系列文章</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <span class="mono" style="font-size:9px;color:var(--near-black);letter-spacing:0.1em;">→ 第一篇（当前）</span>
+          <a href="cn/log001b.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">第二篇</a>
+          <a href="cn/log001c.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">第三篇</a>
+          <a href="cn/log001d.html" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">第四篇</a>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">标签</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="post-tag">NCC</span>
+          <span class="post-tag">Prefab</span>
+          <span class="post-tag">DTS</span>
+          <span class="post-tag">Compliance</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</body>
+</html>
