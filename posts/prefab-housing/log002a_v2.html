@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Is Prefab the Problem? — PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --near-black: rgba(29, 29, 31, 1);
+    --line: rgba(29, 29, 31, 0.1);
+    --line-dark: rgba(29, 29, 31, 0.08);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--near-black); }
+  .mono { font-family: 'Space Mono', monospace; }
+  .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
+  .post-body p { margin-bottom: 1.6em; }
+  .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
+  @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
+  .post-sidebar { position: sticky; top: 80px; }
+  .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
+  .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
+  .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
+  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
+  .nav-between { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-top: 1px solid var(--line); margin-top: 3em; gap: 16px; }
+  .nav-between a { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(29,29,31,0.4); text-decoration: none; }
+  .nav-between a:hover { color: var(--near-black); }
+  .author-block { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.015); padding: 20px 24px; margin: 2.4em 0; }
+  .author-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .author-block p { font-size: 12px; color: rgba(29,29,31,0.55); margin-bottom: 0; line-height: 1.75; }
+</style>
+</head>
+<body class="bg-white">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--line)]">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <a href="https://projectaxis.com.au/posts/prefab-housing/cn/log002a" class="mono" style="font-size:10px;border:1px solid var(--line-dark);padding:4px 12px;text-decoration:none;color:inherit;border-radius:2px;">CN 中文</a>
+    </div>
+  </div>
+</nav>
+
+<section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
+  <div style="margin-bottom:48px;">
+    <a href="/#log" class="mono" style="text-decoration:none;color:rgba(29,29,31,0.4);font-size:10px;letter-spacing:0.3em;">← BACK TO LOG</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap;">
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.002-A</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-05-08</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">PREFAB / COMPLIANCE // BY PROJECT AXIS</span>
+  </div>
+
+  <div style="position:relative;">
+    <div class="post-log-num">002</div>
+    <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
+      Is Prefab<br>the Problem?
+    </h1>
+    <p style="font-size:16px;color:rgba(29,29,31,0.6);margin-top:10px;font-weight:400;">Construction failures make headlines. Prefab gets the blame. But the evidence tells a different story.</p>
+    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:6px;">A practitioner's view on where compliance risk actually lives — on-site and off.</p>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="post-tag">Prefab</span>
+      <span class="post-tag">Compliance</span>
+      <span class="post-tag">Lacrosse</span>
+      <span class="post-tag">Building Surveyor</span>
+      <span class="post-tag">Supply Chain</span>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:0 32px 120px;position:relative;">
+  <div class="post-layout">
+    <article>
+      <div class="post-body">
+
+        <h3>A Fire That Changed the Industry</h3>
+
+        <p>In November 2014, a fire broke out on the eighth floor balcony of the Lacrosse apartment tower in Melbourne's Docklands. Started by an unextinguished cigarette, the fire reached the building's external cladding and climbed thirteen storeys in approximately eleven minutes. More than 400 residents were evacuated. There were no fatalities — but the financial and legal consequences would play out for years.</p>
+
+        <p>The cladding involved was an aluminium composite panel (ACP) with a 100% polyethylene core — a material with a calorific value comparable to petrol. The VCAT proceedings that followed established something the industry has had to sit with ever since: the problem was not a rogue substitution or an isolated supply chain failure. The architect had specified a product "indicative to Alucobond" — and the tribunal found that the original Alucobond PE, had it been installed as specified, would have performed no differently in the fire. The rapid spread was caused by the material category itself, not the brand swap.</p>
+
+        <p>What the tribunal found was a failure distributed across the entire professional chain. The architect had specified a non-compliant material. The fire engineer had not flagged it. The building surveyor had issued a permit that approved it. No single party had caught what, in hindsight, all of them had an obligation to consider.</p>
+
+        <p>Lacrosse was a fully conventional, on-site construction project. No prefabrication was involved.</p>
+
+        <h3>The Compliance Chain and Its Boundaries</h3>
+
+        <p>Australia's building compliance framework is built on a chain of licensed professionals, each certifying within their own defined scope. The system is designed this way deliberately — no single party can hold expertise across every discipline on a complex project. A building surveyor is not a fire engineer. A plumber is not a building surveyor. Each carries professional liability for their own domain, and relies on others to do the same.</p>
+
+        <p>In practice, this means the system has structural boundaries that are not failures — they are features. A Building Surveyor's mandatory inspection scope covers foundations, structural framing, and finishes. On a project involving imported bathroom pods, a Building Surveyor reviewing a critical stage inspection will rely on the licensed plumber's compliance certificate for the plumbing installation. They are not expected to verify plumbing product certifications independently. That is the plumber's domain.</p>
+
+        <p>But consider what this means in practice. If a licensed plumber connects a product without verifying its WaterMark certification status — or if a supplier misrepresents a product's compliance — the Building Surveyor may have performed their role entirely correctly and still had no visibility over the problem. The compliance framework did not fail. But the outcome is the same as if it had.</p>
+
+        <p>Now consider a standard frame inspection on any conventional build. A delivery of structural timber arrives on site — two hundred pieces, mixed in a single load. Is it realistic to expect a Building Surveyor to check the compliance stamp on every individual piece?</p>
+
+        <p>Every practitioner knows the honest answer. It is no.</p>
+
+        <h3>When the Supply Chain Is the Variable</h3>
+
+        <p>This is the point that tends to get lost when prefab failures are discussed: the compliance framework, on-site or off-site, ultimately rests on the integrity of the supply chain behind it.</p>
+
+        <p>A compliance stamp on a piece of timber can be replicated. A certificate can be issued for work not fully performed. A product can be misrepresented by a supplier, or installed by a tradesperson who did not verify what they were connecting. These are not hypotheticals unique to prefabrication — they are the mechanisms by which systemic failures, when they occur, tend to actually occur. No inspection frequency resolves a problem that originates upstream of the inspection.</p>
+
+        <p>At Lacrosse, the failure was not a falsified document or a counterfeit product. It was an industry-wide blind spot — a material category that had been in widespread use, specified and permitted and installed across countless projects, without the professional chain collectively recognising that it did not meet the BCA's non-combustibility requirements for high-rise residential buildings. The framework existed. The licensed parties existed. The inspections occurred. And still the building burned.</p>
+
+        <blockquote>
+          The compliance framework rests on informed trust — in suppliers, in licensed trades, in the professional chain. That trust is not naive. It is the only basis on which construction at scale is possible. But it can fail on-site just as readily as off.
+        </blockquote>
+
+        <p style="font-size: 24px; font-weight: 700; color: var(--near-black); border-left: 4px solid var(--near-black); padding-left: 20px; margin: 40px 0;">
+  Prefabrication does not create new risks; it simply concentrates existing ones.
+</p>
+
+        <p>When a large volume of non-compliant components arrives in a single shipment, the failure becomes a headline. In a traditional build, those same failures are often distributed across months of individual trade installs, making them harder to spot but no less damaging. The underlying dynamic hasn't changed—only the scale and the timeline.</p>
+
+        <p>When 180 bathroom pods arrive from overseas, the compliance question that would otherwise be distributed across individual tradespeople working room by room over months is now concentrated in a single procurement event. The volume multiplies the consequence of any gap. But the nature of the gap — reliance on supplier representations, reliance on licensed trades certifying what they say they are certifying — is identical to what exists on every on-site project.</p>
+
+        <p>Lacrosse demonstrated that this gap can have catastrophic consequences in a fully conventional build, where every professional in the chain was licensed, engaged, and nominally performing their role. The prefab context does not introduce a new kind of risk. It introduces a new scale at which existing risk can materialise.</p>
+
+        <h3>Where the Responsibility Boundary Actually Sits</h3>
+
+        <p>The Lacrosse proceedings produced a detailed, contested account of where each party's responsibility began and ended. The building surveyor's liability was significant — not because they had knowingly approved a non-compliant product, but because issuing a building permit carried an obligation that the tribunal found had not been fully discharged.</p>
+
+        <p>That is an important distinction for the prefab conversation. The question is not whether licensed professionals bear responsibility — they do, within their defined scope. The question is whether that scope, as currently defined and practiced, is sufficient to catch the kinds of failures that prefab's supply chain concentration can produce.</p>
+
+        <p>In a conventional build, a non-compliant material might be installed room by room, floor by floor, over months — each instance a discrete event that could theoretically be caught at multiple points. In a prefab scenario, the equivalent decision is made once, upstream, before a single component arrives on site. By the time any inspection occurs, the material is already in the building.</p>
+
+        <p>This is not an argument against prefab. It is an argument for shifting the compliance focus to where the risk actually concentrates — procurement, supplier qualification, and the contract structures that define accountability before the factory starts production. That is where the leverage is. That is where informed participants should be directing their attention.</p>
+
+        <div class="author-block" style="margin-top:2.8em;">
+          <div class="author-block-label">About the Author</div>
+          <p>The author is a Registered Building Surveyor (Victoria), with a background in automotive lean manufacturing. Current research focus: the practical feasibility and on-ground implementation of prefabricated housing in the Australian market. A condensed version of this article was published on <a href="https://www.linkedin.com/in/" style="color:rgba(29,29,31,0.6);text-decoration:underline;">LinkedIn</a> on 8 May 2026.</p>
+        </div>
+
+        <div class="nav-between">
+          <a href="https://projectaxis.com.au/posts/prefab-housing/log001a">← LOG.001-A: PREFABRICATED HOUSING SERIES</a>
+          <span style="color:rgba(29,29,31,0.2);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;">NEXT — COMING SOON →</span>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+
+        <div class="disclaimer-box">
+          <div class="sidebar-label" style="margin-bottom:10px;">DISCLAIMER</div>
+          <p>The views expressed are solely those of the author in a personal capacity. This does not constitute legal, building, or professional advice. Readers should seek independent professional advice regarding their specific circumstances.</p>
+          <p style="margin-top:6px;">References to the Lacrosse fire are based on publicly reported information and published VCAT proceedings. No findings are made regarding the conduct of any individual or organisation beyond what has been established in those public proceedings.</p>
+        </div>
+
+        <div style="margin-top: 40px; border-top: 1px solid var(--line-dark); padding-top: 20px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(29,29,31,0.5);margin-bottom:4px;">Written by</div>
+          <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--near-black);margin-bottom:12px;">Project Axis Solutions</div>
+          <div style="font-size:10px;color:rgba(29,29,31,0.3);letter-spacing:0.05em;">© 2026 Project Axis Solutions. All rights reserved.</div>
+        </div>
+
+      </div>
+    </article>
+
+    <aside class="post-sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-label">PUBLISHED</div>
+        <div class="sidebar-value">2026-05-08</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">CATEGORY</div>
+        <div class="sidebar-value">PREFAB / COMPLIANCE</div>
+        <div class="sidebar-value-sub">Practitioner commentary</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">TYPE</div>
+        <div class="sidebar-value">Standalone</div>
+        <div class="sidebar-value-sub">Independent article</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">READ TIME</div>
+        <div class="sidebar-value">~ 4 MIN</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">ABOUT THE AUTHOR</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;">VIC Registered Building Surveyor<br>Background in automotive lean manufacturing<br>Research: prefab housing feasibility in Australia</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">RELATED</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <a href="https://projectaxis.com.au/posts/prefab-housing/log001a" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">LOG.001-A — PREFAB SERIES</a>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">TAGS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="post-tag">Prefab</span>
+          <span class="post-tag">Lacrosse</span>
+          <span class="post-tag">Compliance</span>
+          <span class="post-tag">Supply Chain</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</body>
+</html>
