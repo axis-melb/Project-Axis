@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>港险保单 CRM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap');
+:root {
+  --bg:#f7f6f3; --surf:#fff; --surf2:#f0ede8; --bdr:#e2ddd6;
+  --txt:#1a1714; --txt2:#6b6560; --muted:#9e9890;
+  --grn:#3d6b5e; --grn-lt:#eaf2ef; --grn-dk:#2e5247;
+  --red:#c0392b; --red-lt:#fdf0ee;
+  --gld:#b8973a; --gld-lt:#faf6ec;
+  --tel:#2e7d52; --tel-lt:#e8f5ee;
+  --r:12px; --sh:0 1px 4px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.05); --sh2:0 8px 32px rgba(0,0,0,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans','Noto Sans SC',sans-serif;background:var(--bg);color:var(--txt);font-size:14px;line-height:1.6;min-height:100vh}
+
+/* ── Header ── */
+.hdr{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:100;gap:8px}
+.hdr-l{display:flex;align-items:center;gap:8px;min-width:0}
+.logo{width:28px;height:28px;flex-shrink:0;background:var(--grn);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+.hdr-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-r{display:flex;gap:6px;align-items:center;flex-shrink:0}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:7px 13px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:inherit;white-space:nowrap;user-select:none;-webkit-user-select:none}
+.btn-p{background:var(--grn);color:#fff}.btn-p:active{background:var(--grn-dk)}
+.btn-s{background:var(--surf2);color:var(--txt);border:1px solid var(--bdr)}.btn-s:active{background:var(--bdr)}
+.btn-g{background:transparent;color:var(--txt2);border:1px solid var(--bdr)}.btn-g:active{background:var(--surf2)}
+.btn-d{background:var(--red);color:#fff}.btn-d:active{opacity:.85}
+.btn-sm{padding:5px 10px;font-size:12px;border-radius:7px}
+
+.lang{display:flex;background:var(--surf2);border:1px solid var(--bdr);border-radius:6px;overflow:hidden}
+.lang-b{padding:4px 9px;font-size:12px;cursor:pointer;background:none;border:none;font-family:inherit;color:var(--txt2)}
+.lang-b.on{background:var(--grn);color:#fff}
+
+/* ── Main ── */
+.main{max-width:680px;margin:0 auto;padding:16px}
+
+/* ── Stats ── */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 16px}
+.stat-lb{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.stat-v{font-size:20px;font-weight:600}
+.c-grn{color:var(--grn)}.c-red{color:var(--red)}.c-gld{color:var(--gld)}
+
+/* ── Toolbar ── */
+.toolbar{display:flex;gap:8px;margin-bottom:14px;flex-direction:column}
+.srch{position:relative}
+.srch input{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--bdr);border-radius:8px;font-size:14px;font-family:inherit;background:var(--surf);color:var(--txt);outline:none}
+.srch input:focus{border-color:var(--grn)}
+.srch-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none}
+.filters{display:flex;gap:8px}
+.fsel{flex:1;padding:8px 10px;border:1px solid var(--bdr);border-radius:8px;font-size:13px;font-family:inherit;background:var(--surf);color:var(--txt);outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239e9890' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+
+/* ── Policy Cards ── */
+.cards{display:flex;flex-direction:column;gap:10px}
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:box-shadow .15s}
+.card:active{box-shadow:none}
+.card.urg{border-left:4px solid var(--red);background:var(--red-lt)}
+.card.done{border-left:4px solid var(--tel);background:var(--tel-lt)}
+.card-top{padding:14px 16px 10px;cursor:pointer}
+.card-row1{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.card-name{font-size:15px;font-weight:600}
+.card-bday{font-size:11px;color:var(--muted);margin-top:1px}
+.card-cd{text-align:right;flex-shrink:0}
+.cd-urg{color:var(--red);font-weight:700;font-size:13px}
+.cd-ok{color:var(--grn);font-weight:600;font-size:13px}
+.cd-done{color:var(--tel);font-weight:600;font-size:12px}
+.card-row2{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.b-sav{background:var(--gld-lt);color:var(--gld)}
+.b-cri{background:var(--red-lt);color:var(--red)}
+.b-oth{background:var(--surf2);color:var(--txt2)}
+.b-done{background:var(--tel-lt);color:var(--tel);font-weight:600}
+.card-prem{font-size:13px;color:var(--txt2)}
+.card-comm{font-size:13px;color:var(--gld);font-weight:500}
+.card-meta{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;padding:10px 16px;border-top:1px solid var(--bdr);background:rgba(0,0,0,.015)}
+.meta-item{display:flex;flex-direction:column}
+.meta-k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.meta-v{font-size:12px;font-weight:500;color:var(--txt)}
+.meta-v.done-clr{color:var(--tel)}
+.pbar-wrap{margin-top:3px}
+.pbar{height:4px;background:var(--bdr);border-radius:2px;overflow:hidden}
+.pbar-f{height:100%;border-radius:2px}
+.pf-on{background:var(--grn)}.pf-done{background:var(--tel)}
+.pbar-lb{font-size:10px;color:var(--muted);margin-top:2px}
+.card-actions{display:flex;gap:8px;padding:10px 16px;border-top:1px solid var(--bdr)}
+.card-actions .btn{flex:1;font-size:13px;padding:8px 0}
+
+/* ── Ann label ── */
+.ann-chip{font-size:11px;color:var(--txt2);background:var(--surf2);border-radius:20px;padding:2px 8px;display:inline-block}
+
+/* Empty state */
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-ico{font-size:32px;margin-bottom:8px;opacity:.4}
+
+/* ── Overlay / Modal ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:var(--surf);border-radius:20px 20px 0 0;width:100%;max-width:640px;max-height:92vh;overflow-y:auto;box-shadow:var(--sh2);animation:slideUp .25s ease}
+@keyframes slideUp{from{transform:translateY(100%);opacity:.5}to{transform:translateY(0);opacity:1}}
+.m-hdr{padding:16px 18px 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surf);z-index:10;border-bottom:1px solid var(--bdr);padding-bottom:12px}
+.m-pull{width:36px;height:4px;background:var(--bdr);border-radius:2px;margin:0 auto 12px}
+.m-title{font-size:15px;font-weight:600}
+.m-close{width:28px;height:28px;border-radius:7px;border:1px solid var(--bdr);background:none;cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.m-body{padding:16px 18px}
+.m-foot{padding:12px 18px 24px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--bdr);position:sticky;bottom:0;background:var(--surf)}
+
+/* ── Form ── */
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg.full{grid-column:1/-1}
+label{font-size:12px;font-weight:500;color:var(--txt2)}
+input[type=text],input[type=number],input[type=date],select,textarea{padding:9px 11px;border:1px solid var(--bdr);border-radius:8px;font-size:14px;font-family:inherit;background:var(--surf);color:var(--txt);outline:none;width:100%;-webkit-appearance:none;appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--grn);outline:none}
+textarea{resize:vertical;min-height:70px}
+input[readonly]{background:var(--surf2);color:var(--txt2)}
+.comm-row{display:flex;gap:7px;align-items:center}
+.comm-row select, .comm-row input[type=number]{flex:0 0 auto;width:70px;-webkit-appearance:none;padding:9px 6px;text-align:center}
+.comm-disp{background:var(--surf2);border:1px solid var(--bdr);border-radius:8px;padding:9px 11px;font-size:13px;color:var(--grn);font-weight:500;flex:1}
+.pt-row{display:flex;gap:7px}
+.pt-row select{flex:1;-webkit-appearance:none}
+.pt-row input{flex:1}
+
+/* ── Detail ── */
+.det-section{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--bdr)}
+.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.di.full{grid-column:1/-1}
+.dk{font-size:11px;color:var(--muted);margin-bottom:2px}
+.dv{font-size:13px;font-weight:500;word-break:break-word}
+.cd-big{display:inline-block;padding:5px 13px;border-radius:20px;font-size:14px;font-weight:600}
+.cd-big.urg{background:var(--red-lt);color:var(--red)}
+.cd-big.ok{background:var(--grn-lt);color:var(--grn)}
+.cd-big.done-pill{background:var(--tel-lt);color:var(--tel)}
+.prog-bar{height:7px;background:var(--bdr);border-radius:4px;overflow:hidden;margin-top:4px}
+.prog-fill{height:100%;border-radius:4px}
+.pf-on{background:var(--grn)}.pf-done{background:var(--tel)}
+.prog-lb{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* ── Export options ── */
+.exp-opts{display:flex;flex-direction:column;gap:9px}
+.exp-opt{display:flex;align-items:center;gap:12px;padding:14px 15px;border:1px solid var(--bdr);border-radius:10px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.exp-opt:active{background:var(--grn-lt);border-color:var(--grn)}
+.exp-ico{font-size:22px;width:36px;text-align:center;flex-shrink:0}
+.exp-info strong{display:block;font-size:13px}
+.exp-info span{font-size:12px;color:var(--muted)}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(26,23,20,.92);color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transition:all .2s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── PDF preview overlay ── */
+.pdf-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;flex-direction:column}
+.pdf-overlay.open{display:flex}
+.pdf-hdr{background:var(--surf);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bdr);flex-shrink:0}
+.pdf-hdr strong{font-size:14px;font-weight:600}
+.pdf-body{flex:1;overflow-y:auto;background:#eceae6;padding:14px;-webkit-overflow-scrolling:touch}
+/* Card-style report cards */
+.rpt-wrap{max-width:500px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.rpt-meta{text-align:center;font-size:11px;color:#888;padding:4px 0 8px}
+.rpt-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.rpt-card.urg{border-top:4px solid #c0392b}
+.rpt-card.done{border-top:4px solid #2e7d52}
+.rpt-card.normal{border-top:4px solid #3d6b5e}
+.rpt-top{padding:14px 16px 10px;display:flex;justify-content:space-between;align-items:flex-start}
+.rpt-name{font-size:16px;font-weight:700;color:#1a1714}
+.rpt-bday{font-size:11px;color:#9e9890;margin-top:2px}
+.rpt-cd{text-align:right;font-size:13px;font-weight:700}
+.rpt-cd.urg{color:#c0392b}.rpt-cd.ok{color:#3d6b5e}.rpt-cd.done{color:#2e7d52}
+.rpt-badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:500;margin-bottom:6px}
+.rpt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;padding:0 16px 14px;border-top:1px solid #f0ede8;margin-top:8px;padding-top:10px}
+.rpt-item{}
+.rpt-k{font-size:10px;color:#9e9890;text-transform:uppercase;letter-spacing:.04em;margin-bottom:1px}
+.rpt-v{font-size:12px;font-weight:600;color:#1a1714}
+.rpt-v.gold{color:#b8973a}.rpt-v.teal{color:#2e7d52}
+.rpt-prog{height:5px;background:#e2ddd6;border-radius:3px;overflow:hidden;margin-top:3px}
+.rpt-pf{height:100%;border-radius:3px}
+.rpt-pf.on{background:#3d6b5e}.rpt-pf.dn{background:#2e7d52}
+.rpt-prog-lb{font-size:10px;color:#9e9890;margin-top:2px}
+.rpt-notes{padding:8px 16px 12px;border-top:1px solid #f0ede8;font-size:11px;color:#6b6560;line-height:1.5}
+.pdf-foot{background:var(--surf);padding:12px 16px 28px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--bdr);flex-shrink:0}
+
+@media(min-width:500px){
+  .stats{grid-template-columns:repeat(4,1fr)}
+  .toolbar{flex-direction:row;align-items:center}
+  .srch{flex:1}
+  .filters{flex-shrink:0}
+  .overlay{align-items:center}
+  .modal{border-radius:16px;max-height:88vh}
+  @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .m-pull{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="logo">🛡</div>
+    <span class="hdr-title" id="hdr-title">港险保单 CRM</span>
+  </div>
+  <div class="hdr-r">
+    <div class="lang">
+      <button class="lang-b on" id="lb-zh">中文</button>
+      <button class="lang-b" id="lb-en">EN</button>
+    </div>
+    <button class="btn btn-g btn-sm" id="btn-exp-open">导出</button>
+    <button class="btn btn-p btn-sm" id="btn-add-open">＋ 新增</button>
+  </div>
+</header>
+
+<div class="main">
+  <div class="stats">
+    <div class="stat"><div class="stat-lb" id="lb-sc">客户总数</div><div class="stat-v c-grn" id="sv-c">0</div></div>
+    <div class="stat"><div class="stat-lb" id="lb-sp">保单总数</div><div class="stat-v" id="sv-p">0</div></div>
+    <div class="stat"><div class="stat-lb" id="lb-su">30天内到期</div><div class="stat-v c-red" id="sv-u">0</div></div>
+    <div class="stat"><div class="stat-lb" id="lb-sm">总佣金(USD)</div><div class="stat-v c-gld" id="sv-m">$0</div></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="srch"><span class="srch-ico">🔍</span><input type="text" id="srch" placeholder="搜索客户或类型…"></div>
+    <div class="filters">
+      <select class="fsel" id="f-type">
+        <option value="">全部类型</option>
+        <option value="savings">储蓄险</option>
+        <option value="critical">重疾险</option>
+        <option value="other">其他</option>
+      </select>
+      <select class="fsel" id="f-status">
+        <option value="">全部状态</option>
+        <option value="urgent">⚠ 30天内</option>
+        <option value="complete">✓ 已完缴</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="cards" id="cards"></div>
+</div>
+
+<!-- Edit Modal -->
+<div class="overlay" id="ov-edit">
+<div class="modal">
+  <div style="padding:10px 0 0"><div class="m-pull"></div></div>
+  <div class="m-hdr">
+    <div class="m-title" id="edit-title">新增保单</div>
+    <button class="m-close" id="close-edit">✕</button>
+  </div>
+  <div class="m-body">
+    <div class="fgrid">
+      <div class="fg"><label id="lf0">客户姓名 *</label><input type="text" id="f-name" placeholder="e.g. 张伟" autocomplete="name"></div>
+      <div class="fg"><label id="lf1">生日</label><input type="date" id="f-bday"></div>
+      <div class="fg"><label id="lf2">保单类型 *</label>
+        <select id="f-type-sel">
+          <option value="savings">储蓄险</option>
+          <option value="critical">重疾险</option>
+          <option value="other">其他（自定义）</option>
+        </select>
+      </div>
+      <div class="fg" id="fg-custom" style="display:none"><label id="lf3">自定义类型</label><input type="text" id="f-custom" placeholder="输入类型"></div>
+      <div id="fg-spacer"></div>
+      <div class="fg"><label id="lf4">首年保费 (USD) *</label><input type="number" id="f-prem" placeholder="5000" inputmode="numeric"></div>
+      <div class="fg"><label id="lf5">佣金</label>
+        <div class="comm-row">
+          <input type="number" id="f-crate" placeholder="25" min="0" max="100" inputmode="numeric">
+          <span style="font-size:14px;color:var(--txt2);font-weight:500">%</span>
+          <div class="comm-disp" id="comm-disp">— USD</div>
+        </div>
+      </div>
+      <div class="fg"><label id="lf6">开始日期 *</label><input type="date" id="f-start"></div>
+      <div class="fg"><label id="lf7">周年日（自动）</label><input type="text" id="f-ann" readonly></div>
+      <div class="fg"><label id="lf8">缴费年限</label>
+        <div class="pt-row">
+          <select id="f-pt-sel">
+            <option value="">— 选择 —</option>
+            <option value="5">5年</option><option value="10">10年</option>
+            <option value="15">15年</option><option value="18">18年</option>
+            <option value="20">20年</option><option value="25">25年</option>
+            <option value="30">30年</option><option value="custom">自定义…</option>
+          </select>
+          <input type="number" id="f-pt-cust" placeholder="年" min="1" max="99" style="display:none" inputmode="numeric">
+        </div>
+      </div>
+      <div class="fg"><label id="lf9">缴费截止（自动）</label><input type="text" id="f-payend" readonly></div>
+      <div class="fg"><label id="lf10">关联客户</label><input type="text" id="f-rel" placeholder="e.g. 张伟（丈夫）" list="dl-c"><datalist id="dl-c"></datalist></div>
+      <div class="fg full"><label id="lf11">备注</label><textarea id="f-notes" placeholder="保单备注信息…"></textarea></div>
+    </div>
+  </div>
+  <div class="m-foot">
+    <button class="btn btn-g" id="btn-cancel">取消</button>
+    <button class="btn btn-p" id="btn-save">保存</button>
+  </div>
+</div>
+</div>
+
+<!-- Detail Modal -->
+<div class="overlay" id="ov-detail">
+<div class="modal">
+  <div style="padding:10px 0 0"><div class="m-pull"></div></div>
+  <div class="m-hdr">
+    <div class="m-title" id="det-name">—</div>
+    <button class="m-close" id="close-det">✕</button>
+  </div>
+  <div class="m-body" id="det-body"></div>
+  <div class="m-foot">
+    <button class="btn btn-g" id="det-close">关闭</button>
+    <button class="btn btn-g btn-sm" id="det-pdf">📄</button>
+    <button class="btn btn-d btn-sm" id="det-del">删除</button>
+    <button class="btn btn-p" id="det-edit">编辑</button>
+  </div>
+</div>
+</div>
+
+<!-- Export Modal -->
+<div class="overlay" id="ov-exp">
+<div class="modal" style="max-width:460px">
+  <div style="padding:10px 0 0"><div class="m-pull"></div></div>
+  <div class="m-hdr">
+    <div class="m-title" id="exp-title">导出 / Export</div>
+    <button class="m-close" id="close-exp">✕</button>
+  </div>
+  <div class="m-body">
+    <div class="exp-opts">
+      <div class="exp-opt" id="do-pdf"><div class="exp-ico">📄</div><div class="exp-info"><strong id="ep1">查看 PDF 报表</strong><span id="ep1d">在页内显示，可截图或用系统分享</span></div></div>
+      <div class="exp-opt" id="do-json"><div class="exp-ico">💾</div><div class="exp-info"><strong id="ep2">导出 JSON</strong><span id="ep2d">数据备份，可重新导入</span></div></div>
+      <div class="exp-opt" id="do-import"><div class="exp-ico">📥</div><div class="exp-info"><strong id="ep3">导入 JSON</strong><span id="ep3d">从备份文件恢复数据</span></div></div>
+      <div class="exp-opt" id="do-ics"><div class="exp-ico">📅</div><div class="exp-info"><strong id="ep4">导出到日历 (.ics)</strong><span id="ep4d">可导入 Google Calendar / iPhone Calendar</span></div></div>
+    </div>
+    <input type="file" id="imp-file" accept=".json" style="display:none">
+  </div>
+  <div class="m-foot"><button class="btn btn-g" id="close-exp2">关闭</button></div>
+</div>
+</div>
+
+<!-- PDF Preview Overlay -->
+<div class="pdf-overlay" id="pdf-ov">
+  <div class="pdf-hdr">
+    <strong id="pdf-title">保单报表</strong>
+    <button class="btn btn-g btn-sm" id="pdf-close">✕ 关闭</button>
+  </div>
+  <div class="pdf-body" id="pdf-body"></div>
+  <div class="pdf-foot">
+    <span style="font-size:11px;color:var(--muted);align-self:center;flex:1" id="pdf-hint">长按截图保存</span>
+    <button class="btn btn-g" id="pdf-close2">关闭</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+// ─── i18n ─────────────────────────────────────────────────────────────────────
+var L={
+  zh:{
+    hdr:'港险保单 CRM', btn_add:'＋ 新增', btn_exp:'导出',
+    sc:'客户总数',sp:'保单总数',su:'30天内到期',sm:'总佣金(USD)',
+    srch:'搜索客户或类型…',
+    fa:'全部类型',fs:'储蓄险',fc:'重疾险',fo:'其他',
+    fa2:'全部状态',fu:'⚠ 30天内',fd:'✓ 已完缴',
+    empty:'暂无保单，点击「新增」开始',
+    add_t:'新增保单',edit_t:'编辑保单',
+    lf:['客户姓名 *','生日','保单类型 *','自定义类型','首年保费 (USD) *','佣金','开始日期 *','周年日（自动）','缴费年限','缴费截止（自动）','关联客户','备注'],
+    ph_name:'e.g. 张伟',ph_custom:'输入类型',ph_rel:'e.g. 张伟（丈夫）',ph_notes:'保单备注信息…',
+    t_sav:'储蓄险',t_cri:'重疾险',t_oth:'其他（自定义）',
+    pt_choose:'— 选择 —',pt_custom:'自定义…',
+    cancel:'取消',save:'保存',close:'关闭',edit:'编辑',del:'删除',
+    exp_title:'导出 / Export',
+    ep:['查看 PDF 报表','在页内显示，可截图或用系统分享','导出 JSON','数据备份，可重新导入','导入 JSON','从备份文件恢复数据','导出到日历 (.ics)','可导入 Google Calendar / iPhone Calendar'],
+    days:'天',yrs:'年',today:'今天',urg:'⚠ 紧急',done:'✓ 缴费完成',
+    pay_ongoing:'缴费中',
+    sec_basic:'基本信息',sec_pol:'保单信息',sec_other:'关联 & 备注',
+    k:['生日','保单类型','首年保费','佣金比例','佣金金额','开始日期','已缴年限','缴费年限','缴费截止日','下次周年日','距周年日','关联客户','备注','缴费进度'],
+    saved:'已保存 ✓',deleted:'已删除',exported:'已导出',imported:'导入成功',
+    conf_del:'确认删除此保单？',
+    nodata:'暂无数据',err_name:'请填写客户姓名',err_start:'请填写开始日期',
+    rec:'条记录',exp_on:'导出时间：',
+    pdf_title:'保单报表',pdf_share:'分享',
+    ann_every:'每年',
+    k_start:'开始',k_payterm:'缴费',k_elapsed:'已缴',k_ann:'周年日',
+  },
+  en:{
+    hdr:'HK Insurance CRM',btn_add:'＋ Add',btn_exp:'Export',
+    sc:'Clients',sp:'Policies',su:'Due in 30d',sm:'Commission(USD)',
+    srch:'Search client or type…',
+    fa:'All Types',fs:'Savings',fc:'Critical Illness',fo:'Other',
+    fa2:'All Status',fu:'⚠ Due 30d',fd:'✓ Complete',
+    empty:'No policies yet. Tap "Add" to get started.',
+    add_t:'Add Policy',edit_t:'Edit Policy',
+    lf:['Client Name *','Birthday','Policy Type *','Custom Type','First Year Premium (USD) *','Commission','Start Date *','Anniversary (auto)','Payment Term','Payment End (auto)','Related Client','Notes'],
+    ph_name:'e.g. John Zhang',ph_custom:'Enter type',ph_rel:'e.g. John (husband)',ph_notes:'Policy notes…',
+    t_sav:'Savings',t_cri:'Critical Illness',t_oth:'Other (Custom)',
+    pt_choose:'— Select —',pt_custom:'Custom…',
+    cancel:'Cancel',save:'Save',close:'Close',edit:'Edit',del:'Delete',
+    exp_title:'Export / Import',
+    ep:['View PDF Report','Shown in-page, screenshot or share','Export JSON','Data backup, re-importable','Import JSON','Restore from backup','Export to Calendar (.ics)','Import into Google or iPhone Calendar'],
+    days:' days',yrs:' yrs',today:'Today',urg:'⚠ Urgent',done:'✓ Complete',
+    pay_ongoing:'Ongoing',
+    sec_basic:'Basic Info',sec_pol:'Policy Info',sec_other:'Related & Notes',
+    k:['Birthday','Policy Type','First Year Premium','Commission Rate','Commission (USD)','Start Date','Years Paid','Payment Term','Payment End Date','Next Anniversary','Days to Anniversary','Related Client','Notes','Payment Progress'],
+    saved:'Saved ✓',deleted:'Deleted',exported:'Exported',imported:'Imported',
+    conf_del:'Delete this policy?',
+    nodata:'No data',err_name:'Please enter client name',err_start:'Please enter start date',
+    rec:'records',exp_on:'Exported: ',
+    pdf_title:'Policy Report',pdf_share:'Share',
+    ann_every:'Every',
+    k_start:'Start',k_payterm:'Pay Term',k_elapsed:'Paid',k_ann:'Anniversary',
+  }
+};
+
+var lang=(navigator.language||'zh').startsWith('zh')?'zh':'en';
+function t(k){return(L[lang]&&L[lang][k])||k;}
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+var policies=[];
+try{policies=JSON.parse(localStorage.getItem('hkcrm4')||'[]');}catch(e){}
+var editId=null, detailId=null;
+function persist(){localStorage.setItem('hkcrm4',JSON.stringify(policies));}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
+
+// ─── Date helpers ─────────────────────────────────────────────────────────────
+function nextAnn(sd){
+  if(!sd)return null;
+  var s=new Date(sd+'T00:00:00'),now=new Date();now.setHours(0,0,0,0);
+  var n=new Date(now.getFullYear(),s.getMonth(),s.getDate());
+  if(n<=now)n.setFullYear(n.getFullYear()+1);
+  return n;
+}
+function daysTo(d){var now=new Date();now.setHours(0,0,0,0);var x=new Date(d);x.setHours(0,0,0,0);return Math.round((x-now)/86400000);}
+function yrsSince(sd){if(!sd)return 0;return(new Date()-new Date(sd+'T00:00:00'))/(365.25*24*3600*1000);}
+function payEnd(sd,pt){if(!sd||!pt)return null;var e=new Date(sd+'T00:00:00');e.setFullYear(e.getFullYear()+Number(pt));return e;}
+function isComplete(p){if(!p.payterm||!p.startDate)return false;return yrsSince(p.startDate)>=Number(p.payterm);}
+function fmtD(s){
+  if(!s)return'—';
+  var d=new Date(s+(s.includes('T')?'':'T00:00:00'));
+  return d.toLocaleDateString(lang==='zh'?'zh-CN':'en-GB',{year:'numeric',month:'short',day:'numeric'});
+}
+function fmtDo(d){if(!d)return'—';return d.toLocaleDateString(lang==='zh'?'zh-CN':'en-GB',{year:'numeric',month:'short',day:'numeric'});}
+function annLbl(sd){
+  if(!sd)return'—';
+  var s=new Date(sd+'T00:00:00');
+  var m=s.toLocaleString(lang==='zh'?'zh-CN':'en-GB',{month:'long'});
+  return lang==='zh'?('每年 '+m+s.getDate()+'日'):(t('ann_every')+' '+m+' '+s.getDate());
+}
+function typeLbl(p){if(p.policyType==='savings')return t('fs');if(p.policyType==='critical')return t('fc');return p.policyTypeCustom||t('fo');}
+function typeCls(p){if(p.policyType==='savings')return'b-sav';if(p.policyType==='critical')return'b-cri';return'b-oth';}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ─── Apply lang ───────────────────────────────────────────────────────────────
+function applyLang(){
+  var l=L[lang];
+  document.getElementById('hdr-title').textContent=l.hdr;
+  document.getElementById('btn-add-open').textContent=l.btn_add;
+  document.getElementById('btn-exp-open').textContent=l.btn_exp;
+  document.getElementById('lb-sc').textContent=l.sc;
+  document.getElementById('lb-sp').textContent=l.sp;
+  document.getElementById('lb-su').textContent=l.su;
+  document.getElementById('lb-sm').textContent=l.sm;
+  document.getElementById('srch').placeholder=l.srch;
+  var ft=document.getElementById('f-type');
+  ft.options[0].textContent=l.fa;ft.options[1].textContent=l.fs;ft.options[2].textContent=l.fc;ft.options[3].textContent=l.fo;
+  var fs=document.getElementById('f-status');
+  fs.options[0].textContent=l.fa2;fs.options[1].textContent=l.fu;fs.options[2].textContent=l.fd;
+  document.getElementById('edit-title').textContent=editId?l.edit_t:l.add_t;
+  l.lf.forEach(function(v,i){var el=document.getElementById('lf'+i);if(el)el.textContent=v;});
+  document.getElementById('f-name').placeholder=l.ph_name;
+  document.getElementById('f-custom').placeholder=l.ph_custom;
+  document.getElementById('f-rel').placeholder=l.ph_rel;
+  document.getElementById('f-notes').placeholder=l.ph_notes;
+  var ts=document.getElementById('f-type-sel');
+  ts.options[0].textContent=l.t_sav;ts.options[1].textContent=l.t_cri;ts.options[2].textContent=l.t_oth;
+  var pp=document.getElementById('f-pt-sel');
+  pp.options[0].textContent=l.pt_choose;pp.options[pp.options.length-1].textContent=l.pt_custom;
+  document.getElementById('btn-cancel').textContent=l.cancel;
+  document.getElementById('btn-save').textContent=l.save;
+  document.getElementById('det-close').textContent=l.close;
+  document.getElementById('det-edit').textContent=l.edit;
+  document.getElementById('det-del').textContent=l.del;
+  document.getElementById('exp-title').textContent=l.exp_title;
+  var ep=l.ep;
+  ['ep1','ep1d','ep2','ep2d','ep3','ep3d','ep4','ep4d'].forEach(function(id,i){
+    var el=document.getElementById(id);if(el)el.textContent=ep[i];
+  });
+  document.getElementById('close-exp2').textContent=l.close;
+  document.getElementById('pdf-title').textContent=lang==='zh'?'保单报表':'Policy Report';
+  document.getElementById('pdf-close').textContent='✕ '+(lang==='zh'?'关闭':'Close');
+  document.getElementById('pdf-close2').textContent=lang==='zh'?'关闭':'Close';
+  document.getElementById('pdf-hint').textContent=lang==='zh'?'长按截图 · 上划分享':'Long-press to screenshot';
+}
+
+function setLang(l){
+  lang=l;
+  document.getElementById('lb-zh').classList.toggle('on',l==='zh');
+  document.getElementById('lb-en').classList.toggle('on',l==='en');
+  applyLang();render();updateStats();
+}
+
+// ─── Render cards ─────────────────────────────────────────────────────────────
+function render(){
+  var s=document.getElementById('srch').value.toLowerCase();
+  var ft=document.getElementById('f-type').value;
+  var fs=document.getElementById('f-status').value;
+
+  var rows=policies.filter(function(p){
+    var ms=!s||p.name.toLowerCase().includes(s)||typeLbl(p).toLowerCase().includes(s);
+    var mt=!ft||p.policyType===ft;
+    var comp=isComplete(p);
+    var na=nextAnn(p.startDate);var d=na?daysTo(na):999;
+    var urg=!comp&&d<=30;
+    if(fs==='urgent')return ms&&mt&&urg;
+    if(fs==='complete')return ms&&mt&&comp;
+    return ms&&mt;
+  });
+
+  rows.sort(function(a,b){
+    var ca=isComplete(a),cb=isComplete(b);
+    if(ca!==cb)return ca?1:-1;
+    var da=daysTo(nextAnn(a.startDate)||new Date(9999,0,1));
+    var db=daysTo(nextAnn(b.startDate)||new Date(9999,0,1));
+    return da-db;
+  });
+
+  var wrap=document.getElementById('cards');
+  if(!rows.length){
+    wrap.innerHTML='<div class="empty"><div class="empty-ico">📋</div><div>'+esc(t('empty'))+'</div></div>';
+    return;
+  }
+
+  wrap.innerHTML=rows.map(function(p){
+    var comp=isComplete(p);
+    var na=nextAnn(p.startDate);var days=na?daysTo(na):null;
+    var urg=!comp&&days!==null&&days<=30;
+    var el=yrsSince(p.startDate);
+    var comm=p.premium*(p.commRate||0);
+
+    // Countdown display
+    var cdTxt='',cdCls='';
+    if(comp){cdTxt=t('done');cdCls='cd-done';}
+    else if(days===null){cdTxt='—';cdCls='cd-ok';}
+    else if(days===0){cdTxt=t('today');cdCls=urg?'cd-urg':'cd-ok';}
+    else{cdTxt=days+t('days');cdCls=urg?'cd-urg':'cd-ok';}
+
+    // Progress bar (mini)
+    var progHtml='';
+    if(p.payterm){
+      var pct=Math.min(100,el/Number(p.payterm)*100);
+      progHtml='<div class="pbar-wrap"><div class="pbar"><div class="pbar-f '+(comp?'pf-done':'pf-on')+'" style="width:'+pct.toFixed(0)+'%"></div></div>'
+        +'<div class="pbar-lb">'+(comp?t('done'):(el.toFixed(1)+'/'+p.payterm+t('yrs')+' '+pct.toFixed(0)+'%'))+'</div></div>';
+    }
+
+    var cardCls='card'+(urg?' urg':comp?' done':'');
+
+    return '<div class="'+cardCls+'" data-id="'+esc(p.id)+'">'
+      // Tappable top area → detail
+      +'<div class="card-top card-tap" data-id="'+esc(p.id)+'">'
+        +'<div class="card-row1">'
+          +'<div>'
+            +'<div class="card-name">'+esc(p.name)+'</div>'
+            +(p.birthday?'<div class="card-bday">'+fmtD(p.birthday)+'</div>':'')
+          +'</div>'
+          +'<div class="card-cd"><span class="'+cdCls+'">'+cdTxt+(urg?' '+t('urg'):'')+'</span></div>'
+        +'</div>'
+        +'<div class="card-row2">'
+          +'<span class="badge '+typeCls(p)+'">'+esc(typeLbl(p))+'</span>'
+          +'<span class="card-prem">$'+Number(p.premium).toLocaleString()+'</span>'
+          +'<span class="card-comm">$'+comm.toLocaleString(undefined,{maximumFractionDigits:0})+' ('+Number((p.commRate*100).toFixed(2))+'%)</span>'
+        +'</div>'
+      +'</div>'
+      // Meta strip
+      +'<div class="card-meta">'
+        +'<div class="meta-item"><div class="meta-k">'+t('k_start')+'</div><div class="meta-v">'+fmtD(p.startDate)+'</div></div>'
+        +'<div class="meta-item"><div class="meta-k">'+t('k_ann')+'</div><div class="meta-v">'+annLbl(p.startDate)+'</div></div>'
+        +(p.payterm
+          ?'<div class="meta-item"><div class="meta-k">'+t('k_payterm')+'</div><div class="meta-v'+(comp?' done-clr':'')+'">'+p.payterm+t('yrs')+'</div></div>'
+          +'<div class="meta-item"><div class="meta-k">'+t('k_elapsed')+'</div><div class="meta-v">'+progHtml+'</div></div>'
+          :'<div class="meta-item"><div class="meta-k">'+t('k_elapsed')+'</div><div class="meta-v">'+el.toFixed(1)+t('yrs')+'</div></div>'
+          +'<div class="meta-item"></div>')
+      +'</div>'
+      // Actions
+      +'<div class="card-actions">'
+        +'<button class="btn btn-g act-view" data-id="'+esc(p.id)+'">👁 '+(lang==='zh'?'详情':'View')+'</button>'
+        +'<button class="btn btn-s act-edit" data-id="'+esc(p.id)+'">✏️ '+(lang==='zh'?'编辑':'Edit')+'</button>'
+        +'<button class="btn btn-d act-del" data-id="'+esc(p.id)+'">🗑 '+(lang==='zh'?'删除':'Delete')+'</button>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+
+function updateStats(){
+  document.getElementById('sv-c').textContent=new Set(policies.map(function(p){return p.name;})).size;
+  document.getElementById('sv-p').textContent=policies.length;
+  var u=policies.filter(function(p){if(isComplete(p))return false;var n=nextAnn(p.startDate);return n&&daysTo(n)<=30;}).length;
+  document.getElementById('sv-u').textContent=u;
+  var tc=policies.reduce(function(s,p){return s+p.premium*(p.commRate||0);},0);
+  document.getElementById('sv-m').textContent='$'+tc.toLocaleString(undefined,{maximumFractionDigits:0});
+}
+
+// ─── Card event delegation ────────────────────────────────────────────────────
+document.getElementById('cards').addEventListener('click',function(e){
+  var btn=e.target.closest('button');
+  if(btn){
+    e.stopPropagation();
+    var id=btn.getAttribute('data-id');
+    if(!id)return;
+    if(btn.classList.contains('act-view'))openDetail(id);
+    else if(btn.classList.contains('act-edit'))openEdit(id);
+    else if(btn.classList.contains('act-del'))doDelete(id);
+    return;
+  }
+  var tap=e.target.closest('.card-tap');
+  if(tap){var id=tap.getAttribute('data-id');if(id)openDetail(id);}
+});
+
+// ─── Overlays ─────────────────────────────────────────────────────────────────
+function openOv(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeOv(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+
+['ov-edit','ov-detail','ov-exp'].forEach(function(id){
+  document.getElementById(id).addEventListener('click',function(e){if(e.target===this)closeOv(id);});
+});
+
+document.getElementById('close-edit').addEventListener('click',function(){closeOv('ov-edit');});
+document.getElementById('close-det').addEventListener('click',function(){closeOv('ov-detail');});
+document.getElementById('det-close').addEventListener('click',function(){closeOv('ov-detail');});
+document.getElementById('close-exp').addEventListener('click',function(){closeOv('ov-exp');});
+document.getElementById('close-exp2').addEventListener('click',function(){closeOv('ov-exp');});
+document.getElementById('pdf-close').addEventListener('click',function(){closePDF();});
+document.getElementById('pdf-close2').addEventListener('click',function(){closePDF();});
+
+function closePDF(){document.getElementById('pdf-ov').classList.remove('open');document.body.style.overflow='';}
+
+// ─── Add / Edit ───────────────────────────────────────────────────────────────
+document.getElementById('btn-add-open').addEventListener('click',function(){openAdd();});
+document.getElementById('btn-exp-open').addEventListener('click',function(){openOv('ov-exp');});
+document.getElementById('lb-zh').addEventListener('click',function(){setLang('zh');});
+document.getElementById('lb-en').addEventListener('click',function(){setLang('en');});
+
+function openAdd(){editId=null;clearForm();updateDL();applyLang();openOv('ov-edit');}
+
+function openEdit(id){
+  var p=policies.find(function(x){return x.id===id;});
+  if(!p)return;
+  editId=id;
+  document.getElementById('f-name').value=p.name||'';
+  document.getElementById('f-bday').value=p.birthday||'';
+  document.getElementById('f-type-sel').value=p.policyType||'savings';
+  document.getElementById('f-custom').value=p.policyTypeCustom||'';
+  var isOth=p.policyType==='other';
+  document.getElementById('fg-custom').style.display=isOth?'':'none';
+  document.getElementById('fg-spacer').style.display=isOth?'none':'';
+  document.getElementById('f-prem').value=p.premium||'';
+  document.getElementById('f-crate').value=p.commRate !== undefined ? Number((p.commRate * 100).toFixed(4)) : 25;
+  document.getElementById('f-start').value=p.startDate||'';
+  document.getElementById('f-rel').value=p.related||'';
+  document.getElementById('f-notes').value=p.notes||'';
+  var presets=['5','10','15','18','20','25','30'];
+  var pt=String(p.payterm||'');
+  if(pt&&!presets.includes(pt)){
+    document.getElementById('f-pt-sel').value='custom';
+    document.getElementById('f-pt-cust').style.display='';
+    document.getElementById('f-pt-cust').value=pt;
+  }else{
+    document.getElementById('f-pt-sel').value=pt;
+    document.getElementById('f-pt-cust').style.display='none';
+    document.getElementById('f-pt-cust').value='';
+  }
+  calcComm();calcAnn();calcPayEnd();
+  updateDL();applyLang();openOv('ov-edit');
+}
+
+function clearForm(){
+  ['f-name','f-bday','f-prem','f-ann','f-rel','f-notes','f-custom','f-payend'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('f-type-sel').value='savings';
+  document.getElementById('f-crate').value='25';
+  document.getElementById('f-start').value='';
+  document.getElementById('f-pt-sel').value='';
+  document.getElementById('f-pt-cust').value='';
+  document.getElementById('f-pt-cust').style.display='none';
+  document.getElementById('comm-disp').textContent='— USD';
+  document.getElementById('fg-custom').style.display='none';
+  document.getElementById('fg-spacer').style.display='';
+}
+
+document.getElementById('f-type-sel').addEventListener('change',function(){
+  var isOth=this.value==='other';
+  document.getElementById('fg-custom').style.display=isOth?'':'none';
+  document.getElementById('fg-spacer').style.display=isOth?'none':'';
+});
+document.getElementById('f-pt-sel').addEventListener('change',function(){
+  var isC=this.value==='custom';
+  var ci=document.getElementById('f-pt-cust');
+  ci.style.display=isC?'':'none';
+  if(!isC)ci.value='';
+  calcPayEnd();
+});
+document.getElementById('f-pt-cust').addEventListener('input',calcPayEnd);
+document.getElementById('f-prem').addEventListener('input',calcComm);
+document.getElementById('f-crate').addEventListener('input',calcComm);
+document.getElementById('f-start').addEventListener('change',function(){calcAnn();calcPayEnd();});
+
+function getPT(){
+  var v=document.getElementById('f-pt-sel').value;
+  if(!v)return null;
+  if(v==='custom'){var n=parseInt(document.getElementById('f-pt-cust').value);return isNaN(n)?null:n;}
+  return parseInt(v);
+}
+function calcComm(){
+  var pr=parseFloat(document.getElementById('f-prem').value)||0;
+  var rtVal=parseFloat(document.getElementById('f-crate').value);
+  var rt=isNaN(rtVal) ? 0 : (rtVal / 100);
+  var c=pr*rt;
+  document.getElementById('comm-disp').textContent=c?('$'+c.toLocaleString(undefined,{maximumFractionDigits:0})+' USD'):'— USD';
+}
+function calcAnn(){
+  var sd=document.getElementById('f-start').value;
+  document.getElementById('f-ann').value=sd?annLbl(sd):'';
+}
+function calcPayEnd(){
+  var sd=document.getElementById('f-start').value;
+  var pt=getPT();
+  document.getElementById('f-payend').value=(sd&&pt)?fmtDo(payEnd(sd,pt)):'';
+}
+
+document.getElementById('btn-cancel').addEventListener('click',function(){closeOv('ov-edit');});
+document.getElementById('btn-save').addEventListener('click',function(){
+  var name=document.getElementById('f-name').value.trim();
+  var sd=document.getElementById('f-start').value;
+  if(!name){showToast(t('err_name'));return;}
+  if(!sd){showToast(t('err_start'));return;}
+  
+  var p={
+    id:editId||uid(),name:name,
+    birthday:document.getElementById('f-bday').value,
+    policyType:document.getElementById('f-type-sel').value,
+    policyTypeCustom:document.getElementById('f-custom').value.trim(),
+    premium:parseFloat(document.getElementById('f-prem').value)||0,
+    commRate:(function(){ var v=parseFloat(document.getElementById('f-crate').value); return isNaN(v)?0:(v/100); })(),
+    startDate:sd,payterm:getPT(),
+    related:document.getElementById('f-rel').value.trim(),
+    notes:document.getElementById('f-notes').value.trim()
+  };
+  if(editId){
+    var i=policies.findIndex(function(x){return x.id===editId;});
+    if(i!==-1)policies[i]=p;else policies.push(p);
+  }else{policies.push(p);}
+  persist();closeOv('ov-edit');render();updateStats();showToast(t('saved'));
+});
+
+function doDelete(id){
+  if(!confirm(t('conf_del')))return;
+  policies=policies.filter(function(p){return p.id!==id;});
+  persist();closeOv('ov-detail');render();updateStats();showToast(t('deleted'));
+}
+
+function updateDL(){
+  document.getElementById('dl-c').innerHTML=
+    [...new Set(policies.map(function(p){return p.name;}))].map(function(n){return'<option value="'+esc(n)+'">';}).join('');
+}
+
+// ─── Detail ───────────────────────────────────────────────────────────────────
+function openDetail(id){
+  var p=policies.find(function(x){return x.id===id;});
+  if(!p)return;
+  detailId=id;
+  document.getElementById('det-name').textContent=p.name;
+
+  var comp=isComplete(p);
+  var na=nextAnn(p.startDate);var days=na?daysTo(na):null;
+  var urg=!comp&&days!==null&&days<=30;
+  var comm=p.premium*(p.commRate||0);
+  var el=yrsSince(p.startDate);
+  var pe=p.payterm?payEnd(p.startDate,p.payterm):null;
+  var k=L[lang].k;
+
+  var prog='';
+  if(p.payterm){
+    var pct=Math.min(100,el/Number(p.payterm)*100);
+    prog='<div class="prog-bar"><div class="prog-fill '+(comp?'pf-done':'pf-on')+'" style="width:'+pct.toFixed(1)+'%"></div></div>'
+      +'<div class="prog-lb">'+(comp?t('done'):(el.toFixed(1)+' / '+p.payterm+t('yrs')+' ('+pct.toFixed(0)+'%)'))+'</div>';
+  }
+
+  var cdHTML='';
+  if(comp)cdHTML='<span class="cd-big done-pill">'+t('done')+'</span>';
+  else{var txt=days===null?'—':days===0?t('today'):(lang==='zh'?days+' 天':days+' days');cdHTML='<span class="cd-big '+(urg?'urg':'ok')+'">'+txt+'</span>';}
+
+  var html='<div class="det-section">'+t('sec_basic')+'</div>'
+    +'<div class="det-grid">'
+    +'<div class="di"><div class="dk">'+k[0]+'</div><div class="dv">'+fmtD(p.birthday)+'</div></div>'
+    +(p.related?'<div class="di"><div class="dk">'+k[11]+'</div><div class="dv">'+esc(p.related)+'</div></div>':'<div class="di"></div>')
+    +'</div>'
+    +'<div class="det-section">'+t('sec_pol')+'</div>'
+    +'<div class="det-grid">'
+    +'<div class="di"><div class="dk">'+k[1]+'</div><div class="dv"><span class="badge '+typeCls(p)+'">'+esc(typeLbl(p))+'</span></div></div>'
+    +'<div class="di"><div class="dk">'+k[2]+'</div><div class="dv">$'+Number(p.premium).toLocaleString()+' USD</div></div>'
+    +'<div class="di"><div class="dk">'+k[3]+'</div><div class="dv">'+Number((p.commRate*100).toFixed(2))+'%</div></div>'
+    +'<div class="di"><div class="dk">'+k[4]+'</div><div class="dv" style="color:var(--gld)">$'+comm.toLocaleString(undefined,{maximumFractionDigits:0})+' USD</div></div>'
+    +'<div class="di"><div class="dk">'+k[5]+'</div><div class="dv">'+fmtD(p.startDate)+'</div></div>'
+    +'<div class="di"><div class="dk">'+k[6]+'</div><div class="dv">'+el.toFixed(1)+t('yrs')+'</div></div>'
+    +(p.payterm
+      ?'<div class="di"><div class="dk">'+k[7]+'</div><div class="dv" style="color:'+(comp?'var(--tel)':'inherit')+'">'+p.payterm+t('yrs')+'</div></div>'
+      +'<div class="di"><div class="dk">'+k[8]+'</div><div class="dv" style="color:'+(comp?'var(--tel)':'inherit')+'">'+fmtDo(pe)+'</div></div>'
+      +'<div class="di full"><div class="dk">'+k[13]+'</div>'+prog+'</div>'
+      :'')
+    +'<div class="di"><div class="dk">'+k[9]+'</div><div class="dv">'+(na?fmtDo(na):'—')+'</div></div>'
+    +'<div class="di"><div class="dk">'+k[10]+'</div><div class="dv">'+cdHTML+'</div></div>'
+    +'</div>'
+    +(p.notes?'<div class="det-section">'+k[12]+'</div><div style="font-size:13px;white-space:pre-wrap;line-height:1.7;padding-bottom:8px">'+esc(p.notes)+'</div>':'');
+
+  document.getElementById('det-body').innerHTML=html;
+  document.getElementById('det-edit').onclick=function(){closeOv('ov-detail');openEdit(id);};
+  document.getElementById('det-del').onclick=function(){doDelete(id);};
+  document.getElementById('det-pdf').onclick=function(){showPDFSingle(id);};
+  document.getElementById('det-pdf').title=lang==='zh'?'导出此客户':'Export this client';
+  openOv('ov-detail');
+}
+
+// ─── Export ───────────────────────────────────────────────────────────────────
+document.getElementById('do-json').addEventListener('click',exportJSON);
+document.getElementById('do-import').addEventListener('click',function(){document.getElementById('imp-file').click();});
+document.getElementById('do-ics').addEventListener('click',exportICS);
+document.getElementById('do-pdf').addEventListener('click',function(){showPDF();});
+document.getElementById('pdf-close').addEventListener('click',function(){closePDF();});
+document.getElementById('pdf-close2').addEventListener('click',function(){closePDF();});
+
+document.getElementById('imp-file').addEventListener('change',function(e){
+  var f=e.target.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(ev){
+    try{var d=JSON.parse(ev.target.result);if(Array.isArray(d)){policies=d;persist();render();updateStats();showToast(t('imported'));closeOv('ov-exp');}}catch(err){alert('Invalid JSON');}
+  };
+  r.readAsText(f);e.target.value='';
+});
+
+function exportJSON(){
+  var json=JSON.stringify(policies,null,2);
+  // iPhone-compatible: use data URI
+  try{
+    var blob=new Blob([json],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download='hk-crm-'+ds()+'.json';
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);document.body.removeChild(a);},1000);
+  }catch(e){
+    // Fallback: data URI
+    var uri='data:application/json;charset=utf-8,'+encodeURIComponent(json);
+    var a2=document.createElement('a');a2.href=uri;a2.download='hk-crm-'+ds()+'.json';
+    document.body.appendChild(a2);a2.click();document.body.removeChild(a2);
+  }
+  showToast(t('exported'));
+}
+
+function exportICS(){
+  if(!policies.length){showToast(t('nodata'));return;}
+  var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//HK Insurance CRM//EN\r\nCALSCALE:GREGORIAN\r\n';
+  policies.forEach(function(p){
+    var na=nextAnn(p.startDate);if(!na)return;
+    var d1=icsD(na),d2=icsD(new Date(na.getTime()+86400000));
+    var sum=lang==='zh'?('🛡 '+p.name+' 保单周年日 ('+typeLbl(p)+')'):(p.name+' Policy Anniversary ('+typeLbl(p)+')');
+    var desc='Premium: $'+p.premium+' | Commission: $'+Math.round(p.premium*(p.commRate||0))+' | Start: '+p.startDate+(p.payterm?' | PayTerm: '+p.payterm+'yr':'');
+    ics+='BEGIN:VEVENT\r\nUID:'+p.id+'-'+d1+'@hkcrm\r\nDTSTART;VALUE=DATE:'+d1+'\r\nDTEND;VALUE=DATE:'+d2+'\r\nSUMMARY:'+sum+'\r\nDESCRIPTION:'+desc+'\r\nRRULE:FREQ=YEARLY\r\nBEGIN:VALARM\r\nTRIGGER:-P7D\r\nACTION:DISPLAY\r\nDESCRIPTION:7天提醒 '+sum+'\r\nEND:VALARM\r\nBEGIN:VALARM\r\nTRIGGER:-P1D\r\nACTION:DISPLAY\r\nDESCRIPTION:明天! '+sum+'\r\nEND:VALARM\r\nEND:VEVENT\r\n';
+  });
+  ics+='END:VCALENDAR';
+  try{
+    var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download='policy-anniversaries-'+ds()+'.ics';
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);document.body.removeChild(a);},1000);
+  }catch(e){
+    var uri='data:text/calendar;charset=utf-8,'+encodeURIComponent(ics);
+    var a2=document.createElement('a');a2.href=uri;a2.download='policy-anniversaries-'+ds()+'.ics';
+    document.body.appendChild(a2);a2.click();document.body.removeChild(a2);
+  }
+  showToast(t('exported'));
+}
+
+// PDF: render inline card-style overlay (mobile friendly, screenshot-ready)
+function buildRptCard(p){
+  var comp=isComplete(p);
+  var na=nextAnn(p.startDate);var days=na?daysTo(na):null;
+  var urg=!comp&&days!==null&&days<=30;
+  var comm=p.premium*(p.commRate||0);
+  var el=yrsSince(p.startDate);
+  var pe=p.payterm?payEnd(p.startDate,p.payterm):null;
+
+  var cdTxt='',cdCls='';
+  if(comp){cdTxt=lang==='zh'?'✓ 缴费完成':'✓ Payment Complete';cdCls='done';}
+  else if(days===null){cdTxt='—';cdCls='ok';}
+  else if(days===0){cdTxt=lang==='zh'?'今天':'Today!';cdCls='urg';}
+  else{cdTxt=days+(lang==='zh'?'天' :' days');cdCls=urg?'urg':'ok';}
+
+  var topCls=urg?'urg':comp?'done':'normal';
+  var badgeCls=typeCls(p).replace('b-','rpt-b-');
+  // reuse badge style via inline
+  var badgeStyle=p.policyType==='savings'?'background:#faf6ec;color:#b8973a'
+    :p.policyType==='critical'?'background:#fdf0ee;color:#c0392b'
+    :'background:#f0ede8;color:#6b6560';
+
+  var prog='';
+  if(p.payterm){
+    var pct=Math.min(100,el/Number(p.payterm)*100);
+    prog='<div class="rpt-prog"><div class="rpt-pf '+(comp?'dn':'on')+'" style="width:'+pct.toFixed(0)+'%"></div></div>'
+      +'<div class="rpt-prog-lb">'+(comp?(lang==='zh'?'已完成':'Complete'):(el.toFixed(1)+'/'+p.payterm+(lang==='zh'?'年':' yrs')+' · '+pct.toFixed(0)+'%'))+'</div>';
+  }
+
+  var k=lang==='zh'
+    ?['首年保费','佣金','开始日期','缴费年限','已缴年限','缴费截止','周年日','下次周年']
+    :['First Yr Premium','Commission','Start Date','Pay Term','Yrs Paid','Pay End','Anniversary','Next Anniversary'];
+
+  return '<div class="rpt-card '+topCls+'">'
+    +'<div class="rpt-top">'
+      +'<div>'
+        +'<div class="rpt-name">'+esc(p.name)+'</div>'
+        +(p.birthday?'<div class="rpt-bday">'+fmtD(p.birthday)+'</div>':'')
+        +'<span class="rpt-badge" style="'+badgeStyle+'">'+esc(typeLbl(p))+'</span>'
+      +'</div>'
+      +'<div class="rpt-cd '+cdCls+'">'+cdTxt+'</div>'
+    +'</div>'
+    +'<div class="rpt-grid">'
+      +'<div class="rpt-item"><div class="rpt-k">'+k[0]+'</div><div class="rpt-v">$'+Number(p.premium).toLocaleString()+' USD</div></div>'
+      +'<div class="rpt-item"><div class="rpt-k">'+k[1]+'</div><div class="rpt-v gold">$'+comm.toLocaleString(undefined,{maximumFractionDigits:0})+' ('+Number((p.commRate*100).toFixed(2))+'%)</div></div>'
+      +'<div class="rpt-item"><div class="rpt-k">'+k[2]+'</div><div class="rpt-v">'+fmtD(p.startDate)+'</div></div>'
+      +(p.payterm
+        ?'<div class="rpt-item"><div class="rpt-k">'+k[3]+'</div><div class="rpt-v'+(comp?' teal':'')+'">'+p.payterm+(lang==='zh'?'年':' yrs')+'</div></div>'
+        +'<div class="rpt-item"><div class="rpt-k">'+k[4]+'</div><div class="rpt-v">'+el.toFixed(1)+(lang==='zh'?'年':' yrs')+'<br>'+prog+'</div></div>'
+        +'<div class="rpt-item"><div class="rpt-k">'+k[5]+'</div><div class="rpt-v'+(comp?' teal':'')+'">'+fmtDo(pe)+'</div></div>'
+        :'<div class="rpt-item"><div class="rpt-k">'+k[4]+'</div><div class="rpt-v">'+el.toFixed(1)+(lang==='zh'?'年':' yrs')+'</div></div>'
+        +'<div class="rpt-item"></div>'
+        )
+      +'<div class="rpt-item"><div class="rpt-k">'+k[6]+'</div><div class="rpt-v">'+annLbl(p.startDate)+'</div></div>'
+      +'<div class="rpt-item"><div class="rpt-k">'+k[7]+'</div><div class="rpt-v">'+fmtDo(na)+'</div></div>'
+      +(p.related?'<div class="rpt-item" style="grid-column:1/-1"><div class="rpt-k">'+(lang==='zh'?'关联客户':'Related Client')+'</div><div class="rpt-v">'+esc(p.related)+'</div></div>':'')
+    +'</div>'
+    +(p.notes?'<div class="rpt-notes"><strong>'+(lang==='zh'?'备注：':'Notes: ')+'</strong>'+esc(p.notes)+'</div>':'')
+  +'</div>';
+}
+
+function showPDF(policyList,titleOverride){
+  var list=policyList||policies;
+  if(!list.length){showToast(t('nodata'));return;}
+  closeOv('ov-exp');closeOv('ov-detail');
+
+  var now=new Date().toLocaleDateString(lang==='zh'?'zh-CN':'en-GB',{year:'numeric',month:'long',day:'numeric'});
+  var title=titleOverride||(lang==='zh'?'港险保单 CRM — 保单报表':'HK Insurance CRM — Policy Report');
+  var hint=lang==='zh'?'长按截图 · 上划分享':'Long-press to screenshot · swipe up to share';
+
+  document.getElementById('pdf-title').textContent=title;
+  document.getElementById('pdf-hint').textContent=hint;
+  document.getElementById('pdf-body').innerHTML=
+    '<div class="rpt-wrap">'
+    +'<div class="rpt-meta">'+now+' · '+list.length+' '+(lang==='zh'?'条记录':'records')+'</div>'
+    +list.map(buildRptCard).join('')
+    +'</div>';
+
+  document.getElementById('pdf-ov').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function showPDFSingle(id){
+  var p=policies.find(function(x){return x.id===id;});
+  if(!p)return;
+  showPDF([p], p.name+(lang==='zh'?' — 保单详情':' — Policy Detail'));
+}
+
+function closePDF(){document.getElementById('pdf-ov').classList.remove('open');document.body.style.overflow='';}
+function icsD(d){return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());}
+function pad(n){return String(n).padStart(2,'0');}
+function ds(){return new Date().toISOString().split('T')[0];}
+
+function showToast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show');},2400);
+}
+
+// ─── Sync Layer ───────────────────────────────────────────────────────────────
+// API base: same origin /api/crm  (works on Synology via Apache proxy)
+// Falls back to localStorage when API not reachable (GitHub / offline mode)
+var API_BASE = '/api/crm';
+var syncOnline = false;
+var syncTimer = null;
+
+function syncIndicator(state){
+  // state: 'ok' | 'offline' | 'syncing'
+  var el = document.getElementById('sync-dot');
+  if(!el) return;
+  var map = {ok:'#2e7d52', offline:'#9e9890', syncing:'#b8973a'};
+  el.style.background = map[state] || map.offline;
+  el.title = state === 'ok' ? (lang==='zh'?'已同步':'Synced')
+    : state === 'syncing' ? (lang==='zh'?'同步中…':'Syncing…')
+    : (lang==='zh'?'离线模式（本地存储）':'Offline mode (local storage)');
+}
+
+function apiLoad(cb){
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', API_BASE, true);
+  xhr.timeout = 4000;
+  xhr.onload = function(){
+    if(xhr.status === 200){
+      try{
+        var data = JSON.parse(xhr.responseText);
+        syncOnline = true;
+        syncIndicator('ok');
+        cb(null, data);
+      }catch(e){ cb(e); }
+    } else { cb(new Error('HTTP '+xhr.status)); }
+  };
+  xhr.onerror = xhr.ontimeout = function(){ cb(new Error('Network error')); };
+  xhr.send();
+}
+
+function apiSave(data, cb){
+  syncIndicator('syncing');
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', API_BASE, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.timeout = 6000;
+  xhr.onload = function(){
+    if(xhr.status === 200){
+      syncOnline = true;
+      syncIndicator('ok');
+      if(cb) cb(null);
+    } else { if(cb) cb(new Error('HTTP '+xhr.status)); }
+  };
+  xhr.onerror = xhr.ontimeout = function(){
+    syncOnline = false;
+    syncIndicator('offline');
+    if(cb) cb(new Error('Network error'));
+  };
+  xhr.send(JSON.stringify(data));
+}
+
+function loadData(cb){
+  apiLoad(function(err, data){
+    if(err){
+      // API not available → use localStorage
+      syncOnline = false;
+      syncIndicator('offline');
+      cb(JSON.parse(localStorage.getItem('hkcrm4')||'[]'));
+    } else {
+      // API OK → also update localStorage as local cache
+      localStorage.setItem('hkcrm4', JSON.stringify(data));
+      cb(data);
+    }
+  });
+}
+
+// Override persist to save both locally and to API
+function persist(){
+  localStorage.setItem('hkcrm4', JSON.stringify(policies));
+  if(syncOnline){
+    apiSave(policies, function(err){
+      if(err){
+        syncOnline = false;
+        syncIndicator('offline');
+        showToast(lang==='zh'?'⚠ 已存本地，同步失败':'⚠ Saved locally, sync failed');
+      }
+    });
+  }
+}
+
+// Poll for changes from other devices every 30s (only when online)
+function startPoll(){
+  if(syncTimer) clearInterval(syncTimer);
+  syncTimer = setInterval(function(){
+    if(!syncOnline) return;
+    apiLoad(function(err, data){
+      if(err){ syncOnline=false; syncIndicator('offline'); return; }
+      var remote = JSON.stringify(data);
+      var local  = JSON.stringify(policies);
+      if(remote !== local){
+        policies = data;
+        localStorage.setItem('hkcrm4', JSON.stringify(data));
+        render();
+        updateStats();
+        // subtle update toast
+        showToast(lang==='zh'?'↻ 数据已从其他设备更新':'↻ Updated from another device');
+      }
+    });
+  }, 30000);
+}
+
+// Add sync dot to header
+(function addSyncDot(){
+  var dot = document.createElement('div');
+  dot.id = 'sync-dot';
+  dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:#9e9890;flex-shrink:0;cursor:help;transition:background .3s';
+  dot.title = lang==='zh'?'连接中…':'Connecting…';
+  var hdr = document.querySelector('.hdr-r');
+  if(hdr) hdr.insertBefore(dot, hdr.firstChild);
+})();
+
+// ─── Filter & search event listeners ───────────────
+document.getElementById('srch').addEventListener('input', function(){ render(); });
+document.getElementById('f-type').addEventListener('change', function(){ render(); });
+document.getElementById('f-status').addEventListener('change', function(){ render(); });
+
+// ─── Storage guard ────────────────────────────────────────────────────────────
+(function checkStorage(){
+  try{
+    localStorage.setItem('__crm_test__','1');
+    localStorage.removeItem('__crm_test__');
+  }catch(e){
+    setTimeout(function(){
+      alert('⚠️ 浏览器存储不可用，数据无法保存。\n请在浏览器设置中允许本地存储。\n\nStorage unavailable. Please enable cookies/local storage.');
+    }, 500);
+  }
+})();
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+applyLang();
+updateStats();
+
+// Load data from API (or localStorage fallback), then render
+loadData(function(data){
+  policies = data;
+  render();
+  updateStats();
+  startPoll();
+});
+
+// Refresh countdown every minute
+setInterval(function(){render();updateStats();}, 60000);
+
+})();
+</script>
+</body>
+</html>
