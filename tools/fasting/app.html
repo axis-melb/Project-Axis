@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="轻断食 · Fast">
+<meta name="theme-color" content="#faf9f7">
+<title>16:8 Fast · 轻断食</title>
+<link rel="apple-touch-icon" id="appIcon" href="">
+<script>
+(function(){
+  var c=document.createElement('canvas');c.width=180;c.height=180;
+  var ctx=c.getContext('2d');
+  ctx.fillStyle='#faf9f7';
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(0,0,180,180,36);else ctx.rect(0,0,180,180);
+  ctx.fill();ctx.font='110px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('🍵',90,95);
+  document.getElementById('appIcon').href=c.toDataURL('image/png');
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Noto+Sans+SC:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#faf9f7;--surface:#fff;--border:#ede9e3;--text:#2c2825;--muted:#9e9589;
+  --accent:#5c8a6e;--accent-light:#eef5f1;--warn:#c4703a;--warn-light:#fdf3ec;
+  --water:#5b8fc4;--shadow:0 2px 12px rgba(0,0,0,.06)
+}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans SC',sans-serif;min-height:100vh;padding-bottom:100px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{flex:1;padding:12px 8px;border:none;background:none;font-family:'Noto Sans SC',sans-serif;font-size:11px;color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color .2s}
+.nav-btn .ni{font-size:20px}
+.nav-btn.active{color:var(--accent)}
+.page{display:none;padding:24px 20px 0}
+.page.active{display:block}
+.page-header{margin-bottom:24px;padding-top:16px;display:flex;justify-content:space-between;align-items:flex-start}
+.page-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;color:var(--text)}
+.page-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.lang-btn{padding:5px 12px;border:1px solid var(--border);border-radius:999px;background:var(--surface);font-size:11px;color:var(--muted);cursor:pointer;white-space:nowrap;font-family:'Noto Sans SC',sans-serif}
+/* Timer */
+.status-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;font-size:12px;margin-bottom:28px}
+.status-pill.fasting{background:#f0edf9;color:#7c6ab5}
+.status-pill.eating{background:var(--accent-light);color:var(--accent)}
+.sdot{width:6px;height:6px;border-radius:50%;animation:blink 2s infinite}
+.fasting .sdot{background:#7c6ab5}.eating .sdot{background:var(--accent)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.timer-block{text-align:center;margin-bottom:32px}
+.timer-big{font-family:'DM Mono',monospace;font-size:58px;font-weight:300;letter-spacing:-2px;color:var(--text);line-height:1}
+.timer-label{font-size:13px;color:var(--muted);margin-top:8px}
+.prog-wrap{background:var(--border);border-radius:999px;height:6px;margin:0 0 32px;overflow:hidden}
+.prog-bar{height:100%;border-radius:999px;transition:width 1s ease,background .5s}
+.prog-bar.fasting{background:#9b8ed4}.prog-bar.eating{background:var(--accent)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.card-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.card-row:last-child{border-bottom:none;padding-bottom:0}
+.card-row:first-child{padding-top:0}
+.cr-left{font-size:13px;color:var(--muted)}
+.cr-right{font-family:'DM Mono',monospace;font-size:15px;color:var(--text)}
+.badge{font-size:10px;padding:2px 8px;border-radius:999px;margin-left:8px}
+.badge-eat{background:var(--accent-light);color:var(--accent)}
+.badge-fast{background:#f0edf9;color:#7c6ab5}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+.slabel{font-size:13px;color:var(--text)}
+.slabel-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.slabel-cap{font-size:11px;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-family:'DM Mono',monospace;text-transform:uppercase}
+.time-inp{background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;padding:6px 12px;width:90px;text-align:center}
+.time-inp:focus{outline:none;border-color:var(--accent)}
+/* Day count */
+.day-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px;text-align:center}
+.day-num{font-family:'Playfair Display',serif;font-size:28px;color:var(--accent)}
+.day-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.day-reset{margin-top:12px;padding:5px 16px;border:1px solid var(--border);border-radius:999px;background:var(--bg);font-size:11px;color:var(--muted);cursor:pointer;font-family:'Noto Sans SC',sans-serif}
+/* Water */
+.water-hero{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:24px 20px;box-shadow:var(--shadow);margin-bottom:16px;text-align:center}
+.water-num{font-family:'Playfair Display',serif;font-size:52px;color:var(--water);line-height:1}
+.water-num span{font-size:20px;color:var(--muted);font-family:'Noto Sans SC';font-weight:300}
+.water-sub{font-size:12px;color:var(--muted);margin:4px 0 16px}
+.wbar-wrap{background:var(--border);border-radius:999px;height:8px;overflow:hidden;margin-bottom:8px}
+.wbar{height:100%;border-radius:999px;background:var(--water);transition:width .5s}
+.wmarks{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'DM Mono',monospace}
+.warn-box{background:var(--warn-light);border:1px solid #f0c9a8;border-radius:14px;padding:12px 16px;font-size:12px;color:var(--warn);margin-bottom:16px;display:none}
+.warn-box.show{display:block}
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.qbtn{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 8px;text-align:center;cursor:pointer;box-shadow:var(--shadow)}
+.qbtn:active{transform:scale(.96)}
+.qbtn .qi{font-size:22px;margin-bottom:4px}
+.qbtn .ql{font-size:11px;color:var(--muted)}
+.qbtn .qm{font-family:'DM Mono',monospace;font-size:13px;color:var(--text)}
+.custom-row{display:flex;gap:10px;align-items:center;margin-top:10px}
+.ml-inp{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'DM Mono',monospace;font-size:15px;color:var(--text)}
+.ml-inp:focus{outline:none;border-color:var(--water)}
+.type-sel{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;font-family:'Noto Sans SC',sans-serif;font-size:13px;color:var(--text);-webkit-appearance:none}
+.add-btn{padding:10px 18px;background:var(--water);color:#fff;border:none;border-radius:10px;font-family:'Noto Sans SC',sans-serif;font-size:13px;cursor:pointer;white-space:nowrap}
+.log-hdr{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-family:'DM Mono',monospace}
+.log-item{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;box-shadow:var(--shadow)}
+.li-left{display:flex;align-items:center;gap:10px}
+.li-icon{font-size:18px}
+.li-type{font-size:13px;color:var(--text)}
+.li-time{font-size:11px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace}
+.li-ml{font-family:'DM Mono',monospace;font-size:14px;color:var(--water)}
+.del-btn{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;margin-left:4px}
+.empty{text-align:center;padding:32px;color:var(--muted);font-size:13px}
+.empty-i{font-size:32px;margin-bottom:8px}
+/* Meal */
+.carb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.carb-btn{padding:10px 6px;border:1.5px solid var(--border);border-radius:12px;background:var(--bg);font-family:'Noto Sans SC',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;text-align:center;transition:all .15s}
+.carb-btn.sel{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+.meal-note{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'Noto Sans SC',sans-serif;font-size:13px;color:var(--text);margin-top:10px;resize:none}
+.meal-note:focus{outline:none;border-color:var(--accent)}
+.meal-add{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:14px;font-family:'Noto Sans SC',sans-serif;font-size:14px;cursor:pointer;margin-top:12px}
+.meal-add:active{opacity:.85}
+.hist-day{margin-bottom:20px}
+.hist-date{font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:10px;font-family:'DM Mono',monospace}
+.meal-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:flex-start}
+.meal-time{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:4px}
+.meal-carb{display:inline-block;font-size:12px;padding:3px 10px;border-radius:999px;background:var(--accent-light);color:var(--accent);margin-bottom:4px}
+.meal-carb.nc{background:#f5f5f5;color:var(--muted)}
+.meal-note-t{font-size:12px;color:var(--muted);margin-top:4px}
+/* Backup */
+.export-btn{padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'Noto Sans SC',sans-serif;font-size:12px;cursor:pointer}
+.import-lbl{padding:8px 16px;background:var(--bg);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--text);cursor:pointer}
+/* Toast */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;border-radius:12px;padding:10px 20px;font-size:13px;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- TIMER PAGE -->
+<div class="page active" id="page-timer">
+  <div class="page-header">
+    <div>
+      <div class="page-title" id="t-title"></div>
+      <div class="page-sub" id="t-date"></div>
+    </div>
+    <button class="lang-btn" onclick="toggleLang()" id="lang-toggle"></button>
+  </div>
+
+  <div class="status-pill fasting" id="statusPill">
+    <span class="sdot"></span>
+    <span id="statusText"></span>
+  </div>
+
+  <div class="timer-block">
+    <div class="timer-big" id="timerDisplay">00:00:00</div>
+    <div class="timer-label" id="timerLabel"></div>
+  </div>
+
+  <div class="prog-wrap">
+    <div class="prog-bar fasting" id="progBar" style="width:0%"></div>
+  </div>
+
+  <!-- Day count -->
+  <div class="day-card">
+    <div class="day-num" id="dayNum">1</div>
+    <div class="day-sub" id="dayJourney"></div>
+    <button class="day-reset" id="dayResetBtn" onclick="resetDay()"></button>
+  </div>
+
+  <!-- Window -->
+  <div class="card">
+    <div class="card-row">
+      <span class="cr-left" id="lbl-eat-start"></span>
+      <span class="cr-right" id="wcStart"></span>
+    </div>
+    <div class="card-row">
+      <span class="cr-left" id="lbl-eat-end"></span>
+      <span class="cr-right" id="wcEnd"></span>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div class="scard">
+    <div class="slabel-cap" id="lbl-set-time"></div>
+    <div class="srow">
+      <div class="slabel" id="lbl-start"></div>
+      <input type="time" class="time-inp" id="eatStartInput" value="10:00" onchange="saveSettings()">
+    </div>
+    <div class="srow">
+      <div class="slabel" id="lbl-stop"></div>
+      <input type="time" class="time-inp" id="eatEndInput" value="18:00" onchange="saveSettings()">
+    </div>
+  </div>
+
+  <!-- Backup -->
+  <div class="scard">
+    <div class="slabel-cap" id="lbl-backup"></div>
+    <div class="srow">
+      <div class="slabel" id="lbl-export"></div>
+      <button class="export-btn" id="btn-export" onclick="exportData()"></button>
+    </div>
+    <div class="srow">
+      <div>
+        <div class="slabel" id="lbl-import"></div>
+        <div class="slabel-sub" id="lbl-import-sub"></div>
+      </div>
+      <label class="import-lbl" id="lbl-import-btn">
+        <span id="lbl-import-btn-text"></span>
+        <input type="file" accept=".json" onchange="importData(event)" style="display:none">
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- WATER PAGE -->
+<div class="page" id="page-water">
+  <div class="page-header">
+    <div>
+      <div class="page-title" id="w-title"></div>
+      <div class="page-sub" id="w-sub"></div>
+    </div>
+  </div>
+
+  <div class="water-hero">
+    <div class="water-num" id="waterAmount">0<span>ml</span></div>
+    <div class="water-sub" id="waterSubText"></div>
+    <div class="wbar-wrap"><div class="wbar" id="waterBar" style="width:0%"></div></div>
+    <div class="wmarks"><span>0</span><span>500</span><span>1000</span><span>1500</span><span>2000ml</span></div>
+  </div>
+
+  <div class="warn-box" id="warnBox"></div>
+
+  <div class="quick-grid">
+    <div class="qbtn" onclick="quickAdd(375,'💧')">
+      <div class="qi">💧</div>
+      <div class="qm">375ml</div>
+      <div class="ql" id="lbl-cup"></div>
+    </div>
+    <div class="qbtn" onclick="quickAdd(350,'🍵')">
+      <div class="qi">🍵</div>
+      <div class="qm">350ml</div>
+      <div class="ql" id="lbl-tea"></div>
+    </div>
+    <div class="qbtn" onclick="quickAdd(250,'☕')">
+      <div class="qi">☕</div>
+      <div class="qm">250ml</div>
+      <div class="ql" id="lbl-coffee"></div>
+    </div>
+  </div>
+
+  <div class="scard">
+    <div class="slabel-cap" id="lbl-custom"></div>
+    <div class="custom-row">
+      <input type="number" class="ml-inp" id="customMl" placeholder="ml" min="50" max="2000">
+      <select class="type-sel" id="customType">
+        <option value="💧">💧</option>
+        <option value="🍵">🍵</option>
+        <option value="☕">☕</option>
+        <option value="🥤">🥤</option>
+      </select>
+      <button class="add-btn" id="btn-add-water" onclick="addCustomWater()"></button>
+    </div>
+  </div>
+
+  <div class="log-hdr" id="lbl-today-log"></div>
+  <div id="waterLog"></div>
+</div>
+
+<!-- MEAL PAGE -->
+<div class="page" id="page-meal">
+  <div class="page-header">
+    <div>
+      <div class="page-title" id="m-title"></div>
+      <div class="page-sub" id="m-sub"></div>
+    </div>
+  </div>
+
+  <div class="scard">
+    <div class="slabel-cap" id="lbl-record-meal"></div>
+    <div class="slabel-cap" style="margin-top:12px" id="lbl-carb-type"></div>
+    <div class="carb-grid" id="carbGrid"></div>
+    <textarea class="meal-note" id="mealNote" rows="2"></textarea>
+    <button class="meal-add" id="btn-add-meal" onclick="addMeal()"></button>
+  </div>
+
+  <div class="log-hdr" id="lbl-last7"></div>
+  <div id="mealHistory"></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showPage('timer',this)">
+    <span class="ni">⏱</span><span id="nav-timer"></span>
+  </button>
+  <button class="nav-btn" onclick="showPage('water',this)">
+    <span class="ni">💧</span><span id="nav-water"></span>
+  </button>
+  <button class="nav-btn" onclick="showPage('meal',this)">
+    <span class="ni">🍽</span><span id="nav-meal"></span>
+  </button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── i18n ──────────────────────────────────────────────
+var STRINGS = {
+  zh: {
+    appTitle:'16 · 8 轻断食', waterTitle:'喝水记录', mealTitle:'进餐记录',
+    waterSub:'目标 1500–2000ml · 20:00前喝完', mealSub:'追踪碳水，了解饮食规律',
+    fasting:'断食中 💧', eating:'进食窗口 🍽',
+    toClose:'距关窗', toOpen:'距开窗',
+    eatStartLbl:'☀️ 进食开始', eatEndLbl:'🌙 进食结束',
+    canEat:'可以吃', stopEat:'停止吃',
+    setTime:'设置进食时间', startEat:'开始进食', stopEating:'停止进食',
+    backup:'数据备份', exportLbl:'导出数据', exportBtn:'导出 JSON',
+    importLbl:'导入数据', importSub:'会覆盖现有数据', importBtn:'选择文件',
+    dayJourney:'轻断食旅程', resetDay:'重新开始计天',
+    cup:'一杯水', tea:'一杯茶', coffee:'一杯咖啡', custom:'自定义', addWater:'记录',
+    todayLog:'今日记录', warnWater:'⚠️ 已过 20:00，尽量不再喝水，避免夜间起夜',
+    waterDone:'🎉 今天喝水完美达标！',
+    waterOk:'✅ 已达最低目标，距 2000ml 还差 {n}ml',
+    waterLeft:'距最低目标 1500ml 还差 {n}ml',
+    emptyWater:'还没有记录，喝一杯吧！',
+    recordMeal:'记录这一餐', carbType:'主食碳水',
+    carbs:['🍚 米饭','🍜 面条','🥗 凉皮','🥟 馒头','🌾 其他碳水','🥬 无碳水'],
+    mealPlaceholder:'备注（可选）：份量、感受...', addMeal:'记录这一餐',
+    last7:'最近 7 天', emptyMeal:'还没有进餐记录',
+    today:'今天', yesterday:'昨天',
+    navTimer:'计时', navWater:'喝水', navMeal:'进餐',
+    logged:'已记录', lateWarn:' ⚠️ 已过20:00',
+    toastMeal:'🍽 进餐记录已保存', errNoCarb:'请选择主食碳水',
+    errMl:'请输入有效毫升数', toastExported:'✅ 数据已导出',
+    toastImported:'✅ 数据已导入', errFile:'❌ 文件格式错误',
+    toastReset:'✅ 已重新开始计天', confirmReset:'确定重新开始计天？',
+    switchLang:'EN', dayLabel:'第 {n} 天',
+    dateFormat: function(d){ var dn=['日','一','二','三','四','五','六']; return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日 星期'+dn[d.getDay()]; }
+  },
+  en: {
+    appTitle:'16 · 8 Fast', waterTitle:'Water', mealTitle:'Meals',
+    waterSub:'Goal 1500–2000ml · Finish before 8pm', mealSub:'Track carbs & eating patterns',
+    fasting:'Fasting 💧', eating:'Eating window 🍽',
+    toClose:'Until window closes', toOpen:'Until window opens',
+    eatStartLbl:'☀️ Eating starts', eatEndLbl:'🌙 Eating ends',
+    canEat:'Open', stopEat:'Close',
+    setTime:'Eating window', startEat:'Start eating', stopEating:'Stop eating',
+    backup:'Backup', exportLbl:'Export data', exportBtn:'Export JSON',
+    importLbl:'Import data', importSub:'Overwrites existing data', importBtn:'Choose file',
+    dayJourney:'Fasting journey', resetDay:'Reset day count',
+    cup:'Water', tea:'Tea', coffee:'Coffee', custom:'Custom', addWater:'Log',
+    todayLog:"Today's log", warnWater:"⚠️ It's past 8pm. Try not to drink more to avoid waking at night.",
+    waterDone:'🎉 Daily goal reached!',
+    waterOk:'✅ Min goal reached · {n}ml to go',
+    waterLeft:'{n}ml to reach min goal',
+    emptyWater:'No entries yet. Drink up!',
+    recordMeal:'Log a meal', carbType:'Main carbs',
+    carbs:['🍚 Rice','🍜 Noodles','🥗 Liangpi','🥟 Buns','🌾 Other carbs','🥬 No carbs'],
+    mealPlaceholder:'Notes (optional): portion, how you feel...', addMeal:'Log this meal',
+    last7:'Last 7 days', emptyMeal:'No meal entries yet.',
+    today:'Today', yesterday:'Yesterday',
+    navTimer:'Timer', navWater:'Water', navMeal:'Meals',
+    logged:'logged', lateWarn:' ⚠️ Past 8pm',
+    toastMeal:'🍽 Meal logged', errNoCarb:'Please select a carb type',
+    errMl:'Please enter a valid amount', toastExported:'✅ Data exported',
+    toastImported:'✅ Data imported', errFile:'❌ Invalid file format',
+    toastReset:'✅ Day count reset', confirmReset:'Reset day count to Day 1?',
+    switchLang:'中文', dayLabel:'Day {n}',
+    dateFormat: function(d){ return d.toLocaleDateString('en-AU',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); }
+  }
+};
+
+// Detect system language, allow override stored in localStorage
+var syslang = (navigator.language||navigator.userLanguage||'zh').toLowerCase().startsWith('zh')?'zh':'en';
+var LANG = localStorage.getItem('if_lang') || syslang;
+
+function s(k){ return STRINGS[LANG][k]||k; }
+function sr(k,vars){ var t=s(k); for(var v in vars) t=t.replace('{'+v+'}',vars[v]); return t; }
+
+function toggleLang(){
+  LANG = LANG==='zh'?'en':'zh';
+  localStorage.setItem('if_lang', LANG);
+  renderAll();
+}
+
+function renderAll(){
+  applyStrings();
+  updateTimer();
+  updateDate();
+  updateDayCount();
+  renderWater();
+  renderMeals();
+  buildCarbGrid();
+}
+
+function applyStrings(){
+  // Timer page
+  document.getElementById('t-title').textContent = s('appTitle');
+  document.getElementById('lang-toggle').textContent = s('switchLang');
+  document.getElementById('lbl-eat-start').textContent = s('eatStartLbl');
+  document.getElementById('lbl-eat-end').textContent = s('eatEndLbl');
+  document.getElementById('lbl-set-time').textContent = s('setTime');
+  document.getElementById('lbl-start').textContent = s('startEat');
+  document.getElementById('lbl-stop').textContent = s('stopEating');
+  document.getElementById('lbl-backup').textContent = s('backup');
+  document.getElementById('lbl-export').textContent = s('exportLbl');
+  document.getElementById('btn-export').textContent = s('exportBtn');
+  document.getElementById('lbl-import').textContent = s('importLbl');
+  document.getElementById('lbl-import-sub').textContent = s('importSub');
+  document.getElementById('lbl-import-btn-text').textContent = s('importBtn');
+  document.getElementById('dayJourney').textContent = s('dayJourney');
+  document.getElementById('dayResetBtn').textContent = s('resetDay');
+  // Water page
+  document.getElementById('w-title').textContent = s('waterTitle');
+  document.getElementById('w-sub').textContent = s('waterSub');
+  document.getElementById('warnBox').textContent = s('warnWater');
+  document.getElementById('lbl-cup').textContent = s('cup');
+  document.getElementById('lbl-tea').textContent = s('tea');
+  document.getElementById('lbl-coffee').textContent = s('coffee');
+  document.getElementById('lbl-custom').textContent = s('custom');
+  document.getElementById('btn-add-water').textContent = s('addWater');
+  document.getElementById('lbl-today-log').textContent = s('todayLog');
+  // Meal page
+  document.getElementById('m-title').textContent = s('mealTitle');
+  document.getElementById('m-sub').textContent = s('mealSub');
+  document.getElementById('lbl-record-meal').textContent = s('recordMeal');
+  document.getElementById('lbl-carb-type').textContent = s('carbType');
+  document.getElementById('mealNote').placeholder = s('mealPlaceholder');
+  document.getElementById('btn-add-meal').textContent = s('addMeal');
+  document.getElementById('lbl-last7').textContent = s('last7');
+  // Nav
+  document.getElementById('nav-timer').textContent = s('navTimer');
+  document.getElementById('nav-water').textContent = s('navWater');
+  document.getElementById('nav-meal').textContent = s('navMeal');
+}
+
+function buildCarbGrid(){
+  var carbs = STRINGS[LANG].carbs;
+  var grid = document.getElementById('carbGrid');
+  grid.innerHTML = carbs.map(function(c,i){
+    return '<div class="carb-btn'+(selectedCarb===c?' sel':'')+'" onclick="selectCarb(this,\''+c+'\')">'+c+'</div>';
+  }).join('');
+}
+
+// ── State ──────────────────────────────────────────────
+var state = {
+  eatStartHour:10, eatStartMin:0, eatEndHour:18, eatEndMin:0,
+  waterLog:[], mealLog:[], startDate:null
+};
+
+function save(){ localStorage.setItem('if2', JSON.stringify(state)); }
+function load(){
+  try{ var d=JSON.parse(localStorage.getItem('if2')); if(d) Object.assign(state,d); }catch(e){}
+}
+
+// ── Nav ──────────────────────────────────────────────
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='water') renderWater();
+  if(id==='meal'){ buildCarbGrid(); renderMeals(); }
+}
+
+// ── Helpers ──────────────────────────────────────────
+function f2(n){ return String(n).padStart(2,'0'); }
+function fmtT(h,m){ return f2(h)+':'+f2(m); }
+function fmtSec(sec){ var h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60; return f2(h)+':'+f2(m)+':'+f2(s); }
+
+// ── Timer ──────────────────────────────────────────────
+function getPhase(){
+  var now=new Date();
+  var nm=now.getHours()*60+now.getMinutes();
+  var sm=state.eatStartHour*60+state.eatStartMin;
+  var em=state.eatEndHour*60+state.eatEndMin;
+  var eating=nm>=sm&&nm<em;
+  var el,tot;
+  if(eating){ el=(nm-sm)*60+now.getSeconds(); tot=(em-sm)*60; }
+  else{
+    var toStart= nm<sm ? (sm-nm)*60-now.getSeconds() : (24*60-nm+sm)*60-now.getSeconds();
+    tot=(24-(state.eatEndHour-state.eatStartHour))*3600;
+    el=tot-toStart;
+  }
+  return {eating:eating, elapsed:Math.max(0,el), total:tot, remaining:Math.max(0,tot-Math.max(0,el))};
+}
+
+function updateTimer(){
+  var p=getPhase();
+  var pill=document.getElementById('statusPill');
+  pill.className='status-pill '+(p.eating?'eating':'fasting');
+  document.getElementById('statusText').textContent=p.eating?s('eating'):s('fasting');
+  document.getElementById('timerDisplay').textContent=fmtSec(p.remaining);
+  document.getElementById('timerLabel').textContent=p.eating?s('toClose'):s('toOpen');
+  var pct=p.total>0?Math.min(100,p.elapsed/p.total*100):0;
+  var bar=document.getElementById('progBar');
+  bar.style.width=pct+'%'; bar.className='prog-bar '+(p.eating?'eating':'fasting');
+  document.getElementById('wcStart').innerHTML=fmtT(state.eatStartHour,state.eatStartMin)+'<span class="badge badge-eat">'+s('canEat')+'</span>';
+  document.getElementById('wcEnd').innerHTML=fmtT(state.eatEndHour,state.eatEndMin)+'<span class="badge badge-fast">'+s('stopEat')+'</span>';
+}
+
+function saveSettings(){
+  var sv=document.getElementById('eatStartInput').value.split(':');
+  var ev=document.getElementById('eatEndInput').value.split(':');
+  state.eatStartHour=parseInt(sv[0]); state.eatStartMin=parseInt(sv[1]);
+  state.eatEndHour=parseInt(ev[0]); state.eatEndMin=parseInt(ev[1]);
+  save(); updateTimer();
+}
+
+function updateDate(){
+  document.getElementById('t-date').textContent = STRINGS[LANG].dateFormat(new Date());
+}
+
+// ── Day count ──────────────────────────────────────────
+function updateDayCount(){
+  if(!state.startDate){ state.startDate=new Date().toDateString(); save(); }
+  var n=Math.floor((new Date()-new Date(state.startDate))/86400000)+1;
+  document.getElementById('dayNum').textContent=sr('dayLabel',{n:n});
+}
+
+function resetDay(){
+  if(!confirm(s('confirmReset'))) return;
+  state.startDate=new Date().toDateString(); save(); updateDayCount();
+  showToast(s('toastReset'));
+}
+
+// ── Water ──────────────────────────────────────────────
+function todayWater(){
+  var td=new Date().toDateString();
+  return state.waterLog.filter(function(w){return new Date(w.time).toDateString()===td;});
+}
+
+function quickAdd(ml,icon){
+  state.waterLog.push({ml:ml,icon:icon,time:new Date().toISOString()});
+  save(); renderWater();
+  var h=new Date().getHours();
+  showToast(icon+' +'+ml+'ml '+s('logged')+(h>=20?s('lateWarn'):''));
+}
+
+function addCustomWater(){
+  var ml=parseInt(document.getElementById('customMl').value);
+  var icon=document.getElementById('customType').value;
+  if(!ml||ml<50){showToast(s('errMl'));return;}
+  state.waterLog.push({ml:ml,icon:icon,time:new Date().toISOString()});
+  document.getElementById('customMl').value='';
+  save(); renderWater();
+  var h=new Date().getHours();
+  showToast(icon+' +'+ml+'ml '+s('logged')+(h>=20?s('lateWarn'):''));
+}
+
+function deleteWater(idx){
+  var td=new Date().toDateString(); var count=0;
+  for(var i=0;i<state.waterLog.length;i++){
+    if(new Date(state.waterLog[i].time).toDateString()===td){
+      if(count===idx){state.waterLog.splice(i,1);break;} count++;
+    }
+  }
+  save(); renderWater();
+}
+
+function renderWater(){
+  var log=todayWater();
+  var total=log.reduce(function(a,w){return a+w.ml;},0);
+  document.getElementById('waterAmount').innerHTML=total+'<span>ml</span>';
+  document.getElementById('waterBar').style.width=Math.min(100,total/2000*100)+'%';
+  var txt=total>=2000?s('waterDone'):total>=1500?sr('waterOk',{n:2000-total}):sr('waterLeft',{n:1500-total});
+  document.getElementById('waterSubText').textContent=txt;
+  var h=new Date().getHours();
+  document.getElementById('warnBox').className='warn-box'+(h>=20?' show':'');
+  var el=document.getElementById('waterLog');
+  if(!log.length){el.innerHTML='<div class="empty"><div class="empty-i">💧</div>'+s('emptyWater')+'</div>';return;}
+  el.innerHTML=log.slice().reverse().map(function(w,ri){
+    var idx=log.length-1-ri;
+    var t=new Date(w.time);
+    return '<div class="log-item"><div class="li-left"><span class="li-icon">'+w.icon+'</span><div><div class="li-type">'+w.icon+'</div><div class="li-time">'+f2(t.getHours())+':'+f2(t.getMinutes())+'</div></div></div><div style="display:flex;align-items:center"><span class="li-ml">+'+w.ml+'ml</span><button class="del-btn" onclick="deleteWater('+idx+')">×</button></div></div>';
+  }).join('');
+}
+
+// ── Meal ──────────────────────────────────────────────
+var selectedCarb='';
+
+function selectCarb(el,carb){
+  selectedCarb=carb;
+  document.querySelectorAll('.carb-btn').forEach(function(b){b.classList.remove('sel');});
+  el.classList.add('sel');
+}
+
+function addMeal(){
+  if(!selectedCarb){showToast(s('errNoCarb'));return;}
+  var note=document.getElementById('mealNote').value.trim();
+  state.mealLog.push({carb:selectedCarb,note:note,time:new Date().toISOString()});
+  save();
+  document.querySelectorAll('.carb-btn').forEach(function(b){b.classList.remove('sel');});
+  document.getElementById('mealNote').value=''; selectedCarb='';
+  renderMeals(); showToast(s('toastMeal'));
+}
+
+function deleteMeal(idx){state.mealLog.splice(idx,1);save();renderMeals();}
+
+function renderMeals(){
+  var el=document.getElementById('mealHistory');
+  var now=new Date(); var days={};
+  state.mealLog.forEach(function(m,i){
+    var d=new Date(m.time);
+    if((now-d)/86400000>7) return;
+    var key=d.toDateString();
+    if(!days[key]){
+      var diff=Math.floor((now-d)/86400000);
+      var lbl=diff===0?s('today'):diff===1?s('yesterday'):(LANG==='zh'?(d.getMonth()+1)+'月'+d.getDate()+'日':d.toLocaleDateString('en-AU',{month:'short',day:'numeric'}));
+      days[key]={label:lbl,meals:[]};
+    }
+    days[key].meals.push({m:m,i:i});
+  });
+  var keys=Object.keys(days).sort(function(a,b){return new Date(b)-new Date(a);});
+  if(!keys.length){el.innerHTML='<div class="empty"><div class="empty-i">🍽</div>'+s('emptyMeal')+'</div>';return;}
+  el.innerHTML=keys.map(function(k){
+    var day=days[k];
+    var items=day.meals.slice().reverse().map(function(item){
+      var t=new Date(item.m.time);
+      var nc=item.m.carb.indexOf('无碳水')>-1||item.m.carb.indexOf('No carbs')>-1;
+      return '<div class="meal-item"><div><div class="meal-time">'+f2(t.getHours())+':'+f2(t.getMinutes())+'</div><span class="meal-carb'+(nc?' nc':'')+'">'+item.m.carb+'</span>'+(item.m.note?'<div class="meal-note-t">'+item.m.note+'</div>':'')+'</div><button class="del-btn" onclick="deleteMeal('+item.i+')">×</button></div>';
+    }).join('');
+    return '<div class="hist-day"><div class="hist-date">'+day.label+'</div>'+items+'</div>';
+  }).join('');
+}
+
+// ── Backup ──────────────────────────────────────────────
+function exportData(){
+  var blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  var d=new Date();
+  a.href=url; a.download='fasting-'+d.getFullYear()+f2(d.getMonth()+1)+f2(d.getDate())+'.json';
+  a.click(); URL.revokeObjectURL(url); showToast(s('toastExported'));
+}
+
+function importData(e){
+  var file=e.target.files[0]; if(!file) return;
+  var r=new FileReader();
+  r.onload=function(ev){
+    try{
+      var imp=JSON.parse(ev.target.result);
+      if(!imp.waterLog||!imp.mealLog) throw 0;
+      Object.assign(state,imp); save();
+      document.getElementById('eatStartInput').value=f2(state.eatStartHour)+':'+f2(state.eatStartMin);
+      document.getElementById('eatEndInput').value=f2(state.eatEndHour)+':'+f2(state.eatEndMin);
+      renderAll(); showToast(s('toastImported'));
+    }catch(err){showToast(s('errFile'));}
+  };
+  r.readAsText(file); e.target.value='';
+}
+
+// ── Toast ──────────────────────────────────────────────
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2500);
+}
+
+// ── Init ──────────────────────────────────────────────
+load();
+document.getElementById('eatStartInput').value=f2(state.eatStartHour)+':'+f2(state.eatStartMin);
+document.getElementById('eatEndInput').value=f2(state.eatEndHour)+':'+f2(state.eatEndMin);
+renderAll();
+setInterval(updateTimer,1000);
+setInterval(updateDate,60000);
+</script>
+</body>
+</html>
