@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Projects">
+<title>Project Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--green:#4a7c59;--green-l:#e8f5ee;--green-d:#2d5a3d;--bg:#f7f6f2;--card:#fff;--text:#2c2c2a;--muted:#888780;--border:#e8e6e0;--border-s:#d3d1c7;--r:16px;--rs:10px;--tabh:72px;--sp:#ba7517;--sp-b:#faeeda;--sa:#185fa5;--sa-b:#e6f1fb;--sw:#639922;--sw-b:#eaf3de;--sd:#5f5e5a;--sd-b:#f1efe8;
+/* 新增状态颜色 */
+--sq:#6b4c9a;--sq-b:#f3e8fd;--spaid:#0e7c7b;--spaid-b:#e2f6f5;--sawait:#d95c50;--sawait-b:#fdeeed}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+/* 调整了 max-width 使界面和弹窗更宽敞 */
+html,body{height:100%;background:var(--bg);font-family:'Inter',sans-serif;color:var(--text)}
+body{display:flex;flex-direction:column;max-width:600px;margin:0 auto;min-height:100vh;box-shadow: 0 0 20px rgba(0,0,0,0.03);}
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:16px 20px 14px;position:sticky;top:0;z-index:100;display:flex;align-items:flex-start;justify-content:space-between}
+.hl h1{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--green-d);letter-spacing:-.3px}
+.hl p{font-size:13px;color:var(--muted);margin-top:2px}
+.hbtns{display:flex;gap:8px;align-items:flex-start;margin-top:2px}
+.lang-btn{background:var(--green-l);border:1px solid var(--border-s);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--green-d);cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
+.tool-btn{background:var(--bg);border:1px solid var(--border-s);border-radius:20px;padding:6px 10px;cursor:pointer;display:flex;align-items:center;color:var(--muted)}
+.tool-btn svg{width:16px;height:16px}
+.page-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--tabh) + env(safe-area-inset-bottom) + 24px)}
+.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:600px;background:var(--card);border-top:1px solid var(--border);display:flex;height:var(--tabh);padding-bottom:env(safe-area-inset-bottom);z-index:200}
+.tb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:none;background:none;cursor:pointer;padding:8px;color:var(--muted);font-size:11px;font-family:'Inter',sans-serif}
+.tb.active{color:var(--green)}
+.tb svg{width:22px;height:22px}
+.view{display:none}.view.active{display:block}
+.stats-bar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;display:flex}
+.si{flex:1;text-align:center}.si+.si{border-left:1px solid var(--border)}
+.sn{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--green-d)}
+.sl{font-size:11px;color:var(--muted);margin-top:1px}
+.fbar{padding:12px 16px 0;display:flex;gap:6px;overflow-x:auto}.fbar::-webkit-scrollbar{display:none}
+.chip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid var(--border-s);cursor:pointer;white-space:nowrap;color:var(--muted);background:var(--card);font-family:'Inter',sans-serif}
+.chip.active{background:var(--green);border-color:var(--green);color:#fff}
+.lw{padding:16px;display:flex;flex-direction:column;gap:10px}
+.fy-lbl{font-size:11px;font-weight:600;color:var(--green);letter-spacing:.6px;padding:6px 2px 4px;border-bottom:1px solid var(--green-l);margin-bottom:2px;margin-top:6px}.fy-lbl:first-child{margin-top:0}
+.empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}.empty .ico{font-size:40px;margin-bottom:12px}
+.pcard{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:16px;cursor:pointer;transition:transform .1s}.pcard:active{transform:scale(.99)}
+.ctop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.caddr{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:var(--text);line-height:1.3;flex:1}
+.sbadge{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.s0{background:var(--sp-b);color:var(--sp)}.s1{background:var(--sa-b);color:var(--sa)}.s2{background:var(--sw-b);color:var(--sw)}.s3{background:var(--sd-b);color:var(--sd)}
+.s4{background:var(--sq-b);color:var(--sq)}.s5{background:var(--spaid-b);color:var(--spaid)}.s6{background:var(--sawait-b);color:var(--sawait)}
+.cmeta{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.ptag{font-size:11px;color:var(--green-d);background:var(--green-l);padding:2px 8px;border-radius:6px}
+.cbot{margin-top:12px;display:flex;justify-content:space-between;align-items:baseline}
+.cfee{font-size:18px;font-weight:600;color:var(--green-d);font-family:'Playfair Display',serif}
+.cgst{font-size:11px;color:var(--muted)}.cdue{font-size:12px;color:var(--muted)}
+.fw{padding:16px}
+.fsec{margin-bottom:20px}
+.fst{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.ff{margin-bottom:14px}
+.ff label{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px}
+.ff input,.ff textarea{width:100%;background:var(--bg);border:1px solid var(--border-s);border-radius:var(--rs);padding:10px 12px;font-size:16px;font-family:'Inter',sans-serif;color:var(--text);outline:none;-webkit-appearance:none;appearance:none}
+.ff input:focus,.ff textarea:focus{border-color:var(--green)}
+/* 调整 Notes 输入框的默认高度并允许垂直拉伸 */
+.ff textarea{resize:vertical;min-height:160px}
+.pgrid{display:flex;flex-wrap:wrap;gap:8px}
+.pchk{display:none}
+.plbl{padding:7px 13px;border-radius:20px;font-size:13px;font-weight:500;border:1px solid var(--border-s);cursor:pointer;color:var(--muted);user-select:none}
+.pchk:checked+.plbl{background:var(--green);border-color:var(--green);color:#fff}
+.fee-list{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.fee-row{background:var(--bg);border:1px solid var(--border-s);border-radius:var(--rs);padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.fee-row-top{display:flex;align-items:center;gap:6px}
+.fee-name{flex:1;background:transparent;border:none;font-size:15px;font-family:'Inter',sans-serif;color:var(--text);outline:none;padding:0;min-width:0}
+.fee-amt{width:110px;background:var(--card);border:1px solid var(--border-s);border-radius:8px;padding:7px 8px;font-size:15px;font-family:'Inter',sans-serif;color:var(--text);outline:none;-webkit-appearance:none;text-align:right;flex-shrink:0}
+.fee-amt:focus{border-color:var(--green)}
+.del-fee{background:none;border:none;cursor:pointer;color:var(--muted);padding:2px 6px;font-size:20px;line-height:1;flex-shrink:0}
+.fee-row-bot{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.gst-toggle{display:flex;gap:5px}
+.gt-radio{display:none}
+.gt-lbl{padding:4px 9px;border-radius:14px;font-size:11px;font-weight:600;border:1px solid var(--border-s);cursor:pointer;color:var(--muted);user-select:none}
+.gt-radio:checked+.gt-lbl{background:var(--green);border-color:var(--green);color:#fff}
+.gt-radio.no:checked+.gt-lbl{background:var(--muted);border-color:var(--muted);color:#fff}
+.fee-calc{font-size:11px;color:var(--muted);margin-left:auto;text-align:right;line-height:1.5}
+.add-fee-btn{background:none;border:1px dashed var(--border-s);border-radius:var(--rs);padding:10px;font-size:13px;color:var(--green);font-family:'Inter',sans-serif;cursor:pointer;width:100%}
+.fee-totals{background:var(--green-l);border-radius:var(--rs);padding:12px 14px;margin-top:4px;display:flex;flex-direction:column;gap:6px}
+.ft-row{display:flex;justify-content:space-between;align-items:center}
+.ft-label{font-size:12px;color:var(--green-d)}.ft-val{font-size:13px;font-weight:500;color:var(--green-d)}
+.ft-row.main .ft-label{font-size:13px;font-weight:500}
+.ft-row.main .ft-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:600}
+.ft-divider{border:none;border-top:1px solid rgba(74,124,89,.2);margin:2px 0}
+.sgrid{display:flex;gap:8px;flex-wrap:wrap}
+.srad{display:none}
+.srlbl{padding:7px 13px;border-radius:20px;font-size:13px;font-weight:500;border:1px solid var(--border-s);cursor:pointer;color:var(--muted);user-select:none}
+#as0:checked+.srlbl,#es0:checked+.srlbl{background:var(--sp);color:#fff;border-color:transparent}
+#as1:checked+.srlbl,#es1:checked+.srlbl{background:var(--sa);color:#fff;border-color:transparent}
+#as2:checked+.srlbl,#es2:checked+.srlbl{background:var(--sw);color:#fff;border-color:transparent}
+#as3:checked+.srlbl,#es3:checked+.srlbl{background:var(--sd);color:#fff;border-color:transparent}
+#as4:checked+.srlbl,#es4:checked+.srlbl{background:var(--sq);color:#fff;border-color:transparent}
+#as5:checked+.srlbl,#es5:checked+.srlbl{background:var(--spaid);color:#fff;border-color:transparent}
+#as6:checked+.srlbl,#es6:checked+.srlbl{background:var(--sawait);color:#fff;border-color:transparent}
+.btn-p{width:100%;background:var(--green);color:#fff;border:none;border-radius:var(--rs);padding:15px;font-size:16px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;margin-top:4px;display:block}
+.btn-p:active{background:var(--green-d)}
+.dh{background:var(--card);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.back-btn{background:none;border:none;cursor:pointer;color:var(--green);display:flex;align-items:center;gap:4px;font-size:15px;font-family:'Inter',sans-serif;font-weight:500;padding:0;white-space:nowrap}
+.dtitle{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.icobtn{background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;display:flex;align-items:center}
+.dbody{padding:16px;padding-bottom:32px}
+.dsec{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:16px;margin-bottom:12px}
+.dst{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.drow{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border)}.drow:last-child{border-bottom:none}
+.dk{font-size:13px;color:var(--muted);flex-shrink:0;min-width:80px}.dv{font-size:14px;color:var(--text);text-align:right;flex:1}
+.dfee-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}.dfee-row:last-child{border-bottom:none}
+.dfee-left{display:flex;flex-direction:column;gap:2px}
+.dfee-name{font-size:14px;color:var(--text)}.dfee-gst-tag{font-size:10px;color:var(--muted)}
+.dfee-right{text-align:right}.dfee-inc{font-size:14px;color:var(--text);font-weight:500}.dfee-ex{font-size:11px;color:var(--muted)}
+.dtotals{background:var(--green-l);border-radius:var(--rs);padding:12px 14px;margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.dtr{display:flex;justify-content:space-between;align-items:center}
+.dtk{font-size:12px;color:var(--green-d)}.dtv{font-size:13px;font-weight:500;color:var(--green-d)}
+.dtr.main .dtk{font-size:13px;font-weight:500}.dtr.main .dtv{font-family:'Playfair Display',serif;font-size:22px;font-weight:600}
+.dt-div{border:none;border-top:1px solid rgba(74,124,89,.2);margin:2px 0}
+.dnext{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:16px;margin-bottom:12px}
+.dnl{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.dnt{font-size:14px;color:var(--text);line-height:1.6;white-space:pre-wrap}
+.detail-actions{display:flex;gap:10px;margin-bottom:16px}
+.dact-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border-radius:var(--rs);font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;border:1px solid var(--border-s);background:var(--card);color:var(--text)}
+.dact-btn.danger{border-color:#f09595;color:#a32d2d}
+.dact-btn svg{width:15px;height:15px;flex-shrink:0}
+.moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:flex-end;justify-content:center;max-width:600px;left:50%;transform:translateX(-50%)}
+.moverlay.open{display:flex}
+.modal{background:var(--card);border-radius:20px 20px 0 0;padding:20px;width:100%;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.mtitle{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--text);margin-bottom:16px}
+.mfst{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin:14px 0 10px}
+.btn-cancel{width:100%;background:var(--bg);border:none;border-radius:var(--rs);padding:13px;font-size:15px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;color:var(--muted);margin-top:8px}
+.tool-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer}.tool-row:last-child{border-bottom:none}.tool-row:active{opacity:.7}
+.tool-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tool-icon.green{background:var(--green-l)}.tool-icon.blue{background:#e6f1fb}.tool-icon.amber{background:#faeeda}
+.tool-icon svg{width:20px;height:20px}
+.tool-icon.green svg{color:var(--green)}.tool-icon.blue svg{color:#185fa5}.tool-icon.amber svg{color:#ba7517}
+.tool-info{flex:1}.tool-name{font-size:15px;font-weight:500;color:var(--text)}.tool-desc{font-size:12px;color:var(--muted);margin-top:2px}
+.tool-chev{color:var(--muted)}
+#restore-input{display:none}
+@media print{
+  body{max-width:100%;background:#fff;box-shadow:none;}
+  .tab-bar,.header,.fbar,.stats-bar,.detail-actions,.back-btn,.icobtn,.moverlay,.tool-btn,.lang-btn,.view:not(.active){display:none!important}
+  .view.active{display:block!important}
+  .page-scroll{overflow:visible;padding:0}
+  .dh{position:static;border:none;padding:0 0 12px}
+  .dbody{padding:0}
+  .dsec,.dnext{break-inside:avoid;border:1px solid #ddd;border-radius:8px;margin-bottom:12px}
+  .dtotals{background:#e8f5ee;-webkit-print-color-adjust:exact;print-color-adjust:exact;border-radius:8px}
+  .dtk,.dtv{color:#2d5a3d!important}
+  .sbadge,.ptag{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ptag{background:#e8f5ee!important;color:#2d5a3d!important}
+  .print-header{display:block!important;padding:0 0 16px;border-bottom:2px solid #4a7c59;margin-bottom:20px}
+  .del-btn-wrap{display:none!important}
+}
+.print-header{display:none}
+</style>
+</head>
+<body>
+
+<div id="view-list" class="view active">
+  <div class="header">
+    <div class="hl"><h1 id="h-title"></h1><p id="h-sub"></p></div>
+    <div class="hbtns">
+      <button class="tool-btn" onclick="openTools()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button class="lang-btn" onclick="toggleLang()" id="lang-btn"></button>
+    </div>
+  </div>
+  <div class="stats-bar" id="stats-bar"></div>
+  <div class="fbar" id="fbar"></div>
+  <div class="lw" id="plist"></div>
+</div>
+
+<div id="view-add" class="view">
+  <div class="header">
+    <div class="hl"><h1 id="h-add"></h1></div>
+    <button class="lang-btn" onclick="toggleLang()" id="lang-btn2"></button>
+  </div>
+  <div class="page-scroll"><div class="fw">
+    <div class="fsec">
+      <div class="fst" id="a-fs-basic"></div>
+      <div class="ff"><label id="a-lbl-addr"></label><input type="text" id="a-addr" autocomplete="off"></div>
+      <div class="ff"><label id="a-lbl-type"></label><input type="text" id="a-type" autocomplete="off"></div>
+      <div class="ff"><label id="a-lbl-due"></label><input type="date" id="a-due"></div>
+      <div class="ff"><label id="a-lbl-cname"></label><input type="text" id="a-cname" autocomplete="off"></div>
+      <div class="ff"><label id="a-lbl-cphone"></label><input type="text" id="a-cphone" autocomplete="off"></div>
+    </div>
+    <div class="fsec">
+      <div class="fst" id="a-fs-permit"></div>
+      <div class="pgrid">
+        <input class="pchk" type="checkbox" id="p0" value="Planning"><label class="plbl" for="p0">Planning</label>
+        <input class="pchk" type="checkbox" id="p1" value="Subdivision"><label class="plbl" for="p1">Subdivision</label>
+        <input class="pchk" type="checkbox" id="p2" value="Building"><label class="plbl" for="p2">Building</label>
+        <input class="pchk" type="checkbox" id="p3" value="Report & Consent"><label class="plbl" for="p3">Report & Consent</label>
+        <input class="pchk" type="checkbox" id="p4" value="Other"><label class="plbl" for="p4" id="a-other-lbl"></label>
+      </div>
+    </div>
+    <div class="fsec">
+      <div class="fst" id="a-fs-fees"></div>
+      <div class="fee-list" id="a-fee-list"></div>
+      <button class="add-fee-btn" id="a-add-fee" onclick="addFeeRow('a')" type="button"></button>
+      <div class="fee-totals" id="a-totals"></div>
+    </div>
+    <div class="fsec">
+      <div class="fst" id="a-fs-status"></div>
+      <div class="sgrid">
+        <input class="srad" type="radio" name="a-st" id="as0" value="0" checked><label class="srlbl" for="as0" id="a-sl0"></label>
+        <input class="srad" type="radio" name="a-st" id="as4" value="4"><label class="srlbl" for="as4" id="a-sl4"></label>
+        <input class="srad" type="radio" name="a-st" id="as1" value="1"><label class="srlbl" for="as1" id="a-sl1"></label>
+        <input class="srad" type="radio" name="a-st" id="as6" value="6"><label class="srlbl" for="as6" id="a-sl6"></label>
+        <input class="srad" type="radio" name="a-st" id="as2" value="2"><label class="srlbl" for="as2" id="a-sl2"></label>
+        <input class="srad" type="radio" name="a-st" id="as5" value="5"><label class="srlbl" for="as5" id="a-sl5"></label>
+        <input class="srad" type="radio" name="a-st" id="as3" value="3"><label class="srlbl" for="as3" id="a-sl3"></label>
+      </div>
+    </div>
+    <div class="fsec">
+      <div class="fst" id="a-fs-next"></div>
+      <div class="ff"><textarea id="a-next"></textarea></div>
+    </div>
+    <button class="btn-p" id="a-save" onclick="saveProject()" type="button"></button>
+  </div></div>
+</div>
+
+<div id="view-detail" class="view">
+  <div class="dh">
+    <button class="back-btn" onclick="goBack()" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      <span id="back-lbl"></span>
+    </button>
+    <span class="dtitle" id="d-title"></span>
+    <button class="icobtn" onclick="window.print()" type="button" title="PDF">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    </button>
+    <button class="icobtn" onclick="editProject()" type="button">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </button>
+  </div>
+  <div class="page-scroll"><div class="dbody" id="dbody"></div></div>
+</div>
+
+<div class="moverlay" id="edit-modal">
+  <div class="modal">
+    <div class="mtitle" id="e-title"></div>
+    <div class="ff"><label id="e-lbl-addr"></label><input type="text" id="e-addr" autocomplete="off"></div>
+    <div class="ff"><label id="e-lbl-type"></label><input type="text" id="e-type" autocomplete="off"></div>
+    <div class="ff"><label id="e-lbl-due"></label><input type="date" id="e-due"></div>
+    <div class="ff"><label id="e-lbl-cname"></label><input type="text" id="e-cname" autocomplete="off"></div>
+    <div class="ff"><label id="e-lbl-cphone"></label><input type="text" id="e-cphone" autocomplete="off"></div>
+    
+    <div class="mfst" id="e-fs-permit"></div>
+    <div class="pgrid" style="margin-bottom:14px">
+      <input class="pchk" type="checkbox" id="ep0" value="Planning"><label class="plbl" for="ep0">Planning</label>
+      <input class="pchk" type="checkbox" id="ep1" value="Subdivision"><label class="plbl" for="ep1">Subdivision</label>
+      <input class="pchk" type="checkbox" id="ep2" value="Building"><label class="plbl" for="ep2">Building</label>
+      <input class="pchk" type="checkbox" id="ep3" value="Report & Consent"><label class="plbl" for="ep3">Report & Consent</label>
+      <input class="pchk" type="checkbox" id="ep4" value="Other"><label class="plbl" for="ep4" id="e-other-lbl"></label>
+    </div>
+    
+    <div class="mfst" id="e-fs-fees"></div>
+    <div class="fee-list" id="e-fee-list"></div>
+    <button class="add-fee-btn" id="e-add-fee" onclick="addFeeRow('e')" type="button" style="margin-bottom:8px"></button>
+    <div class="fee-totals" id="e-totals" style="margin-bottom:14px"></div>
+    
+    <div class="mfst" id="e-fs-status"></div>
+    <div class="sgrid" style="margin-bottom:14px">
+      <input class="srad" type="radio" name="e-st" id="es0" value="0"><label class="srlbl" for="es0" id="e-sl0"></label>
+      <input class="srad" type="radio" name="e-st" id="es4" value="4"><label class="srlbl" for="es4" id="e-sl4"></label>
+      <input class="srad" type="radio" name="e-st" id="es1" value="1"><label class="srlbl" for="es1" id="e-sl1"></label>
+      <input class="srad" type="radio" name="e-st" id="es6" value="6"><label class="srlbl" for="es6" id="e-sl6"></label>
+      <input class="srad" type="radio" name="e-st" id="es2" value="2"><label class="srlbl" for="es2" id="e-sl2"></label>
+      <input class="srad" type="radio" name="e-st" id="es5" value="5"><label class="srlbl" for="es5" id="e-sl5"></label>
+      <input class="srad" type="radio" name="e-st" id="es3" value="3"><label class="srlbl" for="es3" id="e-sl3"></label>
+    </div>
+    
+    <div class="ff"><label id="e-fs-next"></label><textarea id="e-next"></textarea></div>
+    <button class="btn-p" id="e-save" onclick="updateProject()" type="button"></button>
+    <button class="btn-cancel" id="e-cancel" onclick="closeModal('edit-modal')" type="button"></button>
+  </div>
+</div>
+
+<div class="moverlay" id="tools-modal">
+  <div class="modal">
+    <div class="mtitle" id="tools-title"></div>
+    <div id="tools-list"></div>
+    <button class="btn-cancel" id="tools-cancel" onclick="closeModal('tools-modal')" type="button"></button>
+  </div>
+</div>
+
+<input type="file" id="restore-input" accept=".json" onchange="restoreFromFile(this)">
+
+<div class="tab-bar">
+  <button class="tb active" id="tab-list" onclick="showTab('list')" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    <span id="tab-lbl-list"></span>
+  </button>
+  <button class="tb" id="tab-add" onclick="showTab('add')" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    <span id="tab-lbl-add"></span>
+  </button>
+</div>
+
+<script>
+// Storage guard
+(function(){
+  try{localStorage.setItem('__pm_t__','1');localStorage.removeItem('__pm_t__');}
+  catch(e){setTimeout(function(){alert('Storage unavailable. Please enable cookies/local storage in browser settings.\n\n存储不可用，请在浏览器设置中允许本地存储。');},500);}
+})();
+
+// i18n
+var T={
+  en:{appTitle:'Projects',addTitle:'Add Project',sub:function(n,f){return n+' project'+(n===1?'':'s')+' · '+f;},tabList:'Projects',tabAdd:'Add',back:'Back',toggleTo:'中文',fsBasic:'Basic Info',fsPermit:'Permit Type',fsFees:'Fee Breakdown',fsStatus:'Status',fsNext:'Next Steps / Notes',lblAddr:'Address *',lblType:'Project Type',lblDue:'Due Date',lblCName:'Contact Name',lblCPhone:'Contact Number',other:'Other',addFee:'+ Add fee item',
+  sl:['Not Started','In Progress','Pending Approval','Completed','Quoted','Paid','Awaiting 3rd Party'],
+  filterAll:'All',statAll:'All',statActive:'Active',statWait:'Awaiting',statDone:'Done',saveBtn:'Save Project',editTitle:'Edit Project',editSave:'Save Changes',editCancel:'Cancel',detailInfo:'Project Info',detailFees:'Fee Breakdown',dlAddr:'Address',dlType:'Type',dlStatus:'Status',dlDue:'Due Date',dlCName:'Contact Name',dlCPhone:'Contact No.',dlPermit:'Permit',delBtn:'Delete Project',delConfirm:'Delete this project? Cannot be undone.',emptyAll:'No projects yet\nTap "Add" to get started',emptyFilter:'No projects with this status',addrPh:'e.g. 12 Smith St, Fitzroy VIC 3065',typePh:'e.g. Residential New Build',nextPh:'Next actions, notes…',feePh:'Fee name',alertAddr:'Please enter the project address',totalIncGST:'Total (inc. GST)',totalExGST:'Total (ex. GST)',gstAmount:'GST',incGST:'inc. GST',exGST:'ex. GST',noGST:'No GST',gstOf:function(n){return 'GST: '+n;},exOf:function(n){return 'ex. GST: '+n;},incOf:function(n){return 'inc. GST: '+n;},toolsTitle:'Tools',toolsCancel:'Close',toolExportPdf:'Export All as PDF',toolExportPdfDesc:'Print all projects to PDF',toolBackup:'Backup Data',toolBackupDesc:'Download JSON backup file',toolRestore:'Restore from Backup',toolRestoreDesc:'Import a JSON backup file',backupSuccess:function(n){return 'Backup downloaded ('+n+' projects)';},restoreSuccess:function(n){return 'Restored '+n+' projects';},restoreError:'Invalid backup file',restoreConfirm:function(n){return 'Replace all data with '+n+' projects from backup. Continue?';},printedOn:'Printed on',addedLbl:'Added'},
+  
+  zh:{appTitle:'工程项目',addTitle:'添加项目',sub:function(n,f){return n+' 个项目 · '+f;},tabList:'项目列表',tabAdd:'添加',back:'返回',toggleTo:'English',fsBasic:'基本信息',fsPermit:'Permit 类型',fsFees:'费用明细',fsStatus:'进度状态',fsNext:'下一步 / 备注',lblAddr:'项目地址 *',lblType:'项目类型',lblDue:'截止日期',lblCName:'联系人姓名',lblCPhone:'联系电话',other:'其他',addFee:'+ 添加费用项',
+  sl:['待开始','进行中','等待审批','已完成','已报价','已付款','等待第三方回复'],
+  filterAll:'全部',statAll:'全部',statActive:'进行中',statWait:'待审批',statDone:'已完成',saveBtn:'保存项目',editTitle:'编辑项目',editSave:'保存更改',editCancel:'取消',detailInfo:'项目信息',detailFees:'费用明细',dlAddr:'地址',dlType:'类型',dlStatus:'状态',dlDue:'截止日期',dlCName:'联系人',dlCPhone:'电话',dlPermit:'Permit',delBtn:'删除项目',delConfirm:'确认删除这个项目？此操作不可撤销。',emptyAll:'暂无项目\n点击下方「添加」开始',emptyFilter:'该状态下暂无项目',addrPh:'如：12 Smith Street, Fitzroy VIC 3065',typePh:'如：住宅新建 / 商业改建',nextPh:'下一步行动、备注…',feePh:'费用名称',alertAddr:'请输入项目地址',totalIncGST:'总价（含GST）',totalExGST:'总价（不含GST）',gstAmount:'GST 合计',incGST:'含GST',exGST:'不含GST',noGST:'无GST',gstOf:function(n){return 'GST: '+n;},exOf:function(n){return '不含GST: '+n;},incOf:function(n){return '含GST: '+n;},toolsTitle:'工具',toolsCancel:'关闭',toolExportPdf:'导出全部项目 PDF',toolExportPdfDesc:'打印所有项目为PDF',toolBackup:'备份数据',toolBackupDesc:'下载JSON备份文件',toolRestore:'从备份恢复',toolRestoreDesc:'导入JSON备份文件',backupSuccess:function(n){return '备份已下载（'+n+' 个项目）';},restoreSuccess:function(n){return '已恢复 '+n+' 个项目';},restoreError:'无效的备份文件',restoreConfirm:function(n){return '此操作将用备份中的 '+n+' 个项目替换当前所有数据，确认继续？';},printedOn:'打印时间',addedLbl:'录入日期'}
+};
+
+var DEFAULT_FEES={en:['Government Fee','Consulting Fee','Engineering Fee','Other'],zh:['Government Fee','Consulting Fee','Engineering Fee','其他费用']};
+
+function detectLang(){return(navigator.language||'en').toLowerCase().startsWith('zh')?'zh':'en';}
+var lang=localStorage.getItem('pm_lang')||detectLang();
+var t=T[lang];
+function toggleLang(){lang=lang==='en'?'zh':'en';localStorage.setItem('pm_lang',lang);t=T[lang];applyLang();renderList();}
+
+// Storage key — do not change (preserves existing data)
+var STORAGE_KEY='pm_proj';
+
+function migrateProject(p){
+  if(p.fees){p.fees=p.fees.map(function(f){return{name:f.name||f.label||'',amt:parseFloat(f.amt||f.amount||0),gst:f.gst||'inc'};});}
+  if(p.totalInc===undefined&&p.total!==undefined){p.totalInc=p.total;p.totalEx=p.total;p.totalGST=0;}
+  if(!p.id)p.id=Date.now().toString(36);
+  if(!p.created)p.created=Date.now();
+  if(p.status===undefined)p.status=0;
+  if(!p.permits)p.permits=[];
+  if(!p.fees)p.fees=[];
+  return p;
+}
+
+var projects=[];
+var currentId=null;
+var filter='all';
+var feeData={a:[],e:[]};
+
+function load(){try{var raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');projects=raw.map(migrateProject);}catch(e){projects=[];}}
+function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(projects));}catch(e){alert('Storage error. Data may not be saved.');}}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5);}
+
+function fmt(n){return '$'+Number(n||0).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtDate(ts){return new Date(ts).toLocaleDateString(lang==='zh'?'zh-CN':'en-AU',{year:'numeric',month:'short',day:'numeric'});}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+
+function feeIncGST(r){var a=parseFloat(r.amt)||0;return r.gst==='inc'?a:r.gst==='ex'?a*1.1:a;}
+function feeExGST(r){var a=parseFloat(r.amt)||0;return r.gst==='inc'?a/1.1:r.gst==='ex'?a:a;}
+function feeGSTOnly(r){var a=parseFloat(r.amt)||0;return r.gst==='inc'?a-a/1.1:r.gst==='ex'?a*0.1:0;}
+function calcSums(fees){return{totalInc:fees.reduce(function(s,r){return s+feeIncGST(r);},0),totalEx:fees.reduce(function(s,r){return s+feeExGST(r);},0),totalGST:fees.reduce(function(s,r){return s+feeGSTOnly(r);},0)};}
+
+function updateTotalsPanel(ctx){
+  var totEl=document.getElementById(ctx==='a'?'a-totals':'e-totals');
+  if(!totEl)return;
+  var sums=calcSums(feeData[ctx]);
+  var hasGST=feeData[ctx].some(function(r){return r.gst!=='no';});
+  totEl.innerHTML=hasGST?'<div class="ft-row main"><span class="ft-label">'+t.totalIncGST+'</span><span class="ft-val">'+fmt(sums.totalInc)+'</span></div><hr class="ft-divider"><div class="ft-row"><span class="ft-label">'+t.totalExGST+'</span><span class="ft-val">'+fmt(sums.totalEx)+'</span></div><div class="ft-row"><span class="ft-label">'+t.gstAmount+'</span><span class="ft-val">'+fmt(sums.totalGST)+'</span></div>':'<div class="ft-row main"><span class="ft-label">'+t.totalIncGST+'</span><span class="ft-val">'+fmt(sums.totalInc)+'</span></div>';
+}
+
+function updateFeeCalcLabel(ctx,i){
+  var el=document.getElementById('fee-calc-'+ctx+'-'+i);
+  if(!el)return;
+  var r=feeData[ctx][i];
+  var amt=parseFloat(r.amt)||0;
+  if(amt>0&&r.gst!=='no'){
+    if(r.gst==='inc')el.innerHTML=t.exOf(fmt(feeExGST(r)))+'<br>'+t.gstOf(fmt(feeGSTOnly(r)));
+    else el.textContent=t.incOf(fmt(feeIncGST(r)));
+  }else{el.textContent='';}
+}
+
+function renderFeeList(ctx){
+  var listEl=document.getElementById(ctx==='a'?'a-fee-list':'e-fee-list');
+  if(!listEl)return;
+  listEl.innerHTML='';
+  feeData[ctx].forEach(function(row,i){
+    var div=document.createElement('div');div.className='fee-row';
+    var top=document.createElement('div');top.className='fee-row-top';
+    var nameEl=document.createElement('input');nameEl.className='fee-name';nameEl.type='text';
+    nameEl.value=row.name||'';nameEl.placeholder=t.feePh;nameEl.autocomplete='off';
+    nameEl.addEventListener('input',function(){feeData[ctx][i].name=nameEl.value;});
+    var amtEl=document.createElement('input');amtEl.className='fee-amt';amtEl.type='number';
+    amtEl.value=row.amt||'';amtEl.placeholder='0';amtEl.min='0';amtEl.step='0.01';
+    amtEl.addEventListener('input',function(){feeData[ctx][i].amt=amtEl.value;updateFeeCalcLabel(ctx,i);updateTotalsPanel(ctx);});
+    amtEl.addEventListener('blur',function(){var v=parseFloat(amtEl.value);if(!isNaN(v)){amtEl.value=v.toFixed(2);feeData[ctx][i].amt=v;}});
+    var delBtn=document.createElement('button');delBtn.type='button';delBtn.className='del-fee';delBtn.textContent='×';
+    delBtn.addEventListener('click',function(){feeData[ctx].splice(i,1);renderFeeList(ctx);updateTotalsPanel(ctx);});
+    top.appendChild(nameEl);top.appendChild(amtEl);top.appendChild(delBtn);
+    var bot=document.createElement('div');bot.className='fee-row-bot';
+    var gDiv=document.createElement('div');gDiv.className='gst-toggle';
+    ['inc','ex','no'].forEach(function(v){
+      var rid='gst-'+ctx+'-'+i+'-'+v;
+      var r=document.createElement('input');r.type='radio';r.className='gt-radio'+(v==='no'?' no':'');
+      r.name='gst-'+ctx+'-'+i;r.id=rid;r.value=v;r.checked=(row.gst===v);
+      r.addEventListener('change',function(){feeData[ctx][i].gst=v;updateFeeCalcLabel(ctx,i);updateTotalsPanel(ctx);});
+      var lbl=document.createElement('label');lbl.className='gt-lbl';lbl.setAttribute('for',rid);
+      lbl.textContent=v==='inc'?t.incGST:v==='ex'?t.exGST:t.noGST;
+      gDiv.appendChild(r);gDiv.appendChild(lbl);
+    });
+    var calcEl=document.createElement('span');calcEl.className='fee-calc';calcEl.id='fee-calc-'+ctx+'-'+i;
+    bot.appendChild(gDiv);bot.appendChild(calcEl);
+    div.appendChild(top);div.appendChild(bot);
+    listEl.appendChild(div);
+  });
+  updateTotalsPanel(ctx);
+  feeData[ctx].forEach(function(_,i){updateFeeCalcLabel(ctx,i);});
+}
+
+function addFeeRow(ctx){feeData[ctx].push({name:'',amt:'',gst:'inc'});renderFeeList(ctx);}
+function initFees(ctx){feeData[ctx]=DEFAULT_FEES[lang].map(function(n){return{name:n,amt:'',gst:'inc'};});renderFeeList(ctx);}
+
+function getFY(ts){var d=new Date(ts||Date.now());var y=d.getFullYear(),m=d.getMonth();return m>=6?(y+'/'+(y+1).toString().slice(2)):((y-1)+'/'+y.toString().slice(2));}
+
+function tx(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+function ph(id,v){var el=document.getElementById(id);if(el)el.placeholder=v;}
+
+function applyLang(){
+  document.title=t.appTitle;
+  tx('h-title',t.appTitle);tx('h-add',t.addTitle);
+  tx('lang-btn',t.toggleTo);tx('lang-btn2',t.toggleTo);
+  tx('tab-lbl-list',t.tabList);tx('tab-lbl-add',t.tabAdd);tx('back-lbl',t.back);
+  tx('a-fs-basic',t.fsBasic);tx('a-fs-permit',t.fsPermit);tx('a-fs-fees',t.fsFees);tx('a-fs-status',t.fsStatus);tx('a-fs-next',t.fsNext);
+  tx('a-lbl-addr',t.lblAddr);tx('a-lbl-type',t.lblType);tx('a-lbl-due',t.lblDue);
+  tx('a-lbl-cname',t.lblCName);tx('a-lbl-cphone',t.lblCPhone);
+  tx('a-other-lbl',t.other);tx('a-add-fee',t.addFee);tx('a-save',t.saveBtn);
+  tx('a-sl0',t.sl[0]);tx('a-sl1',t.sl[1]);tx('a-sl2',t.sl[2]);tx('a-sl3',t.sl[3]);
+  tx('a-sl4',t.sl[4]);tx('a-sl5',t.sl[5]);tx('a-sl6',t.sl[6]);
+  
+  tx('e-title',t.editTitle);tx('e-lbl-addr',t.lblAddr);tx('e-lbl-type',t.lblType);tx('e-lbl-due',t.lblDue);
+  tx('e-lbl-cname',t.lblCName);tx('e-lbl-cphone',t.lblCPhone);
+  tx('e-fs-permit',t.fsPermit);tx('e-fs-fees',t.fsFees);tx('e-fs-status',t.fsStatus);tx('e-fs-next',t.fsNext);
+  tx('e-other-lbl',t.other);tx('e-add-fee',t.addFee);tx('e-save',t.editSave);tx('e-cancel',t.editCancel);
+  tx('e-sl0',t.sl[0]);tx('e-sl1',t.sl[1]);tx('e-sl2',t.sl[2]);tx('e-sl3',t.sl[3]);
+  tx('e-sl4',t.sl[4]);tx('e-sl5',t.sl[5]);tx('e-sl6',t.sl[6]);
+  
+  ph('a-addr',t.addrPh);ph('a-type',t.typePh);ph('a-next',t.nextPh);
+}
+
+function renderList(){
+  applyLang();
+  var shown=filter==='all'?projects:projects.filter(function(p){return p.status==filter;});
+  var totalFee=projects.reduce(function(s,p){return s+(p.totalInc||0);},0);
+  tx('h-sub',t.sub(projects.length,fmt(totalFee)));
+  
+  // 简易数据概览（可根据需要拓展）
+  var active=projects.filter(function(p){return p.status==1;}).length;
+  var wait=projects.filter(function(p){return p.status==2 || p.status==6;}).length; // 包括等待第三方
+  var done=projects.filter(function(p){return p.status==3;}).length;
+  document.getElementById('stats-bar').innerHTML='<div class="si"><div class="sn">'+projects.length+'</div><div class="sl">'+t.statAll+'</div></div><div class="si"><div class="sn">'+active+'</div><div class="sl">'+t.statActive+'</div></div><div class="si"><div class="sn">'+wait+'</div><div class="sl">'+t.statWait+'</div></div><div class="si"><div class="sn">'+done+'</div><div class="sl">'+t.statDone+'</div></div>';
+  
+  // 渲染过滤栏（包含新增状态）
+  document.getElementById('fbar').innerHTML=['all','4','0','1','6','2','5','3'].map(function(f){
+    var lbl=f==='all'?t.filterAll:t.sl[parseInt(f)];
+    return'<button class="chip'+(filter===f?' active':'')+'" onclick="setFilter(\''+f+'\')" type="button">'+lbl+'</button>';
+  }).join('');
+  
+  var lw=document.getElementById('plist');
+  if(!shown.length){lw.innerHTML='<div class="empty"><div class="ico">🏗️</div><p>'+(filter==='all'?t.emptyAll:t.emptyFilter).replace('\n','<br>')+'</p></div>';return;}
+  var groups={};
+  shown.forEach(function(p){var fy=getFY(p.created);if(!groups[fy])groups[fy]=[];groups[fy].push(p);});
+  var fyKeys=Object.keys(groups).sort(function(a,b){return b.localeCompare(a);});
+  var multi=fyKeys.length>1;
+  var html='';
+  fyKeys.forEach(function(fy){
+    if(multi)html+='<div class="fy-lbl">FY '+fy+'</div>';
+    groups[fy].forEach(function(p){
+      var permits=(p.permits||[]).map(function(pt){return'<span class="ptag">'+esc(pt)+'</span>';}).join('');
+      var typeH=p.type?'<div style="font-size:13px;color:var(--muted);margin-top:4px">'+esc(p.type)+'</div>':'';
+      var dueH=p.due?'<span class="cdue">Due: '+p.due+'</span>':'';
+      var gstH=(p.totalGST||0)>0?'<span class="cgst">GST '+fmt(p.totalGST)+'</span>':'';
+      html+='<div class="pcard" onclick="openDetail(\''+p.id+'\')">'
+        +'<div class="ctop"><div><div class="caddr">'+esc(p.address)+'</div>'+typeH+'</div><span class="sbadge s'+p.status+'">'+t.sl[p.status]+'</span></div>'
+        +(permits?'<div class="cmeta">'+permits+'</div>':'')
+        +'<div class="cbot"><div style="display:flex;flex-direction:column;gap:2px"><span class="cfee">'+fmt(p.totalInc||0)+'</span>'+gstH+'</div>'+dueH+'</div>'
+        +'</div>';
+    });
+  });
+  lw.innerHTML=html;
+}
+
+function setFilter(f){filter=f;renderList();}
+
+function saveProject(){
+  var addr=document.getElementById('a-addr').value.trim();
+  if(!addr){alert(t.alertAddr);return;}
+  var fees=feeData.a.map(function(r){return{name:r.name,amt:parseFloat(r.amt)||0,gst:r.gst};});
+  var sums=calcSums(fees);
+  var status=parseInt(document.querySelector('input[name="a-st"]:checked').value);
+  projects.unshift({
+    id:uid(), address:addr, type:document.getElementById('a-type').value.trim(), due:document.getElementById('a-due').value,
+    cname:document.getElementById('a-cname').value.trim(), cphone:document.getElementById('a-cphone').value.trim(),
+    permits:['p0','p1','p2','p3','p4'].filter(function(id){return document.getElementById(id).checked;}).map(function(id){return document.getElementById(id).value;}),
+    fees:fees, totalInc:sums.totalInc, totalEx:sums.totalEx, totalGST:sums.totalGST, status:status, 
+    next:document.getElementById('a-next').value.trim(), created:Date.now()
+  });
+  persist();resetAdd();showTab('list');renderList();
+}
+
+function resetAdd(){
+  ['a-addr','a-type','a-due','a-cname','a-cphone','a-next'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['p0','p1','p2','p3','p4'].forEach(function(id){document.getElementById(id).checked=false;});
+  document.getElementById('as0').checked=true;
+  initFees('a');
+}
+
+function buildDetailHTML(p){
+  var permits=(p.permits||[]).map(function(pt){return'<span class="ptag">'+esc(pt)+'</span>';}).join(' ');
+  var fees=(p.fees||[]).filter(function(f){return(parseFloat(f.amt)||0)>0;});
+  var feeRows=fees.map(function(f){
+    var gstTag=f.gst==='inc'?t.incGST:f.gst==='ex'?t.exGST:t.noGST;
+    var subLine=f.gst!=='no'?'<div class="dfee-ex">'+t.exOf(fmt(feeExGST(f)))+' · '+t.gstOf(fmt(feeGSTOnly(f)))+'</div>':'';
+    return'<div class="dfee-row"><div class="dfee-left"><div class="dfee-name">'+esc(f.name||'—')+'</div><div class="dfee-gst-tag">'+gstTag+'</div></div><div class="dfee-right"><div class="dfee-inc">'+fmt(feeIncGST(f))+'</div>'+subLine+'</div></div>';
+  }).join('');
+  var hasGST=(p.totalGST||0)>0;
+  var totalsH=hasGST?'<div class="dtr main"><span class="dtk">'+t.totalIncGST+'</span><span class="dtv">'+fmt(p.totalInc)+'</span></div><hr class="dt-div"><div class="dtr"><span class="dtk">'+t.totalExGST+'</span><span class="dtv">'+fmt(p.totalEx)+'</span></div><div class="dtr"><span class="dtk">'+t.gstAmount+'</span><span class="dtv">'+fmt(p.totalGST)+'</span></div>':'<div class="dtr main"><span class="dtk">'+t.totalIncGST+'</span><span class="dtv">'+fmt(p.totalInc||0)+'</span></div>';
+  return'<div class="print-header"><div style="font-family:\'Playfair Display\',serif;font-size:24px;font-weight:600;color:#2d5a3d;margin-bottom:4px">'+esc(p.address)+'</div><div style="font-size:13px;color:#888;margin-top:4px">'+t.printedOn+': '+fmtDate(Date.now())+'</div></div>'
+    +'<div class="dsec"><div class="dst">'+t.detailInfo+'</div>'
+    +'<div class="drow"><span class="dk">'+t.dlAddr+'</span><span class="dv">'+esc(p.address)+'</span></div>'
+    +(p.type?'<div class="drow"><span class="dk">'+t.dlType+'</span><span class="dv">'+esc(p.type)+'</span></div>':'')
+    +'<div class="drow"><span class="dk">'+t.dlStatus+'</span><span class="dv"><span class="sbadge s'+p.status+'">'+t.sl[p.status]+'</span></span></div>'
+    +(p.due?'<div class="drow"><span class="dk">'+t.dlDue+'</span><span class="dv">'+p.due+'</span></div>':'')
+    +(p.cname?'<div class="drow"><span class="dk">'+t.dlCName+'</span><span class="dv">'+esc(p.cname)+'</span></div>':'')
+    +(p.cphone?'<div class="drow"><span class="dk">'+t.dlCPhone+'</span><span class="dv">'+esc(p.cphone)+'</span></div>':'')
+    +'<div class="drow"><span class="dk">'+t.addedLbl+'</span><span class="dv">'+fmtDate(p.created)+'</span></div>'
+    +(permits?'<div class="drow"><span class="dk">'+t.dlPermit+'</span><span class="dv" style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end">'+permits+'</span></div>':'')
+    +'</div>'
+    +'<div class="dsec"><div class="dst">'+t.detailFees+'</div>'
+    +(feeRows||'<div style="font-size:13px;color:var(--muted)">'+(lang==='zh'?'暂无费用记录':'No fee records')+'</div>')
+    +'<div class="dtotals">'+totalsH+'</div></div>'
+    +(p.next?'<div class="dnext"><div class="dnl">'+t.fsNext+'</div><div class="dnt">'+esc(p.next)+'</div></div>':'')
+    +'<div class="del-btn-wrap"><div class="detail-actions">'
+    +'<button class="dact-btn danger" onclick="deleteProject(\''+p.id+'\')" type="button">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>'
+    +t.delBtn+'</button></div></div>';
+}
+
+function openDetail(id){
+  currentId=id;var p=projects.find(function(x){return x.id===id;});if(!p)return;
+  tx('d-title',p.address.split(',')[0]);
+  document.getElementById('dbody').innerHTML=buildDetailHTML(p);
+  showView('detail');
+}
+
+function editProject(){
+  var p=projects.find(function(x){return x.id===currentId;});if(!p)return;
+  document.getElementById('e-addr').value=p.address;
+  document.getElementById('e-type').value=p.type||'';
+  document.getElementById('e-due').value=p.due||'';
+  document.getElementById('e-cname').value=p.cname||'';
+  document.getElementById('e-cphone').value=p.cphone||'';
+  document.getElementById('e-next').value=p.next||'';
+  ['ep0','ep1','ep2','ep3','ep4'].forEach(function(id){document.getElementById(id).checked=(p.permits||[]).includes(document.getElementById(id).value);});
+  document.getElementById('es'+p.status).checked=true;
+  feeData.e=(p.fees||[]).map(function(f){return{name:f.name||'',amt:parseFloat(f.amt)||'',gst:f.gst||'inc'};});
+  if(!feeData.e.length)feeData.e=[{name:'',amt:'',gst:'inc'}];
+  renderFeeList('e');
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function updateProject(){
+  var addr=document.getElementById('e-addr').value.trim();
+  if(!addr){alert(t.alertAddr);return;}
+  var fees=feeData.e.map(function(r){return{name:r.name,amt:parseFloat(r.amt)||0,gst:r.gst};});
+  var sums=calcSums(fees);
+  var status=parseInt(document.querySelector('input[name="e-st"]:checked').value);
+  var idx=projects.findIndex(function(x){return x.id===currentId;});if(idx<0)return;
+  projects[idx]=Object.assign({},projects[idx],{
+    address:addr, type:document.getElementById('e-type').value.trim(), due:document.getElementById('e-due').value,
+    cname:document.getElementById('e-cname').value.trim(), cphone:document.getElementById('e-cphone').value.trim(),
+    permits:['ep0','ep1','ep2','ep3','ep4'].filter(function(id){return document.getElementById(id).checked;}).map(function(id){return document.getElementById(id).value;}),
+    fees:fees, totalInc:sums.totalInc, totalEx:sums.totalEx, totalGST:sums.totalGST, status:status, next:document.getElementById('e-next').value.trim()
+  });
+  persist();closeModal('edit-modal');openDetail(currentId);renderList();
+}
+
+function deleteProject(id){
+  if(!confirm(t.delConfirm))return;
+  projects=projects.filter(function(x){return x.id!==id;});
+  persist();renderList();goBack();
+}
+
+function openTools(){
+  tx('tools-title',t.toolsTitle);tx('tools-cancel',t.toolsCancel);
+  document.getElementById('tools-list').innerHTML='<div class="tool-row" onclick="exportAllPDF()"><div class="tool-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div><div class="tool-info"><div class="tool-name">'+t.toolExportPdf+'</div><div class="tool-desc">'+t.toolExportPdfDesc+'</div></div><svg class="tool-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div><div class="tool-row" onclick="backupData()"><div class="tool-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="tool-info"><div class="tool-name">'+t.toolBackup+'</div><div class="tool-desc">'+t.toolBackupDesc+'</div></div><svg class="tool-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div><div class="tool-row" onclick="triggerRestore()"><div class="tool-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div class="tool-info"><div class="tool-name">'+t.toolRestore+'</div><div class="tool-desc">'+t.toolRestoreDesc+'</div></div><svg class="tool-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>';
+  document.getElementById('tools-modal').classList.add('open');
+}
+
+function exportAllPDF(){
+  closeModal('tools-modal');
+  var win=window.open('','_blank');
+  var css='body{font-family:Inter,sans-serif;color:#2c2c2a;max-width:800px;margin:0 auto;padding:24px;background:#fff}h1{font-family:"Playfair Display",serif;font-size:28px;color:#2d5a3d;margin:0 0 4px}.meta{font-size:13px;color:#888;margin-bottom:32px}.proj{border:1px solid #e8e6e0;border-radius:12px;padding:20px;margin-bottom:24px;page-break-inside:avoid}.pt{font-family:"Playfair Display",serif;font-size:20px;color:#2c2c2a;margin:0 0 4px}.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}.s0{background:#faeeda;color:#ba7517}.s1{background:#e6f1fb;color:#185fa5}.s2{background:#eaf3de;color:#639922}.s3{background:#f1efe8;color:#5f5e5a}.s4{background:#f3e8fd;color:#6b4c9a}.s5{background:#e2f6f5;color:#0e7c7b}.s6{background:#fdeeed;color:#d95c50}.ptag{display:inline-block;font-size:11px;background:#e8f5ee;color:#2d5a3d;padding:2px 8px;border-radius:6px;margin:2px}.st{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#888;margin:16px 0 8px}table{width:100%;border-collapse:collapse;font-size:14px}td{padding:6px 0;border-bottom:1px solid #f0ece4}tr:last-child td{border-bottom:none}.tr{text-align:right}.tot{background:#e8f5ee;border-radius:8px;padding:12px 14px;margin-top:10px}.tot table td{border:none;padding:4px 0}.tm{font-family:"Playfair Display",serif;font-size:18px;font-weight:600;color:#2d5a3d}.ts{font-size:12px;color:#4a7c59}.nb{background:#f7f6f2;border-radius:8px;padding:12px 14px;margin-top:12px;font-size:14px;line-height:1.6;white-space:pre-wrap}.fyh{font-size:12px;font-weight:700;color:#4a7c59;padding:8px 0 4px;border-bottom:2px solid #e8f5ee;margin:0 0 16px}.gt{font-size:10px;color:#888}@media print{body{padding:16px}}';
+  var groups={};
+  projects.forEach(function(p){var fy=getFY(p.created);if(!groups[fy])groups[fy]=[];groups[fy].push(p);});
+  var fyKeys=Object.keys(groups).sort(function(a,b){return b.localeCompare(a);});
+  var body='';
+  fyKeys.forEach(function(fy){
+    if(fyKeys.length>1)body+='<div class="fyh">FY '+fy+'</div>';
+    groups[fy].forEach(function(p){
+      var fees=(p.fees||[]).filter(function(f){return(parseFloat(f.amt)||0)>0;});
+      var feeRows=fees.map(function(f){var gTag=f.gst==='inc'?t.incGST:f.gst==='ex'?t.exGST:t.noGST;var sub=f.gst!=='no'?'<br><span class="gt">'+t.exOf(fmt(feeExGST(f)))+' · '+t.gstOf(fmt(feeGSTOnly(f)))+'</span>':'';return'<tr><td>'+( f.name||'—')+' <span class="gt">'+gTag+'</span></td><td class="tr">'+fmt(feeIncGST(f))+sub+'</td></tr>';}).join('');
+      var hasGST=(p.totalGST||0)>0;
+      var totRow=hasGST?'<table><tr><td class="tm">'+t.totalIncGST+'</td><td class="tr tm">'+fmt(p.totalInc)+'</td></tr><tr><td class="ts">'+t.totalExGST+'</td><td class="tr ts">'+fmt(p.totalEx)+'</td></tr><tr><td class="ts">'+t.gstAmount+'</td><td class="tr ts">'+fmt(p.totalGST)+'</td></tr></table>':'<table><tr><td class="tm">'+t.totalIncGST+'</td><td class="tr tm">'+fmt(p.totalInc||0)+'</td></tr></table>';
+      var permits=(p.permits||[]).map(function(pt){return'<span class="ptag">'+pt+'</span>';}).join('');
+      body+='<div class="proj"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px"><div class="pt">'+p.address+'</div><span class="badge s'+p.status+'">'+t.sl[p.status]+'</span></div>'+(p.type?'<div style="font-size:13px;color:#888;margin-bottom:8px">'+p.type+'</div>':'')+'<div style="margin-bottom:8px">'+permits+'</div>'+(p.due?'<div style="font-size:12px;color:#888;margin-bottom:4px">Due: '+p.due+'</div>':'')+(p.cname?'<div style="font-size:12px;color:#888;margin-bottom:4px">'+p.cname+(p.cphone?' - '+p.cphone:'')+'</div>':'')+'<div style="font-size:12px;color:#aaa;margin-bottom:8px">'+t.addedLbl+': '+fmtDate(p.created)+'</div>'+(fees.length?'<div class="st">'+t.detailFees+'</div><table>'+feeRows+'</table><div class="tot">'+totRow+'</div>':'')+(p.next?'<div class="st">'+t.fsNext+'</div><div class="nb">'+p.next+'</div>':'')+'</div>';
+    });
+  });
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+t.appTitle+'</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><style>'+css+'</style></head><body><h1>'+t.appTitle+'</h1><div class="meta">'+t.printedOn+': '+fmtDate(Date.now())+' · '+projects.length+' '+(lang==='zh'?'个项目':'projects')+'</div>'+body+'<scr'+'ipt>window.onload=function(){window.print();}<\/script></body></html>');
+  win.document.close();
+}
+
+function backupData(){
+  closeModal('tools-modal');
+  var data={version:2,exported:new Date().toISOString(),projects:projects};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  var d=new Date();var stamp=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+  a.href=url;a.download='pm-backup-'+stamp+'.json';a.click();
+  URL.revokeObjectURL(url);
+  setTimeout(function(){alert(t.backupSuccess(projects.length));},300);
+}
+
+function triggerRestore(){closeModal('tools-modal');document.getElementById('restore-input').value='';document.getElementById('restore-input').click();}
+
+function restoreFromFile(input){
+  var file=input.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var data=JSON.parse(e.target.result);
+      var imported=data.projects||data;
+      if(!Array.isArray(imported))throw new Error();
+      var migrated=imported.map(migrateProject);
+      if(!confirm(t.restoreConfirm(migrated.length)))return;
+      projects=migrated;persist();renderList();alert(t.restoreSuccess(projects.length));
+    }catch(err){alert(t.restoreError);}
+  };
+  reader.readAsText(file);
+}
+
+function goBack(){showView('list');renderList();}
+
+function showView(v){
+  document.querySelectorAll('.view').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('view-'+v).classList.add('active');
+  var isDetail=v==='detail';
+  document.querySelector('.tab-bar').style.display=isDetail?'none':'flex';
+  if(!isDetail){
+    document.getElementById('tab-list').classList.toggle('active',v==='list');
+    document.getElementById('tab-add').classList.toggle('active',v==='add');
+  }
+}
+
+function showTab(tab){if(tab==='add')resetAdd();showView(tab);}
+
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.getElementById('edit-modal').addEventListener('click',function(e){if(e.target===this)closeModal('edit-modal');});
+document.getElementById('tools-modal').addEventListener('click',function(e){if(e.target===this)closeModal('tools-modal');});
+
+// Init
+t=T[lang];load();applyLang();initFees('a');renderList();
+</script>
+</body>
+</html>
