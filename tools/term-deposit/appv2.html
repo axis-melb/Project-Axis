@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>定期存單 CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f5f3ee;--card:#fff;--border:#e5e0d8;
+  --green:#3a6b4a;--text:#1a1a1a;--muted:#888880;
+  --red:#c0392b;--gold:#b8860b;
+  --shadow:0 2px 12px rgba(0,0,0,.07);--radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* TOP BAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;height:56px;position:sticky;top:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'DM Serif Display',serif;font-size:16px}
+.brand{font-weight:600;font-size:15px}
+.brand span{color:var(--muted);font-weight:400;margin-left:4px}
+.topbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:.15s}
+.btn-primary{background:var(--green);color:#fff}
+.btn-primary:hover{background:#2e5538}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-outline:hover{background:#f0ede8}
+.btn-import{background:#f0ede8;color:var(--text);border:1px solid var(--border)}
+.btn-import:hover{background:#e8e4dd}
+.lang-toggle{display:flex;background:#f0ede8;border-radius:7px;overflow:hidden;border:1px solid var(--border)}
+.lang-toggle button{border:none;background:none;padding:5px 12px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;color:var(--muted)}
+.lang-toggle button.active{background:var(--green);color:#fff;border-radius:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:#5cb85c}
+
+/* FX BANNER */
+.fx-banner{background:var(--card);border-bottom:1px solid var(--border);padding:8px 28px;display:flex;align-items:center;gap:18px;font-size:12px;color:var(--muted)}
+.fx-item{display:flex;align-items:center;gap:6px}
+.fx-val{font-weight:700;color:var(--text);font-size:13px}
+.fx-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+.fx-err{color:var(--red)}
+.fx-loading{opacity:.5;font-style:italic}
+
+.container{max-width:1150px;margin:0 auto;padding:28px 24px}
+
+/* SUMMARY CARDS */
+.summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:24px}
+.summary-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+.summary-card .label{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.4px;margin-bottom:6px;text-transform:uppercase}
+.summary-card .value{font-size:24px;font-family:'DM Serif Display',serif;font-weight:400;color:var(--text)}
+.summary-card .value.red{color:var(--red)}
+.summary-card .value.gold{color:var(--gold)}
+.summary-card .sub{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* HKD EQUIV */
+.hkd-equiv{font-size:11px;color:var(--muted);margin-top:3px}
+.hkd-equiv span{color:var(--green);font-weight:600}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:180px;position:relative}
+.search-wrap input{width:100%;padding:9px 14px 9px 34px;border:1px solid var(--border);border-radius:9px;background:var(--card);font-family:inherit;font-size:14px;color:var(--text);outline:none;transition:.15s}
+.search-wrap input:focus{border-color:var(--green)}
+.search-wrap .ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px}
+.filter-select{padding:9px 30px 9px 11px;border:1px solid var(--border);border-radius:9px;background:var(--card);font-family:inherit;font-size:13px;color:var(--text);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;outline:none;cursor:pointer}
+
+/* TABLE */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:auto;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;min-width:860px}
+thead th{padding:12px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;background:#faf9f6;border-bottom:1px solid var(--border);white-space:nowrap}
+tbody tr{border-bottom:1px solid #f0ede8;transition:background .12s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#faf9f6}
+td{padding:13px 14px;font-size:14px;vertical-align:middle}
+.bank-cell{font-weight:600}
+.currency-badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.3px}
+.cur-USD{background:#ddeef9;color:#2c6e9e}
+.cur-HKD{background:#e6f4eb;color:#2e6b3c}
+.cur-AUD{background:#fdf3e1;color:#8a5800}
+.amount-cell{font-family:'DM Serif Display',serif;font-size:15px}
+.rate-cell{color:var(--green);font-weight:600}
+.mature-cell{font-size:13px}
+.mature-soon{color:var(--red);font-weight:600}
+.mature-ok{color:var(--muted)}
+.mature-expired{color:#aaa;text-decoration:line-through}
+.total-cell{font-family:'DM Serif Display',serif;font-size:15px;color:var(--gold)}
+.action-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 9px;font-size:12px;cursor:pointer;margin-right:3px;font-family:inherit;transition:.12s}
+.action-btn:hover{background:#f0ede8}
+.action-btn.del:hover{background:#fdecea;border-color:#f5c6c2;color:var(--red)}
+.tag-soon{display:inline-block;background:#fdecea;color:var(--red);font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px;margin-left:5px;vertical-align:middle}
+.tag-exp{display:inline-block;background:#f0ede8;color:var(--muted);font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px;margin-left:5px;vertical-align:middle}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state .icon{font-size:38px;margin-bottom:12px;opacity:.4}
+.empty-state p{font-size:14px}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border-radius:18px;padding:30px 28px;width:500px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:pop .18s ease}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
+.modal h2{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:22px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.3px;text-transform:uppercase}
+.form-group input,.form-group select{padding:9px 11px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;background:var(--bg);color:var(--text);outline:none;transition:.15s}
+.form-group input:focus,.form-group select:focus{border-color:var(--green);background:#fff}
+.form-note{font-size:11px;color:var(--muted);margin-top:2px}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+
+/* Interest method info */
+.method-info{background:#eef4f0;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--green);margin-top:8px;grid-column:1/-1}
+
+/* Import hidden */
+#importInput{display:none}
+
+/* FX note */
+.fx-note{font-size:10px;color:var(--muted);margin-left:auto}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-icon">定</div>
+    <div class="brand" id="brandLabel">定期存單 <span>CRM</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="dot"></div>
+    <div class="lang-toggle">
+      <button class="active" onclick="setLang('zh')" id="btnZh">中文</button>
+      <button onclick="setLang('en')" id="btnEn">EN</button>
+    </div>
+    <button class="btn btn-import" onclick="document.getElementById('importInput').click()" id="btnImport">⬆ 導入</button>
+    <input type="file" id="importInput" accept=".json" onchange="importJSON(event)"/>
+    <button class="btn btn-outline" onclick="exportJSON()" id="btnExport">⬇ 導出</button>
+    <button class="btn btn-primary" onclick="openModal()" id="btnNew">＋ 新增</button>
+  </div>
+</div>
+
+<!-- FX BANNER -->
+<div class="fx-banner" id="fxBanner">
+  <div class="fx-item">
+    <span class="fx-badge">LIVE</span>
+    <span id="fxLabel">匯率</span>
+  </div>
+  <div class="fx-item">
+    USD/HKD: <span class="fx-val" id="fxUSDHKD">—</span>
+  </div>
+  <div class="fx-item">
+    AUD/HKD: <span class="fx-val" id="fxAUDHKD">—</span>
+  </div>
+  <div class="fx-item">
+    <span id="fxStatus" class="fx-loading">載入中…</span>
+  </div>
+  <div class="fx-note" id="fxNote">數據來源：Frankfurter (ECB)</div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- SUMMARY CARDS -->
+  <div class="summary-row">
+    <div class="summary-card">
+      <div class="label" id="lbl_totalCount">存單總數</div>
+      <div class="value" id="totalCount">0</div>
+      <div class="sub" id="sub_totalCount"></div>
+    </div>
+    <div class="summary-card">
+      <div class="label" id="lbl_soonCount">30天內到期</div>
+      <div class="value red" id="soonCount">0</div>
+    </div>
+    <div class="summary-card">
+      <div class="label" id="lbl_totalUSD">USD 在期本金</div>
+      <div class="value gold" id="totalUSD">$0</div>
+      <div class="hkd-equiv" id="hkdUSD"></div>
+    </div>
+    <div class="summary-card">
+      <div class="label" id="lbl_totalHKD">HKD 在期本金</div>
+      <div class="value gold" id="totalHKD">HK$0</div>
+    </div>
+    <div class="summary-card">
+      <div class="label" id="lbl_totalAUD">AUD 在期本金</div>
+      <div class="value gold" id="totalAUD">A$0</div>
+      <div class="hkd-equiv" id="hkdAUD"></div>
+    </div>
+    <div class="summary-card">
+      <div class="label" id="lbl_totalHKDEquiv">全部折合 HKD</div>
+      <div class="value gold" id="totalHKDEquiv">HK$—</div>
+      <div class="sub" id="sub_hkdEquiv" style="font-size:10px"></div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="ico">🔍</span>
+      <input type="text" id="searchInput" placeholder="搜索銀行…" oninput="render()"/>
+    </div>
+    <select class="filter-select" id="filterCur" onchange="render()">
+      <option value="" id="opt_allCur">全部幣種</option>
+      <option>USD</option><option>HKD</option><option>AUD</option>
+    </select>
+    <select class="filter-select" id="filterStatus" onchange="render()">
+      <option value="" id="opt_allStatus">全部狀態</option>
+      <option value="soon" id="opt_soon">即將到期</option>
+      <option value="active" id="opt_active">生效中</option>
+      <option value="expired" id="opt_expired">已到期</option>
+    </select>
+    <select class="filter-select" id="filterMethod" onchange="render()" title="利息計算方式">
+      <option value="actual365" id="opt_act365">實際天數/365</option>
+      <option value="actual360" id="opt_act360">實際天數/360</option>
+      <option value="monthly" id="opt_monthly">按月計算</option>
+    </select>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th id="th_bank">銀行名稱</th>
+          <th id="th_cur">幣種</th>
+          <th id="th_principal">本金</th>
+          <th id="th_rate">年利率</th>
+          <th id="th_start">存入日</th>
+          <th id="th_mature">到期日</th>
+          <th id="th_days">存期(天)</th>
+          <th id="th_interest">利息</th>
+          <th id="th_total">到期總額</th>
+          <th id="th_note">備注</th>
+          <th id="th_action">操作</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="icon">📋</div>
+      <p id="emptyMsg">暫無存單，點擊「新增」開始</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <h2 id="modalTitle">新增定期存單</h2>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label id="lf_bank">銀行名稱</label>
+        <input type="text" id="f_bank" placeholder="例：匯豐銀行 HSBC"/>
+      </div>
+      <div class="form-group">
+        <label id="lf_cur">幣種</label>
+        <select id="f_cur">
+          <option>USD</option><option>HKD</option><option>AUD</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label id="lf_principal">本金金額</label>
+        <input type="number" id="f_principal" placeholder="0.00" step="0.01" min="0"/>
+      </div>
+      <div class="form-group">
+        <label id="lf_rate">年利率 (%)</label>
+        <input type="number" id="f_rate" placeholder="例：4.50" step="0.001" min="0" max="100"/>
+      </div>
+      <div class="form-group">
+        <label id="lf_start">存入日期</label>
+        <input type="date" id="f_start"/>
+      </div>
+      <div class="form-group">
+        <label id="lf_mature">到期日期</label>
+        <input type="date" id="f_mature"/>
+      </div>
+      <div class="form-group full">
+        <label id="lf_method">利息計算方式</label>
+        <select id="f_method">
+          <option value="actual365" id="mopt_act365">實際天數 / 365（常見：港幣、澳元）</option>
+          <option value="actual360" id="mopt_act360">實際天數 / 360（常見：美元）</option>
+          <option value="monthly" id="mopt_monthly">按月計算（整月數）</option>
+        </select>
+        <div class="method-info" id="methodInfo"></div>
+      </div>
+      <div class="form-group full">
+        <label id="lf_note">備注（可選）</label>
+        <input type="text" id="f_note" placeholder="例：自動續期 / 特殊條款"/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()" id="btnCancel">取消</button>
+      <button class="btn btn-primary" onclick="saveRecord()" id="btnSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  I18N
+// ══════════════════════════════════════
+const T = {
+  zh: {
+    brand:'定期存單 <span style="color:var(--muted);font-weight:400;margin-left:4px">CRM</span>',
+    btnImport:'⬆ 導入', btnExport:'⬇ 導出', btnNew:'＋ 新增',
+    fxLabel:'匯率', fxStatus_loading:'載入中…', fxStatus_ok:'已更新', fxStatus_err:'匯率不可用',
+    lbl_totalCount:'存單總數', lbl_soonCount:'30天內到期',
+    lbl_totalUSD:'USD 在期本金', lbl_totalHKD:'HKD 在期本金',
+    lbl_totalAUD:'AUD 在期本金', lbl_totalHKDEquiv:'全部折合 HKD',
+    searchPH:'搜索銀行…',
+    opt_allCur:'全部幣種', opt_allStatus:'全部狀態', opt_soon:'即將到期',
+    opt_active:'生效中', opt_expired:'已到期',
+    opt_act365:'實際天數/365', opt_act360:'實際天數/360', opt_monthly:'按月計算',
+    th_bank:'銀行名稱', th_cur:'幣種', th_principal:'本金', th_rate:'年利率',
+    th_start:'存入日', th_mature:'到期日', th_days:'存期(天)',
+    th_interest:'利息', th_total:'到期總額', th_note:'備注', th_action:'操作',
+    lf_bank:'銀行名稱', lf_cur:'幣種', lf_principal:'本金金額', lf_rate:'年利率 (%)',
+    lf_start:'存入日期', lf_mature:'到期日期', lf_method:'利息計算方式', lf_note:'備注（可選）',
+    mopt_act365:'實際天數 / 365（常見：港幣、澳元）',
+    mopt_act360:'實際天數 / 360（常見：美元）',
+    mopt_monthly:'按月計算（整月數）',
+    modalAdd:'新增定期存單', modalEdit:'編輯存單',
+    btnCancel:'取消', btnSave:'保存',
+    editBtn:'編輯', delBtn:'刪除',
+    emptyMsg:'暫無存單，點擊「新增」開始',
+    tagSoon:'即將到期', tagExp:'已到期',
+    confirmDel:'確認刪除此存單？',
+    errFill:'請填寫所有必填項目',
+    errDate:'到期日必須晚於存入日期',
+    errImport:'JSON 文件格式不正確',
+    noData:'暫無數據可導出',
+    importOk:(n)=>`成功導入 ${n} 條記錄`,
+    hkdEquiv:(s)=>`≈ HK$${s}`,
+    fxNote:'數據來源：Frankfurter (ECB)',
+    sub_totalCount:(a,t)=>`共 ${t} 條 / ${a} 在期`,
+    methodInfo:{
+      actual365:'利息 = 本金 × 年利率 × 實際天數 ÷ 365',
+      actual360:'利息 = 本金 × 年利率 × 實際天數 ÷ 360（USD 銀行常用）',
+      monthly:'利息 = 本金 × 年利率 ÷ 12 × 完整月數（不足月不計）',
+    },
+    totalHKDSub:'（需匯率數據）',
+  },
+  en: {
+    brand:'Fixed Deposit <span style="color:var(--muted);font-weight:400;margin-left:4px">CRM</span>',
+    btnImport:'⬆ Import', btnExport:'⬇ Export', btnNew:'＋ New',
+    fxLabel:'FX Rates', fxStatus_loading:'Loading…', fxStatus_ok:'Updated', fxStatus_err:'FX unavailable',
+    lbl_totalCount:'Total Deposits', lbl_soonCount:'Expiring in 30d',
+    lbl_totalUSD:'USD Principal', lbl_totalHKD:'HKD Principal',
+    lbl_totalAUD:'AUD Principal', lbl_totalHKDEquiv:'Total in HKD',
+    searchPH:'Search bank…',
+    opt_allCur:'All Currencies', opt_allStatus:'All Status', opt_soon:'Expiring Soon',
+    opt_active:'Active', opt_expired:'Matured',
+    opt_act365:'Actual/365', opt_act360:'Actual/360', opt_monthly:'Monthly',
+    th_bank:'Bank', th_cur:'Currency', th_principal:'Principal', th_rate:'Rate p.a.',
+    th_start:'Start', th_mature:'Maturity', th_days:'Days',
+    th_interest:'Interest', th_total:'Maturity Value', th_note:'Note', th_action:'Actions',
+    lf_bank:'Bank Name', lf_cur:'Currency', lf_principal:'Principal Amount', lf_rate:'Annual Rate (%)',
+    lf_start:'Start Date', lf_mature:'Maturity Date', lf_method:'Interest Method', lf_note:'Note (Optional)',
+    mopt_act365:'Actual / 365 (HKD, AUD common)',
+    mopt_act360:'Actual / 360 (USD common)',
+    mopt_monthly:'Monthly (whole months only)',
+    modalAdd:'New Fixed Deposit', modalEdit:'Edit Deposit',
+    btnCancel:'Cancel', btnSave:'Save',
+    editBtn:'Edit', delBtn:'Delete',
+    emptyMsg:'No records. Click "+ New" to start.',
+    tagSoon:'Expiring Soon', tagExp:'Matured',
+    confirmDel:'Delete this deposit record?',
+    errFill:'Please fill in all required fields.',
+    errDate:'Maturity date must be after start date.',
+    errImport:'Invalid JSON format.',
+    noData:'No data to export.',
+    importOk:(n)=>`Imported ${n} records successfully.`,
+    hkdEquiv:(s)=>`≈ HK$${s}`,
+    fxNote:'Source: Frankfurter (ECB)',
+    sub_totalCount:(a,t)=>`${t} total / ${a} active`,
+    methodInfo:{
+      actual365:'Interest = Principal × Rate × Actual Days ÷ 365',
+      actual360:'Interest = Principal × Rate × Actual Days ÷ 360 (common for USD)',
+      monthly:'Interest = Principal × Rate ÷ 12 × Whole Months',
+    },
+    totalHKDSub:'(requires FX data)',
+  }
+};
+
+let lang = localStorage.getItem('fd_lang') || 'zh';
+let records = JSON.parse(localStorage.getItem('fd_records') || '[]');
+let editId = null;
+let fxRates = { USDHKD: null, AUDHKD: null };
+
+// ══════════════════════════════════════
+//  LANG
+// ══════════════════════════════════════
+function t(key){ return T[lang][key] || key; }
+
+function applyLang() {
+  const L = T[lang];
+  document.getElementById('brandLabel').innerHTML = L.brand;
+  document.getElementById('btnImport').textContent = L.btnImport;
+  document.getElementById('btnExport').textContent = L.btnExport;
+  document.getElementById('btnNew').textContent = L.btnNew;
+  document.getElementById('fxLabel').textContent = L.fxLabel;
+  document.getElementById('fxNote').textContent = L.fxNote;
+
+  // summary labels
+  ['totalCount','soonCount','totalUSD','totalHKD','totalAUD','totalHKDEquiv'].forEach(k=>{
+    const el = document.getElementById('lbl_'+k);
+    if(el) el.textContent = L['lbl_'+k];
+  });
+
+  // toolbar
+  document.getElementById('searchInput').placeholder = L.searchPH;
+  document.getElementById('opt_allCur').textContent = L.opt_allCur;
+  document.getElementById('opt_allStatus').textContent = L.opt_allStatus;
+  document.getElementById('opt_soon').textContent = L.opt_soon;
+  document.getElementById('opt_active').textContent = L.opt_active;
+  document.getElementById('opt_expired').textContent = L.opt_expired;
+  document.getElementById('opt_act365').textContent = L.opt_act365;
+  document.getElementById('opt_act360').textContent = L.opt_act360;
+  document.getElementById('opt_monthly').textContent = L.opt_monthly;
+
+  // table headers
+  ['bank','cur','principal','rate','start','mature','days','interest','total','note','action'].forEach(k=>{
+    const el = document.getElementById('th_'+k);
+    if(el) el.textContent = L['th_'+k];
+  });
+
+  // modal labels
+  ['bank','cur','principal','rate','start','mature','method','note'].forEach(k=>{
+    const el = document.getElementById('lf_'+k);
+    if(el) el.textContent = L['lf_'+k];
+  });
+  document.getElementById('mopt_act365').textContent = L.mopt_act365;
+  document.getElementById('mopt_act360').textContent = L.mopt_act360;
+  document.getElementById('mopt_monthly').textContent = L.mopt_monthly;
+  document.getElementById('btnCancel').textContent = L.btnCancel;
+  document.getElementById('btnSave').textContent = L.btnSave;
+  document.getElementById('emptyMsg').textContent = L.emptyMsg;
+
+  // lang buttons
+  document.getElementById('btnZh').classList.toggle('active', lang==='zh');
+  document.getElementById('btnEn').classList.toggle('active', lang==='en');
+
+  updateMethodInfo();
+  render();
+}
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('fd_lang', l);
+  applyLang();
+}
+
+// ══════════════════════════════════════
+//  FX RATES  (Frankfurter — free, no key)
+// ══════════════════════════════════════
+async function fetchFX() {
+  const statusEl = document.getElementById('fxStatus');
+  statusEl.textContent = T[lang].fxStatus_loading;
+  statusEl.className = 'fx-loading';
+  try {
+    // Frankfurter: base HKD, get USD and AUD
+    const res = await fetch('https://api.frankfurter.app/latest?base=HKD&symbols=USD,AUD');
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    // data.rates gives HKD→USD, HKD→AUD; we want USD→HKD and AUD→HKD
+    fxRates.USDHKD = 1 / data.rates.USD;
+    fxRates.AUDHKD = 1 / data.rates.AUD;
+    document.getElementById('fxUSDHKD').textContent = fxRates.USDHKD.toFixed(4);
+    document.getElementById('fxAUDHKD').textContent = fxRates.AUDHKD.toFixed(4);
+    statusEl.textContent = T[lang].fxStatus_ok + ' ' + new Date().toLocaleTimeString();
+    statusEl.className = '';
+  } catch(e) {
+    statusEl.textContent = T[lang].fxStatus_err;
+    statusEl.className = 'fx-err';
+  }
+  updateSummary();
+}
+
+// ══════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════
+function uid() { return Date.now().toString(36)+Math.random().toString(36).slice(2); }
+
+function save() { localStorage.setItem('fd_records', JSON.stringify(records)); }
+
+function daysDiff(dateStr) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  return Math.round((new Date(dateStr)-today)/86400000);
+}
+
+function monthsDiff(startStr, matureStr) {
+  const s = new Date(startStr), m = new Date(matureStr);
+  return (m.getFullYear()-s.getFullYear())*12+(m.getMonth()-s.getMonth());
+}
+
+function calcInterest(r) {
+  const { principal, rate, start, mature, method } = r;
+  if (!principal || !rate || !start || !mature) return 0;
+  const days = Math.round((new Date(mature)-new Date(start))/86400000);
+  const rateDecimal = rate / 100;
+  if (method === 'actual360') return principal * rateDecimal * days / 360;
+  if (method === 'monthly') {
+    const months = monthsDiff(start, mature);
+    return principal * rateDecimal / 12 * months;
+  }
+  // default actual365
+  return principal * rateDecimal * days / 365;
+}
+
+function calcMaturity(r) { return r.principal + calcInterest(r); }
+
+function fmtNum(n, dp=2) {
+  return n.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});
+}
+
+function curSymbol(c) {
+  return c==='USD'?'$':c==='HKD'?'HK$':'A$';
+}
+
+function fmtDate(s) {
+  if(!s) return '—';
+  const [y,m,d]=s.split('-'); return `${y}/${m}/${d}`;
+}
+
+function toHKD(amount, currency) {
+  if (currency==='HKD') return amount;
+  if (currency==='USD' && fxRates.USDHKD) return amount * fxRates.USDHKD;
+  if (currency==='AUD' && fxRates.AUDHKD) return amount * fxRates.AUDHKD;
+  return null;
+}
+
+// ══════════════════════════════════════
+//  METHOD INFO
+// ══════════════════════════════════════
+function updateMethodInfo() {
+  const method = document.getElementById('f_method')?.value || 'actual365';
+  const el = document.getElementById('methodInfo');
+  if (el) el.textContent = T[lang].methodInfo[method] || '';
+}
+
+// ══════════════════════════════════════
+//  RENDER TABLE
+// ══════════════════════════════════════
+function render() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const fc = document.getElementById('filterCur').value;
+  const fs = document.getElementById('filterStatus').value;
+  const globalMethod = document.getElementById('filterMethod').value;
+
+  let filtered = records.filter(r => {
+    if (q && !r.bank.toLowerCase().includes(q)) return false;
+    if (fc && r.currency !== fc) return false;
+    const d = daysDiff(r.mature);
+    if (fs==='soon' && !(d>=0 && d<=30)) return false;
+    if (fs==='active' && !(d>30)) return false;
+    if (fs==='expired' && d>=0) return false;
+    return true;
+  }).map(r => ({ ...r, method: r.method || globalMethod }));
+
+  filtered.sort((a,b) => new Date(a.mature)-new Date(b.mature));
+
+  const tbody = document.getElementById('tbody');
+  const emptyState = document.getElementById('emptyState');
+
+  if (filtered.length===0) {
+    tbody.innerHTML='';
+    emptyState.style.display='block';
+  } else {
+    emptyState.style.display='none';
+    const L = T[lang];
+    tbody.innerHTML = filtered.map(r => {
+      const days = daysDiff(r.mature);
+      const actualDays = Math.round((new Date(r.mature)-new Date(r.start))/86400000);
+      const interest = calcInterest(r);
+      const maturity = r.principal + interest;
+      const sym = curSymbol(r.currency);
+      let tag = '';
+      let dateClass = 'mature-ok';
+      if (days < 0) { tag=`<span class="tag-exp">${L.tagExp}</span>`; dateClass='mature-expired'; }
+      else if (days<=30) { tag=`<span class="tag-soon">${L.tagSoon}</span>`; dateClass='mature-soon'; }
+      return `<tr>
+        <td class="bank-cell">${r.bank}</td>
+        <td><span class="currency-badge cur-${r.currency}">${r.currency}</span></td>
+        <td class="amount-cell">${sym}${fmtNum(r.principal)}</td>
+        <td class="rate-cell">${parseFloat(r.rate).toFixed(3)}%</td>
+        <td class="mature-cell">${fmtDate(r.start)}</td>
+        <td class="mature-cell ${dateClass}">${fmtDate(r.mature)}${tag}</td>
+        <td style="color:var(--muted);font-size:13px">${actualDays}</td>
+        <td class="amount-cell" style="font-size:14px;color:var(--green)">${sym}${fmtNum(interest)}</td>
+        <td class="total-cell">${sym}${fmtNum(maturity)}</td>
+        <td style="font-size:12px;color:var(--muted)">${r.note||'—'}</td>
+        <td>
+          <button class="action-btn" onclick="editRecord('${r.id}')">${L.editBtn}</button>
+          <button class="action-btn del" onclick="deleteRecord('${r.id}')">${L.delBtn}</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+  updateSummary();
+}
+
+// ══════════════════════════════════════
+//  SUMMARY
+// ══════════════════════════════════════
+function updateSummary() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const active = records.filter(r => new Date(r.mature) >= today);
+  const soon = active.filter(r => daysDiff(r.mature) <= 30);
+
+  const L = T[lang];
+  document.getElementById('totalCount').textContent = active.length;
+  document.getElementById('sub_totalCount').textContent = L.sub_totalCount(active.length, records.length);
+  document.getElementById('soonCount').textContent = soon.length;
+
+  const sum = (cur) => active.filter(r=>r.currency===cur).reduce((s,r)=>s+r.principal,0);
+  const usd=sum('USD'), hkd=sum('HKD'), aud=sum('AUD');
+
+  document.getElementById('totalUSD').textContent = '$'+fmtNum(usd);
+  document.getElementById('totalHKD').textContent = 'HK$'+fmtNum(hkd);
+  document.getElementById('totalAUD').textContent = 'A$'+fmtNum(aud);
+
+  // HKD equiv badges
+  const usdHKD = fxRates.USDHKD ? 'HK$'+fmtNum(usd*fxRates.USDHKD) : '—';
+  const audHKD = fxRates.AUDHKD ? 'HK$'+fmtNum(aud*fxRates.AUDHKD) : '—';
+  document.getElementById('hkdUSD').innerHTML = fxRates.USDHKD
+    ? `≈ <span>HK$${fmtNum(usd*fxRates.USDHKD)}</span>` : '';
+  document.getElementById('hkdAUD').innerHTML = fxRates.AUDHKD
+    ? `≈ <span>HK$${fmtNum(aud*fxRates.AUDHKD)}</span>` : '';
+
+  // Total HKD equiv
+  if (fxRates.USDHKD && fxRates.AUDHKD) {
+    const total = usd*fxRates.USDHKD + hkd + aud*fxRates.AUDHKD;
+    document.getElementById('totalHKDEquiv').textContent = 'HK$'+fmtNum(total);
+    document.getElementById('sub_hkdEquiv').textContent =
+      `USD×${fxRates.USDHKD.toFixed(2)} + HKD + AUD×${fxRates.AUDHKD.toFixed(2)}`;
+  } else {
+    document.getElementById('totalHKDEquiv').textContent = 'HK$—';
+    document.getElementById('sub_hkdEquiv').textContent = L.totalHKDSub;
+  }
+}
+
+// ══════════════════════════════════════
+//  MODAL
+// ══════════════════════════════════════
+function openModal(id) {
+  editId = id || null;
+  const L = T[lang];
+  document.getElementById('modalTitle').textContent = id ? L.modalEdit : L.modalAdd;
+  if (id) {
+    const r = records.find(x=>x.id===id);
+    document.getElementById('f_bank').value = r.bank;
+    document.getElementById('f_cur').value = r.currency;
+    document.getElementById('f_principal').value = r.principal;
+    document.getElementById('f_rate').value = r.rate;
+    document.getElementById('f_start').value = r.start;
+    document.getElementById('f_mature').value = r.mature;
+    document.getElementById('f_method').value = r.method || 'actual365';
+    document.getElementById('f_note').value = r.note||'';
+  } else {
+    ['f_bank','f_principal','f_rate','f_mature','f_note'].forEach(x=>document.getElementById(x).value='');
+    document.getElementById('f_cur').value='USD';
+    document.getElementById('f_method').value='actual365';
+    document.getElementById('f_start').value=new Date().toISOString().slice(0,10);
+  }
+  updateMethodInfo();
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); editId=null; }
+function closeModalOutside(e) { if(e.target===document.getElementById('modalOverlay')) closeModal(); }
+function editRecord(id) { openModal(id); }
+
+function deleteRecord(id) {
+  if(!confirm(T[lang].confirmDel)) return;
+  records=records.filter(r=>r.id!==id);
+  save(); render();
+}
+
+function saveRecord() {
+  const L = T[lang];
+  const bank=document.getElementById('f_bank').value.trim();
+  const currency=document.getElementById('f_cur').value;
+  const principal=parseFloat(document.getElementById('f_principal').value);
+  const rate=parseFloat(document.getElementById('f_rate').value);
+  const start=document.getElementById('f_start').value;
+  const mature=document.getElementById('f_mature').value;
+  const method=document.getElementById('f_method').value;
+  const note=document.getElementById('f_note').value.trim();
+  if(!bank||isNaN(principal)||isNaN(rate)||!start||!mature){alert(L.errFill);return;}
+  if(new Date(mature)<=new Date(start)){alert(L.errDate);return;}
+  if(editId){
+    const idx=records.findIndex(r=>r.id===editId);
+    records[idx]={id:editId,bank,currency,principal,rate,start,mature,method,note};
+  } else {
+    records.push({id:uid(),bank,currency,principal,rate,start,mature,method,note});
+  }
+  save(); closeModal(); render();
+}
+
+// ══════════════════════════════════════
+//  EXPORT / IMPORT JSON
+// ══════════════════════════════════════
+function exportJSON() {
+  if(records.length===0){alert(T[lang].noData);return;}
+  const blob=new Blob([JSON.stringify({version:1,exported:new Date().toISOString(),records},null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`fixed_deposits_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function importJSON(event) {
+  const file=event.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    try {
+      const data=JSON.parse(e.target.result);
+      // Accept either {records:[...]} or raw array
+      const imported=Array.isArray(data)?data:(data.records||null);
+      if(!imported||!Array.isArray(imported)) throw new Error();
+      // Merge: skip duplicates by id
+      const existingIds=new Set(records.map(r=>r.id));
+      let added=0;
+      imported.forEach(r=>{
+        if(!r.id||!r.bank||!r.mature) return; // skip malformed
+        if(!existingIds.has(r.id)){
+          records.push({...r, method:r.method||'actual365'});
+          added++;
+        }
+      });
+      save(); render();
+      alert(T[lang].importOk(added));
+    } catch(err) {
+      alert(T[lang].errImport);
+    }
+    event.target.value=''; // reset so same file can be re-imported
+  };
+  reader.readAsText(file);
+}
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+applyLang();
+fetchFX();
+// Refresh FX every 5 minutes
+setInterval(fetchFX, 5*60*1000);
+</script>
+</body>
+</html>
