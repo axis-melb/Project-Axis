@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>定期存單 CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f5f3ee;--card:#fff;--border:#e5e0d8;
+  --green:#3a6b4a;--text:#1a1a1a;--muted:#888880;
+  --red:#c0392b;--gold:#b8860b;
+  --shadow:0 2px 12px rgba(0,0,0,.07);--radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--card);border-bottom:1px solid var(--border);
+  padding:0 16px;height:52px;position:sticky;top:0;z-index:100;
+}
+.topbar-left{display:flex;align-items:center;gap:8px;min-width:0}
+.logo-icon{
+  width:30px;height:30px;flex-shrink:0;
+  background:var(--green);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-family:'DM Serif Display',serif;font-size:14px;
+}
+.brand{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand span{color:var(--muted);font-weight:400;margin-left:3px}
+.topbar-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.lang-toggle{display:flex;background:#f0ede8;border-radius:6px;overflow:hidden;border:1px solid var(--border)}
+.lang-toggle button{border:none;background:none;padding:4px 10px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;color:var(--muted)}
+.lang-toggle button.active{background:var(--green);color:#fff;border-radius:5px}
+.icon-btn{
+  width:34px;height:34px;border-radius:8px;border:1px solid var(--border);
+  background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--text);transition:.15s;
+}
+.icon-btn:hover{background:#f0ede8}
+.btn-new{
+  height:34px;padding:0 12px;border-radius:8px;border:none;
+  background:var(--green);color:#fff;font-family:inherit;font-size:13px;font-weight:600;
+  cursor:pointer;white-space:nowrap;transition:.15s;
+}
+.btn-new:hover{background:#2e5538}
+
+/* ── FX BANNER ── */
+.fx-banner{
+  background:var(--card);border-bottom:1px solid var(--border);
+  padding:7px 16px;display:flex;align-items:center;gap:12px;
+  font-size:12px;color:var(--muted);flex-wrap:wrap;
+}
+.fx-badge{background:var(--green);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;letter-spacing:.3px}
+.fx-val{font-weight:700;color:var(--text);font-size:13px}
+.fx-status{font-size:11px;margin-left:auto}
+.fx-ok{color:var(--green)}
+.fx-err{color:var(--red)}
+.fx-spin{color:var(--muted);animation:spin 1.2s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── CONTAINER ── */
+.container{max-width:1150px;margin:0 auto;padding:16px}
+
+/* ── SUMMARY CARDS ── */
+.summary-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+@media(min-width:600px){.summary-row{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){.summary-row{grid-template-columns:repeat(6,1fr)}}
+.summary-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 14px;box-shadow:var(--shadow)}
+.summary-card .lbl{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-bottom:5px}
+.summary-card .val{font-size:20px;font-family:'DM Serif Display',serif;color:var(--text);line-height:1.1}
+.summary-card .val.red{color:var(--red)}
+.summary-card .val.gold{color:var(--gold)}
+.summary-card .sub{font-size:10px;color:var(--muted);margin-top:3px}
+.hkd-sub{font-size:10px;color:var(--green);font-weight:600;margin-top:2px}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:140px;position:relative}
+.search-wrap input{
+  width:100%;padding:8px 12px 8px 32px;
+  border:1px solid var(--border);border-radius:9px;
+  background:var(--card);font-family:inherit;font-size:14px;color:var(--text);outline:none;
+}
+.search-wrap input:focus{border-color:var(--green)}
+.search-ico{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--muted)}
+.filter-select{
+  padding:8px 26px 8px 10px;border:1px solid var(--border);border-radius:9px;
+  background:var(--card);font-family:inherit;font-size:13px;color:var(--text);
+  appearance:none;outline:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 8px center;
+}
+
+/* ── TABLE (desktop) ── */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:auto;box-shadow:var(--shadow)}
+.desktop-table{width:100%;border-collapse:collapse;min-width:820px}
+thead th{padding:11px 13px;text-align:left;font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;background:#faf9f6;border-bottom:1px solid var(--border);white-space:nowrap}
+tbody tr{border-bottom:1px solid #f0ede8;transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#faf9f6}
+td{padding:12px 13px;font-size:13.5px;vertical-align:middle}
+.bank-cell{font-weight:600}
+.cbadge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.cur-USD{background:#ddeef9;color:#2c6e9e}
+.cur-HKD{background:#e6f4eb;color:#2e6b3c}
+.cur-AUD{background:#fdf3e1;color:#8a5800}
+.mono{font-family:'DM Serif Display',serif;font-size:14px}
+.rate-c{color:var(--green);font-weight:600}
+.date-c{font-size:12px}
+.soon-c{color:var(--red);font-weight:600}
+.ok-c{color:var(--muted)}
+.exp-c{color:#aaa}
+.interest-c{font-family:'DM Serif Display',serif;font-size:14px;color:var(--green)}
+.total-c{font-family:'DM Serif Display',serif;font-size:14px;color:var(--gold)}
+.tag-soon{display:inline-block;background:#fdecea;color:var(--red);font-size:9px;font-weight:700;padding:1px 5px;border-radius:20px;margin-left:4px;vertical-align:middle}
+.tag-exp{display:inline-block;background:#f0ede8;color:var(--muted);font-size:9px;font-weight:700;padding:1px 5px;border-radius:20px;margin-left:4px;vertical-align:middle}
+.act-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;margin-right:3px;font-family:inherit;transition:.1s}
+.act-btn:hover{background:#f0ede8}
+.act-btn.del:hover{background:#fdecea;border-color:#f5c6c2;color:var(--red)}
+
+/* ── MOBILE CARDS ── */
+.mobile-cards{display:none}
+.dep-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:14px;margin-bottom:10px;box-shadow:var(--shadow);
+}
+.dep-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.dep-card-bank{font-weight:600;font-size:15px}
+.dep-card-actions{display:flex;gap:6px}
+.dep-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dep-field .df-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
+.dep-field .df-val{font-size:13px}
+.dep-field .df-val.mono{font-family:'DM Serif Display',serif;font-size:15px}
+.dep-field .df-val.gold{color:var(--gold)}
+.dep-field .df-val.green{color:var(--green)}
+.dep-field .df-val.red{color:var(--red);font-weight:600}
+.dep-card-footer{margin-top:10px;padding-top:8px;border-top:1px solid var(--border);display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+
+/* Responsive switch */
+@media(max-width:700px){
+  .table-wrap{display:none}
+  .mobile-cards{display:block}
+  .filter-select{font-size:12px;padding:7px 22px 7px 8px}
+}
+
+/* ── EMPTY ── */
+.empty-state{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-state .icon{font-size:36px;margin-bottom:10px;opacity:.35}
+.empty-state p{font-size:14px}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center}
+@media(min-width:600px){.modal-overlay{align-items:center}}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--card);width:100%;max-width:500px;
+  border-radius:20px 20px 0 0;padding:24px 20px 32px;
+  box-shadow:0 -4px 40px rgba(0,0,0,.15);
+  max-height:92vh;overflow-y:auto;
+  animation:slideUp .2s ease;
+}
+@media(min-width:600px){
+  .modal{border-radius:18px;padding:28px 26px;animation:pop .18s ease}
+}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-drag{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 18px;display:block}
+@media(min-width:600px){.modal-drag{display:none}}
+.modal h2{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:400px){.form-grid{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.4px;text-transform:uppercase}
+.form-group input,.form-group select{
+  padding:10px 11px;border:1px solid var(--border);border-radius:9px;
+  font-family:inherit;font-size:16px;/* 16px prevents iOS zoom */
+  background:var(--bg);color:var(--text);outline:none;transition:.15s;
+}
+.form-group input:focus,.form-group select:focus{border-color:var(--green);background:#fff}
+.method-info{background:#eef4f0;border-radius:8px;padding:8px 11px;font-size:11px;color:var(--green);margin-top:6px;grid-column:1/-1}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.modal-actions button{flex:1;padding:12px;border-radius:10px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;border:none;transition:.15s}
+.btn-cancel{background:#f0ede8;color:var(--text)}
+.btn-cancel:hover{background:#e8e4dd}
+.btn-save{background:var(--green);color:#fff}
+.btn-save:hover{background:#2e5538}
+
+#importInput{display:none}
+
+/* Bottom sheet actions menu */
+.actions-menu{
+  display:none;position:fixed;inset:0;z-index:300;
+  align-items:flex-end;justify-content:center;background:rgba(0,0,0,.3);
+}
+.actions-menu.open{display:flex}
+.actions-sheet{
+  background:var(--card);width:100%;max-width:500px;
+  border-radius:20px 20px 0 0;padding:16px 16px 32px;
+  animation:slideUp .2s ease;
+}
+.actions-sheet button{
+  display:block;width:100%;padding:14px 16px;text-align:left;
+  border:none;background:none;font-family:inherit;font-size:15px;cursor:pointer;
+  border-radius:10px;transition:.1s;
+}
+.actions-sheet button:hover{background:#f5f3ee}
+.actions-sheet button.danger{color:var(--red)}
+.actions-sheet .sheet-cancel{color:var(--muted);font-weight:600;margin-top:6px;text-align:center}
+.sheet-divider{height:1px;background:var(--border);margin:6px 0}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-icon">定</div>
+    <div class="brand" id="brandLabel">定期存單 <span>CRM</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="lang-toggle">
+      <button class="active" onclick="setLang('zh')" id="btnZh">中文</button>
+      <button onclick="setLang('en')" id="btnEn">EN</button>
+    </div>
+    <!-- Desktop: show text buttons -->
+    <button class="icon-btn" onclick="document.getElementById('importInput').click()" title="導入" id="btnImportIcon">⬆</button>
+    <button class="icon-btn" onclick="exportJSON()" title="導出" id="btnExportIcon">⬇</button>
+    <input type="file" id="importInput" accept=".json" onchange="importJSON(event)"/>
+    <button class="btn-new" onclick="openModal()" id="btnNew">＋ <span id="btnNewTxt">新增</span></button>
+  </div>
+</div>
+
+<!-- FX BANNER -->
+<div class="fx-banner">
+  <span class="fx-badge">LIVE</span>
+  <span id="fxLabel">匯率</span>
+  <span>USD/HKD <span class="fx-val" id="fxUSDHKD">—</span></span>
+  <span>AUD/HKD <span class="fx-val" id="fxAUDHKD">—</span></span>
+  <span class="fx-status" id="fxStatus">⟳</span>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- SUMMARY -->
+  <div class="summary-row">
+    <div class="summary-card">
+      <div class="lbl" id="lbl_count">存單總數</div>
+      <div class="val" id="totalCount">0</div>
+      <div class="sub" id="sub_count"></div>
+    </div>
+    <div class="summary-card">
+      <div class="lbl" id="lbl_soon">30天內到期</div>
+      <div class="val red" id="soonCount">0</div>
+    </div>
+    <div class="summary-card">
+      <div class="lbl" id="lbl_usd">USD 本金</div>
+      <div class="val gold" id="sumUSD">$0</div>
+      <div class="hkd-sub" id="hkdUSD"></div>
+    </div>
+    <div class="summary-card">
+      <div class="lbl" id="lbl_hkd">HKD 本金</div>
+      <div class="val gold" id="sumHKD">HK$0</div>
+    </div>
+    <div class="summary-card">
+      <div class="lbl" id="lbl_aud">AUD 本金</div>
+      <div class="val gold" id="sumAUD">A$0</div>
+      <div class="hkd-sub" id="hkdAUD"></div>
+    </div>
+    <div class="summary-card">
+      <div class="lbl" id="lbl_total">折合 HKD</div>
+      <div class="val gold" id="sumHKDTotal">HK$—</div>
+      <div class="sub" id="sub_hkd" style="font-size:9px"></div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-ico">🔍</span>
+      <input type="text" id="searchInput" placeholder="搜索銀行…" oninput="render()"/>
+    </div>
+    <select class="filter-select" id="filterCur" onchange="render()">
+      <option value="" id="opt_allCur">全部幣種</option>
+      <option>USD</option><option>HKD</option><option>AUD</option>
+    </select>
+    <select class="filter-select" id="filterStatus" onchange="render()">
+      <option value="" id="opt_allSt">全部狀態</option>
+      <option value="soon" id="opt_soon">即將到期</option>
+      <option value="active" id="opt_active">生效中</option>
+      <option value="expired" id="opt_expired">已到期</option>
+    </select>
+    <select class="filter-select" id="filterMethod" onchange="render()" style="display:none" id="methodSelect">
+      <option value="actual365">天數/365</option>
+      <option value="actual360">天數/360</option>
+      <option value="monthly">按月</option>
+    </select>
+  </div>
+
+  <!-- TABLE (desktop) -->
+  <div class="table-wrap" id="tableWrap">
+    <table class="desktop-table">
+      <thead>
+        <tr>
+          <th id="th_bank">銀行</th>
+          <th id="th_cur">幣種</th>
+          <th id="th_principal">本金</th>
+          <th id="th_rate">年利率</th>
+          <th id="th_start">存入日</th>
+          <th id="th_mature">到期日</th>
+          <th id="th_days">天數</th>
+          <th id="th_interest">利息</th>
+          <th id="th_total">到期總額</th>
+          <th id="th_note">備注</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyStateDesk" style="display:none">
+      <div class="icon">📋</div>
+      <p id="emptyMsgDesk">暫無存單，點擊「新增」開始</p>
+    </div>
+  </div>
+
+  <!-- MOBILE CARDS -->
+  <div class="mobile-cards" id="mobileCards"></div>
+  <div class="empty-state" id="emptyStateMob" style="display:none">
+    <div class="icon">📋</div>
+    <p id="emptyMsgMob">暫無存單，點擊「新增」開始</p>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <span class="modal-drag"></span>
+    <h2 id="modalTitle">新增定期存單</h2>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label id="lf_bank">銀行名稱</label>
+        <input type="text" id="f_bank" placeholder="e.g. 匯豐 HSBC" autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label id="lf_cur">幣種</label>
+        <select id="f_cur"><option>USD</option><option>HKD</option><option>AUD</option></select>
+      </div>
+      <div class="form-group">
+        <label id="lf_principal">本金</label>
+        <input type="number" id="f_principal" placeholder="0.00" step="0.01" min="0" inputmode="decimal"/>
+      </div>
+      <div class="form-group">
+        <label id="lf_rate">年利率 (%)</label>
+        <input type="number" id="f_rate" placeholder="4.500" step="0.001" min="0" max="100" inputmode="decimal"/>
+      </div>
+      <div class="form-group">
+        <label id="lf_start">存入日期</label>
+        <input type="date" id="f_start"/>
+      </div>
+      <div class="form-group">
+        <label id="lf_mature">到期日期</label>
+        <input type="date" id="f_mature"/>
+      </div>
+      <div class="form-group full">
+        <label id="lf_method">計息方式</label>
+        <select id="f_method" onchange="updateMethodInfo()">
+          <option value="actual365" id="mopt_365">實際天數 / 365（HKD / AUD 常用）</option>
+          <option value="actual360" id="mopt_360">實際天數 / 360（USD 常用）</option>
+          <option value="monthly"   id="mopt_mo">按整月計算</option>
+        </select>
+        <div class="method-info" id="methodInfo"></div>
+      </div>
+      <div class="form-group full">
+        <label id="lf_note">備注</label>
+        <input type="text" id="f_note" placeholder="自動續期 / 特殊條款…"/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()" id="btnCancel">取消</button>
+      <button class="btn-save"   onclick="saveRecord()" id="btnSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE ACTIONS SHEET -->
+<div class="actions-menu" id="actionsMenu" onclick="closeActionsMenu(event)">
+  <div class="actions-sheet" id="actionsSheet">
+    <button onclick="sheetEdit()" id="sheetEditBtn">✏️ 編輯</button>
+    <div class="sheet-divider"></div>
+    <button class="danger" onclick="sheetDelete()" id="sheetDelBtn">🗑 刪除</button>
+    <div class="sheet-divider"></div>
+    <button class="sheet-cancel" onclick="closeActionsMenu()">取消</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  I18N
+// ══════════════════════════════════════
+const T = {
+  zh:{
+    brand:'定期存單 <span style="color:var(--muted);font-weight:400;margin-left:3px">CRM</span>',
+    btnNewTxt:'新增',
+    fxLabel:'匯率', fxLoading:'載入中…', fxOk:'已更新', fxErr:'匯率不可用',
+    lbl_count:'存單總數', lbl_soon:'30天內到期',
+    lbl_usd:'USD 本金', lbl_hkd:'HKD 本金', lbl_aud:'AUD 本金', lbl_total:'折合 HKD',
+    sub_count:(a,t)=>`共${t}條 / ${a}在期`,
+    searchPH:'搜索銀行…',
+    opt_allCur:'全部幣種', opt_allSt:'全部狀態', opt_soon:'即將到期', opt_active:'生效中', opt_expired:'已到期',
+    th_bank:'銀行', th_cur:'幣種', th_principal:'本金', th_rate:'年利率',
+    th_start:'存入日', th_mature:'到期日', th_days:'天數', th_interest:'利息', th_total:'到期總額', th_note:'備注',
+    lf_bank:'銀行名稱', lf_cur:'幣種', lf_principal:'本金', lf_rate:'年利率 (%)',
+    lf_start:'存入日期', lf_mature:'到期日期', lf_method:'計息方式', lf_note:'備注',
+    mopt_365:'實際天數 / 365（HKD / AUD 常用）',
+    mopt_360:'實際天數 / 360（USD 常用）',
+    mopt_mo:'按整月計算',
+    methodInfo:{actual365:'利息 = 本金 × 年利率 × 天數 ÷ 365',actual360:'利息 = 本金 × 年利率 × 天數 ÷ 360',monthly:'利息 = 本金 × 年利率 ÷ 12 × 完整月數'},
+    modalAdd:'新增定期存單', modalEdit:'編輯存單',
+    btnCancel:'取消', btnSave:'保存',
+    editBtn:'編輯', delBtn:'刪除',
+    sheetEdit:'✏️ 編輯', sheetDel:'🗑 刪除',
+    emptyMsg:'暫無存單，點擊「新增」開始',
+    tagSoon:'即將到期', tagExp:'已到期',
+    confirmDel:'確認刪除此存單？',
+    errFill:'請填寫所有必填項目', errDate:'到期日必須晚於存入日期',
+    errImport:'JSON 格式不正確', noData:'暫無數據',
+    importOk:n=>`成功導入 ${n} 條`,
+    hkdEquiv:s=>`≈ HK$${s}`,
+    totalHKDSub:'（需匯率數據）',
+    df_bank:'銀行', df_cur:'幣種', df_principal:'本金', df_rate:'年利率',
+    df_start:'存入日', df_mature:'到期日', df_interest:'利息', df_total:'到期總額', df_note:'備注',
+    fxSource:'數據：ECB via Frankfurter',
+  },
+  en:{
+    brand:'Fixed Deposit <span style="color:var(--muted);font-weight:400;margin-left:3px">CRM</span>',
+    btnNewTxt:'New',
+    fxLabel:'FX', fxLoading:'Loading…', fxOk:'Updated', fxErr:'FX unavailable',
+    lbl_count:'Deposits', lbl_soon:'Due in 30d',
+    lbl_usd:'USD Principal', lbl_hkd:'HKD Principal', lbl_aud:'AUD Principal', lbl_total:'Total in HKD',
+    sub_count:(a,t)=>`${t} total / ${a} active`,
+    searchPH:'Search bank…',
+    opt_allCur:'All Currencies', opt_allSt:'All Status', opt_soon:'Expiring Soon', opt_active:'Active', opt_expired:'Matured',
+    th_bank:'Bank', th_cur:'CCY', th_principal:'Principal', th_rate:'Rate p.a.',
+    th_start:'Start', th_mature:'Maturity', th_days:'Days', th_interest:'Interest', th_total:'Maturity Value', th_note:'Note',
+    lf_bank:'Bank Name', lf_cur:'Currency', lf_principal:'Principal', lf_rate:'Annual Rate (%)',
+    lf_start:'Start Date', lf_mature:'Maturity Date', lf_method:'Interest Method', lf_note:'Note',
+    mopt_365:'Actual / 365 (HKD, AUD)',
+    mopt_360:'Actual / 360 (USD common)',
+    mopt_mo:'Monthly (whole months)',
+    methodInfo:{actual365:'Interest = Principal × Rate × Days ÷ 365',actual360:'Interest = Principal × Rate × Days ÷ 360',monthly:'Interest = Principal × Rate ÷ 12 × Whole Months'},
+    modalAdd:'New Fixed Deposit', modalEdit:'Edit Deposit',
+    btnCancel:'Cancel', btnSave:'Save',
+    editBtn:'Edit', delBtn:'Delete',
+    sheetEdit:'✏️ Edit', sheetDel:'🗑 Delete',
+    emptyMsg:'No records. Tap "+ New" to start.',
+    tagSoon:'Due Soon', tagExp:'Matured',
+    confirmDel:'Delete this deposit?',
+    errFill:'Please fill in all required fields.', errDate:'Maturity must be after start date.',
+    errImport:'Invalid JSON format.', noData:'No data to export.',
+    importOk:n=>`Imported ${n} records.`,
+    hkdEquiv:s=>`≈ HK$${s}`,
+    totalHKDSub:'(needs FX data)',
+    df_bank:'Bank', df_cur:'Currency', df_principal:'Principal', df_rate:'Rate p.a.',
+    df_start:'Start', df_mature:'Maturity', df_interest:'Interest', df_total:'Maturity Value', df_note:'Note',
+    fxSource:'Source: ECB via Frankfurter',
+  }
+};
+
+let lang = localStorage.getItem('fd_lang')||'zh';
+let records = JSON.parse(localStorage.getItem('fd_records')||'[]');
+let editId = null;
+let sheetTargetId = null;
+let fxRates = {USDHKD:null, AUDHKD:null};
+
+function t(k){ return T[lang][k]||k; }
+function save(){ localStorage.setItem('fd_records',JSON.stringify(records)); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2); }
+
+// ── FX ──
+// Use allorigins.win as CORS proxy to bypass sandbox restrictions
+async function fetchFX(){
+  const el = document.getElementById('fxStatus');
+  el.textContent='⟳'; el.className='fx-status fx-spin';
+  try {
+    // Try multiple FX sources
+    let data = null;
+
+    // Source 1: exchangerate-api (no key needed for basic)
+    try {
+      const url = 'https://open.er-api.com/v6/latest/HKD';
+      const proxy = 'https://api.allorigins.win/get?url='+encodeURIComponent(url);
+      const res = await fetch(proxy, {signal: AbortSignal.timeout(8000)});
+      const wrapper = await res.json();
+      data = JSON.parse(wrapper.contents);
+      if (data && data.rates && data.rates.USD) {
+        fxRates.USDHKD = 1 / data.rates.USD;
+        fxRates.AUDHKD = 1 / data.rates.AUD;
+      }
+    } catch(e1){}
+
+    // Source 2 fallback: Frankfurter
+    if (!fxRates.USDHKD) {
+      const url2 = 'https://api.frankfurter.app/latest?base=HKD&symbols=USD,AUD';
+      const proxy2 = 'https://api.allorigins.win/get?url='+encodeURIComponent(url2);
+      const res2 = await fetch(proxy2, {signal: AbortSignal.timeout(8000)});
+      const wrapper2 = await res2.json();
+      const d2 = JSON.parse(wrapper2.contents);
+      if (d2 && d2.rates) {
+        fxRates.USDHKD = 1 / d2.rates.USD;
+        fxRates.AUDHKD = 1 / d2.rates.AUD;
+      }
+    }
+
+    if (fxRates.USDHKD) {
+      document.getElementById('fxUSDHKD').textContent = fxRates.USDHKD.toFixed(4);
+      document.getElementById('fxAUDHKD').textContent = fxRates.AUDHKD.toFixed(4);
+      const now = new Date();
+      const hm = now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+      el.textContent = '✓ '+hm; el.className='fx-status fx-ok';
+    } else {
+      throw new Error('no data');
+    }
+  } catch(e) {
+    el.textContent = t('fxErr'); el.className='fx-status fx-err';
+  }
+  updateSummary();
+}
+
+// ── CALC ──
+function daysDiff(d){ const t=new Date(); t.setHours(0,0,0,0); return Math.round((new Date(d)-t)/86400000); }
+function monthsDiff(s,m){ const a=new Date(s),b=new Date(m); return (b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth()); }
+
+function calcInterest(r){
+  const {principal,rate,start,mature,method='actual365'} = r;
+  if(!principal||!rate||!start||!mature) return 0;
+  const days = Math.round((new Date(mature)-new Date(start))/86400000);
+  const rd = rate/100;
+  if(method==='actual360') return principal*rd*days/360;
+  if(method==='monthly')   return principal*rd/12*monthsDiff(start,mature);
+  return principal*rd*days/365;
+}
+
+function fmtN(n,dp=2){ return n.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp}); }
+function sym(c){ return c==='USD'?'$':c==='HKD'?'HK$':'A$'; }
+function fmtD(s){ if(!s)return'—'; const[y,m,d]=s.split('-'); return`${y}/${m}/${d}`; }
+
+// ── LANG ──
+function applyLang(){
+  const L=T[lang];
+  document.getElementById('brandLabel').innerHTML=L.brand;
+  document.getElementById('btnNewTxt').textContent=L.btnNewTxt;
+  document.getElementById('fxLabel').textContent=L.fxLabel;
+  ['count','soon','usd','hkd','aud','total'].forEach(k=>{ const e=document.getElementById('lbl_'+k); if(e)e.textContent=L['lbl_'+k]; });
+  document.getElementById('searchInput').placeholder=L.searchPH;
+  document.getElementById('opt_allCur').textContent=L.opt_allCur;
+  document.getElementById('opt_allSt').textContent=L.opt_allSt;
+  document.getElementById('opt_soon').textContent=L.opt_soon;
+  document.getElementById('opt_active').textContent=L.opt_active;
+  document.getElementById('opt_expired').textContent=L.opt_expired;
+  ['bank','cur','principal','rate','start','mature','days','interest','total','note'].forEach(k=>{
+    const e=document.getElementById('th_'+k); if(e)e.textContent=L['th_'+k];
+  });
+  ['bank','cur','principal','rate','start','mature','method','note'].forEach(k=>{
+    const e=document.getElementById('lf_'+k); if(e)e.textContent=L['lf_'+k];
+  });
+  document.getElementById('mopt_365').textContent=L.mopt_365;
+  document.getElementById('mopt_360').textContent=L.mopt_360;
+  document.getElementById('mopt_mo').textContent=L.mopt_mo;
+  document.getElementById('btnCancel').textContent=L.btnCancel;
+  document.getElementById('btnSave').textContent=L.btnSave;
+  document.getElementById('sheetEditBtn').textContent=L.sheetEdit;
+  document.getElementById('sheetDelBtn').textContent=L.sheetDel;
+  document.getElementById('emptyMsgDesk').textContent=L.emptyMsg;
+  document.getElementById('emptyMsgMob').textContent=L.emptyMsg;
+  document.getElementById('btnZh').classList.toggle('active',lang==='zh');
+  document.getElementById('btnEn').classList.toggle('active',lang==='en');
+  updateMethodInfo();
+  render();
+}
+
+function setLang(l){ lang=l; localStorage.setItem('fd_lang',l); applyLang(); }
+
+// ── METHOD INFO ──
+function updateMethodInfo(){
+  const m=document.getElementById('f_method')?.value||'actual365';
+  const el=document.getElementById('methodInfo');
+  if(el) el.textContent=T[lang].methodInfo[m]||'';
+}
+
+// ── RENDER ──
+function render(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const fc=document.getElementById('filterCur').value;
+  const fs=document.getElementById('filterStatus').value;
+  const gm=document.getElementById('filterMethod').value||'actual365';
+  const L=T[lang];
+
+  let filtered=records
+    .filter(r=>{
+      if(q&&!r.bank.toLowerCase().includes(q))return false;
+      if(fc&&r.currency!==fc)return false;
+      const d=daysDiff(r.mature);
+      if(fs==='soon'&&!(d>=0&&d<=30))return false;
+      if(fs==='active'&&!(d>30))return false;
+      if(fs==='expired'&&d>=0)return false;
+      return true;
+    })
+    .map(r=>({...r,method:r.method||gm}))
+    .sort((a,b)=>new Date(a.mature)-new Date(b.mature));
+
+  const isEmpty=filtered.length===0;
+  document.getElementById('emptyStateDesk').style.display=isEmpty?'block':'none';
+  document.getElementById('emptyStateMob').style.display=isEmpty?'block':'none';
+
+  // ── Desktop table ──
+  document.getElementById('tbody').innerHTML=filtered.map(r=>{
+    const d=daysDiff(r.mature);
+    const actualDays=Math.round((new Date(r.mature)-new Date(r.start))/86400000);
+    const interest=calcInterest(r);
+    const total=r.principal+interest;
+    const s=sym(r.currency);
+    let tag='',dc='ok-c';
+    if(d<0){tag=`<span class="tag-exp">${L.tagExp}</span>`;dc='exp-c';}
+    else if(d<=30){tag=`<span class="tag-soon">${L.tagSoon}</span>`;dc='soon-c';}
+    return`<tr>
+      <td class="bank-cell">${r.bank}</td>
+      <td><span class="cbadge cur-${r.currency}">${r.currency}</span></td>
+      <td class="mono">${s}${fmtN(r.principal)}</td>
+      <td class="rate-c">${parseFloat(r.rate).toFixed(3)}%</td>
+      <td class="date-c ok-c">${fmtD(r.start)}</td>
+      <td class="date-c ${dc}">${fmtD(r.mature)}${tag}</td>
+      <td style="font-size:12px;color:var(--muted)">${actualDays}</td>
+      <td class="interest-c">${s}${fmtN(interest)}</td>
+      <td class="total-c">${s}${fmtN(total)}</td>
+      <td style="font-size:11px;color:var(--muted)">${r.note||'—'}</td>
+      <td>
+        <button class="act-btn" onclick="editRecord('${r.id}')">${L.editBtn}</button>
+        <button class="act-btn del" onclick="deleteRecord('${r.id}')">${L.delBtn}</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  // ── Mobile cards ──
+  document.getElementById('mobileCards').innerHTML=filtered.map(r=>{
+    const d=daysDiff(r.mature);
+    const interest=calcInterest(r);
+    const total=r.principal+interest;
+    const s=sym(r.currency);
+    let dateColor='ok-c';
+    let dateSuffix='';
+    if(d<0){dateColor='exp-c';dateSuffix=` <span class="tag-exp">${L.tagExp}</span>`;}
+    else if(d<=30){dateColor='soon-c';dateSuffix=` <span class="tag-soon">${L.tagSoon}</span>`;}
+    return`<div class="dep-card">
+      <div class="dep-card-top">
+        <div>
+          <span class="dep-card-bank">${r.bank}</span>
+          <span class="cbadge cur-${r.currency}" style="margin-left:8px">${r.currency}</span>
+        </div>
+        <div class="dep-card-actions">
+          <button class="icon-btn" style="font-size:13px" onclick="openActionsMenu('${r.id}')">•••</button>
+        </div>
+      </div>
+      <div class="dep-card-grid">
+        <div class="dep-field">
+          <div class="df-label">${L.df_principal}</div>
+          <div class="df-val mono">${s}${fmtN(r.principal)}</div>
+        </div>
+        <div class="dep-field">
+          <div class="df-label">${L.df_rate}</div>
+          <div class="df-val" style="color:var(--green);font-weight:600">${parseFloat(r.rate).toFixed(3)}%</div>
+        </div>
+        <div class="dep-field">
+          <div class="df-label">${L.df_start}</div>
+          <div class="df-val">${fmtD(r.start)}</div>
+        </div>
+        <div class="dep-field">
+          <div class="df-label">${L.df_mature}</div>
+          <div class="df-val ${dateColor}">${fmtD(r.mature)}${dateSuffix}</div>
+        </div>
+        <div class="dep-field">
+          <div class="df-label">${L.df_interest}</div>
+          <div class="df-val green mono">${s}${fmtN(interest)}</div>
+        </div>
+        <div class="dep-field">
+          <div class="df-label">${L.df_total}</div>
+          <div class="df-val gold mono">${s}${fmtN(total)}</div>
+        </div>
+      </div>
+      ${r.note?`<div class="dep-card-footer">📝 ${r.note}</div>`:''}
+    </div>`;
+  }).join('');
+
+  updateSummary();
+}
+
+// ── SUMMARY ──
+function updateSummary(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const active=records.filter(r=>new Date(r.mature)>=today);
+  const soon=active.filter(r=>daysDiff(r.mature)<=30);
+  const L=T[lang];
+
+  document.getElementById('totalCount').textContent=active.length;
+  document.getElementById('sub_count').textContent=L.sub_count(active.length,records.length);
+  document.getElementById('soonCount').textContent=soon.length;
+
+  const sum=c=>active.filter(r=>r.currency===c).reduce((s,r)=>s+r.principal,0);
+  const usd=sum('USD'),hkd=sum('HKD'),aud=sum('AUD');
+
+  document.getElementById('sumUSD').textContent='$'+fmtN(usd);
+  document.getElementById('sumHKD').textContent='HK$'+fmtN(hkd);
+  document.getElementById('sumAUD').textContent='A$'+fmtN(aud);
+
+  document.getElementById('hkdUSD').innerHTML=fxRates.USDHKD?`≈ <span>HK$${fmtN(usd*fxRates.USDHKD)}</span>`:'';
+  document.getElementById('hkdAUD').innerHTML=fxRates.AUDHKD?`≈ <span>HK$${fmtN(aud*fxRates.AUDHKD)}</span>`:'';
+
+  if(fxRates.USDHKD&&fxRates.AUDHKD){
+    const total=usd*fxRates.USDHKD+hkd+aud*fxRates.AUDHKD;
+    document.getElementById('sumHKDTotal').textContent='HK$'+fmtN(total);
+    document.getElementById('sub_hkd').textContent=`@${fxRates.USDHKD.toFixed(2)} / ${fxRates.AUDHKD.toFixed(2)}`;
+  } else {
+    document.getElementById('sumHKDTotal').textContent='HK$—';
+    document.getElementById('sub_hkd').textContent=L.totalHKDSub;
+  }
+}
+
+// ── MODAL ──
+function openModal(id){
+  editId=id||null;
+  const L=T[lang];
+  document.getElementById('modalTitle').textContent=id?L.modalEdit:L.modalAdd;
+  if(id){
+    const r=records.find(x=>x.id===id);
+    document.getElementById('f_bank').value=r.bank;
+    document.getElementById('f_cur').value=r.currency;
+    document.getElementById('f_principal').value=r.principal;
+    document.getElementById('f_rate').value=r.rate;
+    document.getElementById('f_start').value=r.start;
+    document.getElementById('f_mature').value=r.mature;
+    document.getElementById('f_method').value=r.method||'actual365';
+    document.getElementById('f_note').value=r.note||'';
+  } else {
+    ['f_bank','f_principal','f_rate','f_mature','f_note'].forEach(x=>document.getElementById(x).value='');
+    document.getElementById('f_cur').value='USD';
+    document.getElementById('f_method').value='actual365';
+    document.getElementById('f_start').value=new Date().toISOString().slice(0,10);
+  }
+  updateMethodInfo();
+  document.getElementById('modalOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('f_bank').focus(),200);
+}
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); editId=null; }
+function closeModalOutside(e){ if(e.target===document.getElementById('modalOverlay'))closeModal(); }
+function editRecord(id){ openModal(id); }
+
+function deleteRecord(id){
+  if(!confirm(T[lang].confirmDel))return;
+  records=records.filter(r=>r.id!==id);
+  save(); render();
+}
+
+function saveRecord(){
+  const L=T[lang];
+  const bank=document.getElementById('f_bank').value.trim();
+  const currency=document.getElementById('f_cur').value;
+  const principal=parseFloat(document.getElementById('f_principal').value);
+  const rate=parseFloat(document.getElementById('f_rate').value);
+  const start=document.getElementById('f_start').value;
+  const mature=document.getElementById('f_mature').value;
+  const method=document.getElementById('f_method').value;
+  const note=document.getElementById('f_note').value.trim();
+  if(!bank||isNaN(principal)||isNaN(rate)||!start||!mature){alert(L.errFill);return;}
+  if(new Date(mature)<=new Date(start)){alert(L.errDate);return;}
+  if(editId){
+    const idx=records.findIndex(r=>r.id===editId);
+    records[idx]={id:editId,bank,currency,principal,rate,start,mature,method,note};
+  } else {
+    records.push({id:uid(),bank,currency,principal,rate,start,mature,method,note});
+  }
+  save(); closeModal(); render();
+}
+
+// ── MOBILE ACTIONS SHEET ──
+function openActionsMenu(id){
+  sheetTargetId=id;
+  document.getElementById('actionsMenu').classList.add('open');
+}
+function closeActionsMenu(e){
+  if(!e||e.target===document.getElementById('actionsMenu'))
+    document.getElementById('actionsMenu').classList.remove('open');
+}
+function sheetEdit(){ closeActionsMenu(); openModal(sheetTargetId); }
+function sheetDelete(){
+  closeActionsMenu();
+  setTimeout(()=>deleteRecord(sheetTargetId),100);
+}
+
+// ── EXPORT / IMPORT ──
+function exportJSON(){
+  if(!records.length){alert(T[lang].noData);return;}
+  const blob=new Blob([JSON.stringify({version:1,exported:new Date().toISOString(),records},null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`fixed_deposits_${new Date().toISOString().slice(0,10)}.json`; a.click();
+}
+function importJSON(event){
+  const file=event.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      const imported=Array.isArray(data)?data:(data.records||null);
+      if(!imported||!Array.isArray(imported))throw new Error();
+      const existing=new Set(records.map(r=>r.id));
+      let added=0;
+      imported.forEach(r=>{
+        if(!r.id||!r.bank||!r.mature)return;
+        if(!existing.has(r.id)){records.push({...r,method:r.method||'actual365'});added++;}
+      });
+      save(); render(); alert(T[lang].importOk(added));
+    }catch(err){alert(T[lang].errImport);}
+    event.target.value='';
+  };
+  reader.readAsText(file);
+}
+
+// ── INIT ──
+applyLang();
+fetchFX();
+setInterval(fetchFX, 5*60*1000);
+</script>
+</body>
+</html>
