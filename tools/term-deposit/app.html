@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>定期存單 CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --card: #ffffff;
+    --border: #e5e0d8;
+    --green: #3a6b4a;
+    --green-light: #eef4f0;
+    --text: #1a1a1a;
+    --muted: #888880;
+    --red: #c0392b;
+    --gold: #b8860b;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--green);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    letter-spacing: -.5px;
+  }
+  .brand { font-weight: 600; font-size: 15px; }
+  .brand span { color: var(--muted); font-weight: 400; margin-left: 4px; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px; border-radius: 8px;
+    font-family: inherit; font-size: 13px; font-weight: 500;
+    cursor: pointer; border: none; transition: .15s;
+  }
+  .btn-primary { background: var(--green); color: #fff; }
+  .btn-primary:hover { background: #2e5538; }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { background: #f0ede8; }
+  .lang-toggle {
+    display: flex; background: #f0ede8; border-radius: 7px;
+    overflow: hidden; border: 1px solid var(--border);
+  }
+  .lang-toggle button {
+    border: none; background: none; padding: 5px 12px;
+    font-size: 12px; font-weight: 500; cursor: pointer;
+    font-family: inherit; color: var(--muted);
+  }
+  .lang-toggle button.active {
+    background: var(--green); color: #fff; border-radius: 6px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #5cb85c; }
+
+  /* ── MAIN CONTENT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+  /* ── SUMMARY CARDS ── */
+  .summary-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .summary-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .summary-card .label {
+    font-size: 12px; color: var(--muted); font-weight: 500;
+    letter-spacing: .3px; margin-bottom: 6px;
+  }
+  .summary-card .value {
+    font-size: 26px; font-family: 'DM Serif Display', serif;
+    font-weight: 400; color: var(--text);
+  }
+  .summary-card .value.red { color: var(--red); }
+  .summary-card .value.gold { color: var(--gold); }
+
+  /* Currency totals sub-row */
+  .currency-row {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px;
+  }
+  .currency-chip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 18px;
+    box-shadow: var(--shadow);
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .currency-chip .clabel { font-size: 11px; color: var(--muted); font-weight: 600; }
+  .currency-chip .cval { font-size: 20px; font-family: 'DM Serif Display', serif; }
+  .chip-usd .cval { color: #2c6e9e; }
+  .chip-hkd .cval { color: var(--green); }
+  .chip-aud .cval { color: #b06a00; }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .search-wrap {
+    flex: 1; min-width: 200px; position: relative;
+  }
+  .search-wrap input {
+    width: 100%;
+    padding: 9px 14px 9px 36px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--card);
+    font-family: inherit; font-size: 14px;
+    color: var(--text);
+    outline: none; transition: .15s;
+  }
+  .search-wrap input:focus { border-color: var(--green); }
+  .search-wrap .ico {
+    position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 15px;
+  }
+  .filter-select {
+    padding: 9px 32px 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--card);
+    font-family: inherit; font-size: 13px;
+    color: var(--text);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+    outline: none; cursor: pointer;
+  }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    padding: 13px 16px;
+    text-align: left;
+    font-size: 11.5px; font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    background: #faf9f6;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr {
+    border-bottom: 1px solid #f0ede8;
+    transition: background .12s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #faf9f6; }
+  td {
+    padding: 14px 16px;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+  .bank-cell { font-weight: 600; }
+  .currency-badge {
+    display: inline-block;
+    padding: 3px 9px; border-radius: 20px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: .3px;
+  }
+  .cur-USD { background: #ddeef9; color: #2c6e9e; }
+  .cur-HKD { background: #e6f4eb; color: #2e6b3c; }
+  .cur-AUD { background: #fdf3e1; color: #8a5800; }
+
+  .amount-cell { font-family: 'DM Serif Display', serif; font-size: 15px; }
+  .rate-cell { color: var(--green); font-weight: 600; }
+  .mature-cell { font-size: 13px; }
+  .mature-soon { color: var(--red); font-weight: 600; }
+  .mature-ok { color: var(--muted); }
+  .total-cell { font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--gold); }
+
+  .action-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 10px;
+    font-size: 12px; cursor: pointer; margin-right: 4px;
+    font-family: inherit; transition: .12s;
+  }
+  .action-btn:hover { background: #f0ede8; }
+  .action-btn.del:hover { background: #fdecea; border-color: #f5c6c2; color: var(--red); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center; padding: 60px 20px;
+    color: var(--muted);
+  }
+  .empty-state .icon { font-size: 40px; margin-bottom: 12px; opacity: .4; }
+  .empty-state p { font-size: 14px; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.35);
+    z-index: 200;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 32px 30px;
+    width: 480px; max-width: 95vw;
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    animation: pop .18s ease;
+  }
+  @keyframes pop { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal h2 { font-family: 'DM Serif Display', serif; font-size: 22px; margin-bottom: 24px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1/-1; }
+  .form-group label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .3px; }
+  .form-group input, .form-group select {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit; font-size: 14px;
+    background: var(--bg);
+    color: var(--text); outline: none; transition: .15s;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--green); background: #fff; }
+  .modal-actions {
+    display: flex; justify-content: flex-end; gap: 10px;
+    margin-top: 24px;
+  }
+
+  /* ── MATURE SOON TAG ── */
+  .tag-soon {
+    display: inline-block;
+    background: #fdecea; color: var(--red);
+    font-size: 10px; font-weight: 700; padding: 2px 7px;
+    border-radius: 20px; margin-left: 6px; vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-icon">定</div>
+    <div class="brand">定期存單 <span>CRM</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="dot"></div>
+    <div class="lang-toggle">
+      <button class="active" onclick="setLang('zh')">中文</button>
+      <button onclick="setLang('en')">EN</button>
+    </div>
+    <button class="btn btn-outline" onclick="exportCSV()">⬇ 導出</button>
+    <button class="btn btn-primary" onclick="openModal()">＋ 新增</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- SUMMARY CARDS -->
+  <div class="summary-row" id="summaryRow">
+    <div class="summary-card">
+      <div class="label">存單總數</div>
+      <div class="value" id="totalCount">0</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">30天內到期</div>
+      <div class="value red" id="soonCount">0</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">USD 在期總額</div>
+      <div class="value gold" id="totalUSD">$0</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">HKD 在期總額</div>
+      <div class="value gold" id="totalHKD">HK$0</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">AUD 在期總額</div>
+      <div class="value gold" id="totalAUD">A$0</div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="ico">🔍</span>
+      <input type="text" id="searchInput" placeholder="搜索銀行名稱…" oninput="render()"/>
+    </div>
+    <select class="filter-select" id="filterCur" onchange="render()">
+      <option value="">全部幣種</option>
+      <option>USD</option>
+      <option>HKD</option>
+      <option>AUD</option>
+    </select>
+    <select class="filter-select" id="filterStatus" onchange="render()">
+      <option value="">全部狀態</option>
+      <option value="soon">即將到期</option>
+      <option value="active">生效中</option>
+    </select>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>銀行名稱</th>
+          <th>幣種</th>
+          <th>本金金額</th>
+          <th>年利率</th>
+          <th>存入日期</th>
+          <th>到期日</th>
+          <th>到期總額</th>
+          <th>備注</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="icon">📋</div>
+      <p>暫無存單，點擊「新增」開始</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modalBox">
+    <h2 id="modalTitle">新增定期存單</h2>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>銀行名稱</label>
+        <input type="text" id="f_bank" placeholder="例：匯豐銀行 HSBC"/>
+      </div>
+      <div class="form-group">
+        <label>幣種</label>
+        <select id="f_cur">
+          <option>USD</option>
+          <option>HKD</option>
+          <option>AUD</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>本金金額</label>
+        <input type="number" id="f_principal" placeholder="0.00" step="0.01" min="0"/>
+      </div>
+      <div class="form-group">
+        <label>年利率 (%)</label>
+        <input type="number" id="f_rate" placeholder="例：4.50" step="0.01" min="0" max="100"/>
+      </div>
+      <div class="form-group">
+        <label>存入日期</label>
+        <input type="date" id="f_start"/>
+      </div>
+      <div class="form-group">
+        <label>到期日期</label>
+        <input type="date" id="f_mature"/>
+      </div>
+      <div class="form-group full">
+        <label>備注（可選）</label>
+        <input type="text" id="f_note" placeholder="例：自動續期 / 特殊條款"/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveRecord()">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+let records = JSON.parse(localStorage.getItem('fd_records') || '[]');
+let editId = null;
+
+function save() { localStorage.setItem('fd_records', JSON.stringify(records)); }
+
+// ── HELPERS ──
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+function daysDiff(dateStr) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const d = new Date(dateStr);
+  return Math.round((d - today) / 86400000);
+}
+
+function calcMaturity(principal, rate, startStr, matureStr) {
+  if (!principal || !rate || !startStr || !matureStr) return 0;
+  const days = Math.round((new Date(matureStr) - new Date(startStr)) / 86400000);
+  return principal * (1 + (rate / 100) * (days / 365));
+}
+
+function fmtNum(n) {
+  return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function curSymbol(c) {
+  return c === 'USD' ? '$' : c === 'HKD' ? 'HK$' : 'A$';
+}
+
+function fmtDate(s) {
+  if (!s) return '—';
+  const [y, m, d] = s.split('-');
+  return `${y}/${m}/${d}`;
+}
+
+// ── RENDER ──
+function render() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const fc = document.getElementById('filterCur').value;
+  const fs = document.getElementById('filterStatus').value;
+
+  let filtered = records.filter(r => {
+    if (q && !r.bank.toLowerCase().includes(q)) return false;
+    if (fc && r.currency !== fc) return false;
+    if (fs === 'soon' && daysDiff(r.mature) > 30) return false;
+    if (fs === 'active' && daysDiff(r.mature) <= 0) return false;
+    return true;
+  });
+
+  // sort by mature date
+  filtered.sort((a, b) => new Date(a.mature) - new Date(b.mature));
+
+  const tbody = document.getElementById('tbody');
+  const emptyState = document.getElementById('emptyState');
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '';
+    emptyState.style.display = 'block';
+  } else {
+    emptyState.style.display = 'none';
+    tbody.innerHTML = filtered.map(r => {
+      const days = daysDiff(r.mature);
+      const maturity = calcMaturity(r.principal, r.rate, r.start, r.mature);
+      const soonTag = days <= 30 && days >= 0 ? `<span class="tag-soon">即將到期</span>` : '';
+      const dateClass = days <= 30 && days >= 0 ? 'mature-soon' : 'mature-ok';
+      const sym = curSymbol(r.currency);
+      return `<tr>
+        <td class="bank-cell">${r.bank}</td>
+        <td><span class="currency-badge cur-${r.currency}">${r.currency}</span></td>
+        <td class="amount-cell">${sym}${fmtNum(r.principal)}</td>
+        <td class="rate-cell">${r.rate}%</td>
+        <td class="mature-cell">${fmtDate(r.start)}</td>
+        <td class="mature-cell ${dateClass}">${fmtDate(r.mature)}${soonTag}</td>
+        <td class="total-cell">${sym}${fmtNum(maturity)}</td>
+        <td style="font-size:12px;color:var(--muted)">${r.note || '—'}</td>
+        <td>
+          <button class="action-btn" onclick="editRecord('${r.id}')">編輯</button>
+          <button class="action-btn del" onclick="deleteRecord('${r.id}')">刪除</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  updateSummary();
+}
+
+function updateSummary() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const active = records.filter(r => new Date(r.mature) >= today);
+  const soon = active.filter(r => daysDiff(r.mature) <= 30);
+
+  document.getElementById('totalCount').textContent = active.length;
+  document.getElementById('soonCount').textContent = soon.length;
+
+  const sum = (cur) => active.filter(r => r.currency === cur).reduce((s, r) => s + r.principal, 0);
+  document.getElementById('totalUSD').textContent = '$' + fmtNum(sum('USD'));
+  document.getElementById('totalHKD').textContent = 'HK$' + fmtNum(sum('HKD'));
+  document.getElementById('totalAUD').textContent = 'A$' + fmtNum(sum('AUD'));
+}
+
+// ── MODAL ──
+function openModal(id) {
+  editId = id || null;
+  const mo = document.getElementById('modalOverlay');
+  document.getElementById('modalTitle').textContent = id ? '編輯存單' : '新增定期存單';
+  if (id) {
+    const r = records.find(x => x.id === id);
+    document.getElementById('f_bank').value = r.bank;
+    document.getElementById('f_cur').value = r.currency;
+    document.getElementById('f_principal').value = r.principal;
+    document.getElementById('f_rate').value = r.rate;
+    document.getElementById('f_start').value = r.start;
+    document.getElementById('f_mature').value = r.mature;
+    document.getElementById('f_note').value = r.note || '';
+  } else {
+    ['f_bank','f_principal','f_rate','f_start','f_mature','f_note'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f_cur').value = 'USD';
+    // default start = today
+    document.getElementById('f_start').value = new Date().toISOString().slice(0,10);
+  }
+  mo.classList.add('open');
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); editId = null; }
+function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+function editRecord(id) { openModal(id); }
+
+function deleteRecord(id) {
+  if (!confirm('確認刪除此存單？')) return;
+  records = records.filter(r => r.id !== id);
+  save(); render();
+}
+
+function saveRecord() {
+  const bank = document.getElementById('f_bank').value.trim();
+  const currency = document.getElementById('f_cur').value;
+  const principal = parseFloat(document.getElementById('f_principal').value);
+  const rate = parseFloat(document.getElementById('f_rate').value);
+  const start = document.getElementById('f_start').value;
+  const mature = document.getElementById('f_mature').value;
+  const note = document.getElementById('f_note').value.trim();
+
+  if (!bank || isNaN(principal) || isNaN(rate) || !start || !mature) {
+    alert('請填寫所有必填項目'); return;
+  }
+  if (new Date(mature) <= new Date(start)) {
+    alert('到期日必須晚於存入日期'); return;
+  }
+
+  if (editId) {
+    const idx = records.findIndex(r => r.id === editId);
+    records[idx] = { id: editId, bank, currency, principal, rate, start, mature, note };
+  } else {
+    records.push({ id: uid(), bank, currency, principal, rate, start, mature, note });
+  }
+
+  save(); closeModal(); render();
+}
+
+// ── EXPORT ──
+function exportCSV() {
+  if (records.length === 0) { alert('暫無數據可導出'); return; }
+  const headers = ['銀行名稱','幣種','本金','年利率(%)','存入日期','到期日','到期總額','備注'];
+  const rows = records.map(r => {
+    const m = calcMaturity(r.principal, r.rate, r.start, r.mature);
+    return [r.bank, r.currency, r.principal, r.rate, r.start, r.mature, m.toFixed(2), r.note || ''].join(',');
+  });
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob(['\ufeff'+csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `定期存單_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ── LANG (stub) ──
+function setLang(l) {
+  document.querySelectorAll('.lang-toggle button').forEach((b,i) => {
+    b.classList.toggle('active', (l==='zh' && i===0)||(l==='en' && i===1));
+  });
+}
+
+// ── INIT ──
+render();
+</script>
+</body>
+</html>
