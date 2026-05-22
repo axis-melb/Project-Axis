@@ -23,8 +23,6 @@
   </div>
 </div>
 
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
-
 <header class="site-header">
   <div class="site-header__inner">
     <div class="site-header__brand">
@@ -108,7 +106,6 @@
       </div>
       <div class="card__actions">
         <button class="btn btn--primary" id="startMatchBtn">⚡ Start Match</button>
-        <button class="btn btn--ghost" id="resetMatchBtn">↺ Reset</button>
       </div>
     </div>
 
@@ -135,30 +132,43 @@
         </div>
       </div>
 
-      <div class="livesales-panel" style="background: rgba(255, 193, 7, 0.05); border: 1px solid rgba(255,193,7,0.2); padding: 16px; border-radius: var(--r-lg); margin: 20px 0;">
-        <h4 style="color: #ffc107; margin:0 0 12px 0; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; text-transform: uppercase;">🥤 Live Canteen Sales (POS)</h4>
-        <div id="livesales-widget" style="display: flex; flex-wrap: wrap; gap: 10px;">
+      <div class="canteen-pos-box" style="background: rgba(0, 255, 204, 0.03); border: 1px solid #00ffcc44; padding: 18px; border-radius: var(--r-lg); margin: 20px 0;">
+        <h3 style="color: #00ffcc; margin: 0 0 12px 0; font-size: 15px; letter-spacing: 0.5px; text-transform: uppercase;">🥤 Live Canteen Sales Matrix (POS)</h3>
+        
+        <div class="pos-dropdown-row" style="display: flex; gap: 12px; margin-bottom: 15px; align-items: center;">
+          <div style="flex: 1;">
+            <select id="canteenProductSelect" style="width: 100%; padding: 8px; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px;">
+              <option value="">— Select Drink / Product —</option>
+            </select>
+          </div>
+          <button class="btn btn--success" id="logDropdownSaleBtn" style="padding: 8px 16px; white-space: nowrap; height: auto;">🛒 Record 1 Sale</button>
+        </div>
+
+        <div id="livesales-widget" style="display: flex; flex-wrap: wrap; gap: 8px;">
           </div>
       </div>
 
       <div class="scoring-section" style="margin-bottom: 20px;">
         <div class="scoring-col">
-          <div class="scoring-col__label" id="homeLabel">HOME SCORE CONTROLS</div>
+          <div class="scoring-col__label">HOME SCORE CONTROLS</div>
           <div class="scoring-buttons" id="homeBtns"></div>
         </div>
         <div class="scoring-col">
-          <div class="scoring-col__label" id="awayLabel">AWAY SCORE CONTROLS</div>
+          <div class="scoring-col__label">AWAY SCORE CONTROLS</div>
           <div class="scoring-buttons" id="awayBtns"></div>
         </div>
       </div>
 
-      <div class="card card--canteen-sales">
+      <div class="card card--canteen-sales" style="margin-top: 20px;">
         <div class="card__actions" style="padding: 0;">
-          <button class="btn btn--success btn--full" id="saveMatchBtn" style="font-size:16px; padding:12px;">✅ Save & Finalise Match Results</button>
+          <button class="btn btn--success btn--full" id="saveMatchBtn" style="font-size:16px; padding:12px; font-weight: bold;">✅ Save & Finalise Match Results</button>
         </div>
       </div>
 
-    </div></section><section id="tab-teams" class="tab-panel" aria-label="Team Management">
+    </div>
+  </section>
+
+  <section id="tab-teams" class="tab-panel" aria-label="Team Management">
     <div class="panel-header">
       <h1>Team <span class="accent">Master Data</span></h1>
       <p class="panel-sub">Register clubs and manage team records with auto-generated SKUs.</p>
@@ -314,7 +324,7 @@
   <section id="tab-export" class="tab-panel" aria-label="Data Export">
     <div class="panel-header">
       <h1>Data <span class="accent">Import & Export</span></h1>
-      <p class="panel-sub">Download relational CSV files or restore historical data into the application.</p>
+      <p class="panel-sub">Download relational CSV files or restore historical data.</p>
     </div>
 
     <div class="export-grid">
@@ -324,28 +334,24 @@
         <p>Full match records including team profiles and raw scores.</p>
         <button class="btn btn--primary btn--full" id="exportMatchesBtn">⬇ Download matches.csv</button>
       </div>
-
       <div class="card card--export">
         <div class="export-icon">🧃</div>
         <h3>sales.csv</h3>
         <p>Canteen transaction logs matching live records.</p>
         <button class="btn btn--primary btn--full" id="exportSalesBtn">⬇ Download sales.csv</button>
       </div>
-
       <div class="card card--export">
         <div class="export-icon">🏆</div>
         <h3>teams.csv</h3>
         <p>Team master data registration matrix.</p>
         <button class="btn btn--primary btn--full" id="exportTeamsBtn">⬇ Download teams.csv</button>
       </div>
-
       <div class="card card--export">
         <div class="export-icon">🛒</div>
         <h3>products.csv</h3>
         <p>Product SKU profile directory.</p>
         <button class="btn btn--primary btn--full" id="exportProductsBtn">⬇ Download products.csv</button>
       </div>
-
       <div class="card card--export card--export--danger">
         <div class="export-icon">⚠️</div>
         <h3>Clear All Data</h3>
