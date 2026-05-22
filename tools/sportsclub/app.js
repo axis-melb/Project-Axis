@@ -413,7 +413,7 @@ function renderScoringButtons() {
   config.home.forEach(b => {
     const btn = document.createElement('button');
     btn.className = 'btn btn--secondary';
-    btn.style.cssText = "width: 100%; margin-bottom: 8px; padding: 10px; font-weight: bold;";
+    btn.style.cssText = "width: 100%; margin-bottom: 8px; padding: 10px; font-weight: bold; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer;";
     btn.textContent = b.label;
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -427,7 +427,7 @@ function renderScoringButtons() {
   config.away.forEach(b => {
     const btn = document.createElement('button');
     btn.className = 'btn btn--secondary';
-    btn.style.cssText = "width: 100%; margin-bottom: 8px; padding: 10px; font-weight: bold;";
+    btn.style.cssText = "width: 100%; margin-bottom: 8px; padding: 10px; font-weight: bold; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer;";
     btn.textContent = b.label;
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -591,7 +591,26 @@ function initEventListeners() {
   }
 
   document.getElementById('addTeamBtn').addEventListener('click', (e) => { e.preventDefault(); addTeam(); });
-  document.getElementById('addProductBtn').addEventListener('click', (e) => { e.preventDefault(); addProduct(); });
+
+  // 🛡️ 智能拦截雷达：通过 ID 绑定
+  const addProductBtn = document.getElementById('addProductBtn');
+  if (addProductBtn) {
+    addProductBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      addProduct();
+    });
+  }
+
+  // 🛡️ 全局双重防御：无论你的添加按钮是在 <form> 里还是叫什么名字，只要有人点击了 Canteen 里的提交，一律拦截并不允许刷新
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // 如果触发的是产品表单，则执行产品添加
+      if (form.querySelector('#productName') || document.getElementById('productName')?.value) {
+        addProduct();
+      }
+    });
+  });
 
   document.getElementById('exportMatchesBtn').addEventListener('click', exportMatches);
   document.getElementById('exportSalesBtn').addEventListener('click', exportSales);
