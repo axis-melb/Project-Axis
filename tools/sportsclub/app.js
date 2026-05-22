@@ -1,3 +1,9 @@
+/* ═══════════════════════════════════════════════════════════════
+   AusClub Pro — app.js
+   Core logic for teams, canteen, live scoreboard, and exports.
+═══════════════════════════════════════════════════════════════ */
+
+/* ─── DATA MODELS & SPORT CONFIG ─────────────────────────────── */
 const SPORT_CONFIG = {
   afl: {
     name: 'AFL',
@@ -30,7 +36,7 @@ const SPORT_CONFIG = {
   rugby: {
     name: 'Rugby',
     buttons: [
-      { label: 'Try (4/5)', key: 'score', value: 5, inc: false }, 
+      { label: 'Try (4/5)', key: 'score', value: 5, inc: false }, /* using union standard 5 for demo */
       { label: 'Conversion (2)', key: 'score', value: 2, inc: false },
       { label: 'Penalty (3)', key: 'score', value: 3, inc: false }
     ],
@@ -38,19 +44,25 @@ const SPORT_CONFIG = {
   }
 };
 
+/* ─── LOCAL STORAGE WRAPPER ──────────────────────────────────── */
 const LS = {
   get: (key) => JSON.parse(localStorage.getItem(key) || '[]'),
   set: (key, data) => localStorage.setItem(key, JSON.stringify(data)),
+  
   getTeams: () => LS.get('ausclub_teams'),
   setTeams: (t) => LS.set('ausclub_teams', t),
+  
   getProducts: () => LS.get('ausclub_products'),
   setProducts: (p) => LS.set('ausclub_products', p),
+  
   getMatches: () => LS.get('ausclub_matches'),
   setMatches: (m) => LS.set('ausclub_matches', m),
+
   getSales: () => LS.get('ausclub_sales'),
   setSales: (s) => LS.set('ausclub_sales', s)
 };
 
+/* ─── STATE ──────────────────────────────────────────────────── */
 const state = {
   match: {
     active: false,
@@ -61,13 +73,18 @@ const state = {
     homeScores: {},
     awayScores: {},
     cancelled: false,
-    salesCounter: {}
+    salesCounter: {} // productId -> qty sold in current match
   }
 };
 
+/* ─── UTILS ──────────────────────────────────────────────────── */
 const escHtml = (str) => {
   if (!str) return '';
-  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 };
 
 const generateId = (prefix, nextNum) => `${prefix}${String(nextNum).padStart(3, '0')}`;
@@ -79,10 +96,12 @@ const showToast = (msg, type = 'info') => {
   setTimeout(() => toast.classList.remove('show'), 3000);
 };
 
+/* ─── INITIALIZATION ─────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   bindGlobalEvents();
   prefillDate();
+  
   renderTeams();
   updateTeamSelects();
   renderProducts();
@@ -95,6 +114,9 @@ function prefillDate() {
   document.getElementById('matchTime').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 }
 
+/* ──────────────────────────────────────────────────────────────
+   TAB NAVIGATION
+────────────────────────────────────────────────────────────── */
 function initTabs() {
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -103,6 +125,7 @@ function initTabs() {
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById(`tab-${tab}`).classList.add('active');
+      // Refresh relevant views
       if (tab === 'teams') renderTeams();
       if (tab === 'canteen') renderProducts();
       if (tab === 'history') renderHistory();
@@ -110,25 +133,39 @@ function initTabs() {
   });
 }
 
+/* ──────────────────────────────────────────────────────────────
+   GLOBAL DOM EVENTS
+────────────────────────────────────────────────────────────── */
 function bindGlobalEvents() {
   document.getElementById('addTeamBtn').addEventListener('click', addTeam);
   document.getElementById('addProductBtn').addEventListener('click', addProduct);
+  
   document.getElementById('startMatchBtn').addEventListener('click', startMatch);
   document.getElementById('saveMatchBtn').addEventListener('click', saveMatch);
   document.getElementById('resetMatchBtn').addEventListener('click', resetMatch);
+  
   document.getElementById('heatOkBtn').addEventListener('click', () => {
     document.getElementById('heatOverlay').classList.add('hidden');
   });
+
+  // Export & Import listeners
   document.getElementById('exportMatchesBtn').addEventListener('click', exportMatches);
   document.getElementById('exportSalesBtn').addEventListener('click', exportSales);
   document.getElementById('exportTeamsBtn').addEventListener('click', exportTeams);
   document.getElementById('exportProductsBtn').addEventListener('click', exportProducts);
+  
   document.getElementById('importMatchesBtn').addEventListener('click', () => handleCSVImport('matches'));
   document.getElementById('importSalesBtn').addEventListener('click', () => handleCSVImport('sales'));
+  
   document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
+  
+  // Real-time sport update
   document.getElementById('sportSelect').addEventListener('change', updateTeamSelects);
 }
 
+/* ──────────────────────────────────────────────────────────────
+   TEAMS MANAGEMENT
+────────────────────────────────────────────────────────────── */
 window.addTeam = function() {
   const name = document.getElementById('teamName').value.trim();
   const sport = document.getElementById('teamSport').value;
@@ -138,7 +175,10 @@ window.addTeam = function() {
   
   const teams = LS.getTeams();
   const nextNum = teams.length > 0 ? Math.max(...teams.map(t => parseInt(t.id.replace('T','')))) + 1 : 1;
-  const team = { id: generateId('T', nextNum), name, sport, suburb };
+  const team = {
+    id: generateId('T', nextNum),
+    name, sport, suburb
+  };
   
   teams.push(team);
   LS.setTeams(teams);
@@ -167,7 +207,7 @@ function renderTeams() {
       <td><strong>${escHtml(t.name)}</strong></td>
       <td>${(SPORT_CONFIG[t.sport]?.name || t.sport).toUpperCase()}</td>
       <td>${escHtml(t.suburb)}</td>
-      <td><button class="delete-btn" onclick="window.deleteTeam('${t.id}')">Delete</button></td>
+      <td><button class="delete-btn" onclick="deleteTeam('${t.id}')">Delete</button></td>
     </tr>
   `).join('');
 }
@@ -184,30 +224,61 @@ function updateTeamSelects() {
   const sport = document.getElementById('sportSelect').value;
   const allTeams = LS.getTeams();
   const filtered = sport ? allTeams.filter(t => t.sport === sport) : allTeams;
+  
+  const hSelect = document.getElementById('homeTeamSelect');
+  const aSelect = document.getElementById('awayTeamSelect');
+  
   const opts = '<option value="">— Select Team —</option>' + 
     filtered.map(t => `<option value="${t.id}">${escHtml(t.name)} (${t.id})</option>`).join('');
-  document.getElementById('homeTeamSelect').innerHTML = opts;
-  document.getElementById('awayTeamSelect').innerHTML = opts;
+    
+  hSelect.innerHTML = opts;
+  aSelect.innerHTML = opts;
 }
 
+/* ──────────────────────────────────────────────────────────────
+   CANTEEN & PRODUCTS
+────────────────────────────────────────────────────────────── */
 window.addProduct = function() {
   const name = document.getElementById('productName').value.trim();
   const size = document.getElementById('productSize').value.trim();
   const cost = parseFloat(document.getElementById('productCost').value) || 0;
   const retail = parseFloat(document.getElementById('productRetail').value) || 0;
   const initStock = parseInt(document.getElementById('productStock').value, 10) || 0;
+  
   if (!name) return showToast('Product name required.', 'error');
   
   const prods = LS.getProducts();
-  const nextNum = prods.length > 0 ? Math.max(...prods.map(p => parseInt(p.id.replace('P','')))) + 1 : 1;
-  const product = { id: generateId('P', nextNum), name, size, cost, retail, initialStock: initStock, currentStock: initStock };
   
-  prods.push(product);
+  const existingIndex = prods.findIndex(p => 
+    p.name.toLowerCase() === name.toLowerCase() && 
+    (p.size || '').toLowerCase() === size.toLowerCase()
+  );
+
+  if (existingIndex !== -1) {
+    prods[existingIndex].initialStock = (prods[existingIndex].initialStock || 0) + initStock;
+    prods[existingIndex].currentStock = (prods[existingIndex].currentStock || 0) + initStock;
+    if (cost > 0) prods[existingIndex].cost = cost;
+    if (retail > 0) prods[existingIndex].retail = retail;
+    showToast(`Updated existing ${name} stock by +${initStock}.`, 'success');
+  } else {
+    const nextNum = prods.length > 0 ? Math.max(...prods.map(p => parseInt(p.id.replace('P','')))) + 1 : 1;
+    const product = {
+      id: generateId('P', nextNum),
+      name, size, cost, retail,
+      initialStock: initStock,
+      currentStock: initStock
+    };
+    prods.push(product);
+    showToast('Product added to catalogue.', 'success');
+  }
+  
   LS.setProducts(prods);
-  ['productName','productSize','productCost','productRetail','productStock'].forEach(id => document.getElementById(id).value = '');
+  
+  ['productName','productSize','productCost','productRetail','productStock'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
   
   renderProducts();
-  showToast('Added to catalogue.', 'success');
 };
 
 function renderProducts() {
@@ -233,7 +304,7 @@ function renderProducts() {
       <td><span class="margin-chip">+$${margin.toFixed(2)} (${pct}%)</span></td>
       <td>${p.initialStock || 0}</td>
       <td><strong>${p.currentStock ?? p.initialStock ?? 0}</strong></td>
-      <td><button class="delete-btn" onclick="window.deleteProduct('${p.id}')">Delete</button></td>
+      <td><button class="delete-btn" onclick="deleteProduct('${p.id}')">Delete</button></td>
     </tr>`;
   }).join('');
 }
@@ -242,23 +313,40 @@ window.deleteProduct = function(id) {
   if(!confirm('Delete this product?')) return;
   LS.setProducts(LS.getProducts().filter(p => p.id !== id));
   renderProducts();
+  showToast('Product deleted', 'info');
 };
 
+/* ──────────────────────────────────────────────────────────────
+   LIVE SCOREBOARD
+────────────────────────────────────────────────────────────── */
 window.startMatch = function() {
   const sport = document.getElementById('sportSelect').value;
   const hId = document.getElementById('homeTeamSelect').value;
   const aId = document.getElementById('awayTeamSelect').value;
   const temp = parseFloat(document.getElementById('weatherTemp').value);
+  const status = document.getElementById('matchStatus').value;
   
   if (!sport || !hId || !aId) return showToast('Sport and both teams are required to start.', 'error');
   if (hId === aId) return showToast('Home and Away teams must be different.', 'error');
   
+  // Create match record
   const matches = LS.getMatches();
   const nextNum = matches.length > 0 ? Math.max(...matches.map(m => parseInt(m.match_id.replace('M','')))) + 1 : 1;
   const matchId = generateId('M', nextNum);
   
-  state.match = { active: true, id: matchId, sport, homeId: hId, awayId: aId, homeScores: {}, awayScores: {}, cancelled: false, salesCounter: {} };
+  state.match = {
+    active: true,
+    id: matchId,
+    sport,
+    homeId: hId,
+    awayId: aId,
+    homeScores: {},
+    awayScores: {},
+    cancelled: false,
+    salesCounter: {}
+  };
   
+  // Heat Policy check
   if (!isNaN(temp) && temp >= 40) {
     state.match.cancelled = true;
     document.getElementById('matchNotes').value = "CANCELLED: National Heat Policy triggered (>40°C).";
@@ -269,6 +357,7 @@ window.startMatch = function() {
     document.getElementById('matchStatus').value = 'In Progress';
   }
   
+  // Persist intial match record
   matches.push({
     match_id:       state.match.id,
     date:           document.getElementById('matchDate').value,
@@ -295,14 +384,24 @@ window.startMatch = function() {
   generateForecast(hId, aId);
   
   document.getElementById('livePanel').classList.remove('hidden');
-  ['sportSelect','homeTeamSelect','awayTeamSelect','startMatchBtn'].forEach(id => document.getElementById(id).disabled = true);
+  
+  // Disable setup inputs
+  ['sportSelect','homeTeamSelect','awayTeamSelect','startMatchBtn'].forEach(id => {
+    document.getElementById(id).disabled = true;
+  });
+  
+  showToast(`Match ${matchId} Live.`, 'success');
 }
 
 window.resetMatch = function() {
-  if (state.match.active && !confirm('Reset live panel? Data remains saved in History.')) return;
+  if (state.match.active && !confirm('Resetting will clear the live panel. Current data remains saved in History. Continue?')) {
+    return;
+  }
   state.match.active = false;
   document.getElementById('livePanel').classList.add('hidden');
-  ['sportSelect','homeTeamSelect','awayTeamSelect','startMatchBtn'].forEach(id => document.getElementById(id).disabled = false);
+  ['sportSelect','homeTeamSelect','awayTeamSelect','startMatchBtn'].forEach(id => {
+    document.getElementById(id).disabled = false;
+  });
   prefillDate();
   document.getElementById('weatherTemp').value = '';
   document.getElementById('matchNotes').value = '';
@@ -319,7 +418,7 @@ function buildScoringButtons(disabled) {
   
   const makeBtn = (side, btn) => {
     return `<button class="score-btn score-btn--${side}" 
-              onclick="window.handleScore('${side}', '${btn.key}', ${btn.value || 0}${btn.inc ? `, true` : ''})"
+              onclick="handleScore('${side}', '${btn.key}', ${btn.value || 0}${btn.inc ? `, true` : ''})"
               ${disabled ? 'disabled style="opacity:0.5;cursor:not-allowed"' : ''}>
               ${btn.label}
             </button>`;
@@ -334,21 +433,26 @@ window.handleScore = function(side, key, value, isIncrement = false) {
   const scoresObj = side === 'home' ? state.match.homeScores : state.match.awayScores;
   
   if (isIncrement && scoresObj[key] !== undefined) {
-    scoresObj[key] += 1;
+    scoresObj[key] += 1; // Used for things like AFL goals/behinds where the label value is points but they count occurrences
   } else {
     scoresObj[key] = (scoresObj[key] || 0) + value;
   }
   
   updateScoreboardDisplay();
+  
   const displayEl = document.getElementById(`${side}ScoreDisplay`);
   displayEl.classList.add('score-pop');
   setTimeout(() => displayEl.classList.remove('score-pop'), 350);
 }
 
 function updateScoreboardDisplay() {
-  const cfg = SPORT_CONFIG[state.match.sport];
+  const sport = state.match.sport;
+  const cfg = SPORT_CONFIG[sport];
+  
+  // Safe defaults
   const hScores = Object.assign(Object.fromEntries(cfg.buttons.map(b=>[b.key, 0])), state.match.homeScores);
   const aScores = Object.assign(Object.fromEntries(cfg.buttons.map(b=>[b.key, 0])), state.match.awayScores);
+  
   document.getElementById('homeScoreMain').textContent = cfg.format(hScores);
   document.getElementById('awayScoreMain').textContent = cfg.format(aScores);
 }
@@ -356,14 +460,22 @@ function updateScoreboardDisplay() {
 function getNumericScore(scores, sport) {
   if (sport === 'afl') return (scores.goals || 0) * 6 + (scores.behinds || 0);
   if (sport === 'cricket') return (scores.runs || 0);
+  
+  // For other sports, sum all values
   return Object.values(scores).reduce((a,b) => a+b, 0);
 }
 
+/* ──────────────────────────────────────────────────────────────
+   LIVE CANTEEN SALES
+────────────────────────────────────────────────────────────── */
 function buildCanteenSalesForm(disabled) {
   const products = LS.getProducts();
   const container = document.getElementById('canteenSalesForm');
   
-  if(!products.length) return container.innerHTML = `<p class="muted">No products available.</p>`;
+  if(!products.length) {
+    container.innerHTML = `<p class="muted">No products available. Add some in the Canteen tab.</p>`;
+    return;
+  }
   
   container.innerHTML = products.map(p => {
     state.match.salesCounter[p.id] = state.match.salesCounter[p.id] || 0;
@@ -373,7 +485,7 @@ function buildCanteenSalesForm(disabled) {
       <div class="canteen-sales-item__sku">${p.id} · $${p.retail.toFixed(2)}</div>
       <div style="display:flex;gap:8px;">
         <input type="number" id="saleQty_${p.id}" value="${state.match.salesCounter[p.id]}" readonly />
-        <button class="btn btn--primary" onclick="window.sellProduct('${p.id}')" ${disabled ? 'disabled' : ''}>+1 Sold</button>
+        <button class="btn btn--primary" onclick="sellProduct('${p.id}')" ${disabled ? 'disabled' : ''}>+1 Sold</button>
       </div>
     </div>
     `;
@@ -388,6 +500,7 @@ window.sellProduct = function(productId) {
 
 window.saveMatch = function() {
   if (!state.match.active) return;
+  
   const matches = LS.getMatches();
   let sales = LS.getSales();
   let products = LS.getProducts();
@@ -397,23 +510,36 @@ window.saveMatch = function() {
   const hScores = Object.assign(Object.fromEntries(cfg.buttons.map(b=>[b.key, 0])), state.match.homeScores);
   const aScores = Object.assign(Object.fromEntries(cfg.buttons.map(b=>[b.key, 0])), state.match.awayScores);
   
+  const homeScore = getNumericScore(hScores, sport);
+  const awayScore = getNumericScore(aScores, sport);
+  
+  // Update match status & form fields in case they changed
   const mIndex = matches.findIndex(m => m.match_id === state.match.id);
   if (mIndex !== -1) {
     matches[mIndex].date = document.getElementById('matchDate').value || matches[mIndex].date;
     matches[mIndex].time = document.getElementById('matchTime').value || matches[mIndex].time;
     matches[mIndex].weather_temp_c = document.getElementById('weatherTemp').value !== '' ? document.getElementById('weatherTemp').value : matches[mIndex].weather_temp_c;
     matches[mIndex].status = document.getElementById('matchStatus').value || 'Completed';
-    matches[mIndex].home_score = state.match.cancelled ? 0 : getNumericScore(hScores, sport);
-    matches[mIndex].away_score = state.match.cancelled ? 0 : getNumericScore(aScores, sport);
+    matches[mIndex].home_score = state.match.cancelled ? 0 : homeScore;
+    matches[mIndex].away_score = state.match.cancelled ? 0 : awayScore;
     matches[mIndex].notes = document.getElementById('matchNotes').value;
     LS.setMatches(matches);
   }
   
+  // Save specific sales and deduct inventory
   if(!state.match.cancelled) {
     Object.entries(state.match.salesCounter).forEach(([pId, qty]) => {
       if(qty > 0) {
+        // Record Sales
         const nextSalesNum = sales.length > 0 ? Math.max(...sales.map(s => parseInt(s.sales_id.replace('S','')))) + 1 : 1;
-        sales.push({ sales_id: generateId('S', nextSalesNum), match_id: state.match.id, product_id: pId, quantity: qty });
+        sales.push({
+          sales_id: generateId('S', nextSalesNum),
+          match_id: state.match.id,
+          product_id: pId,
+          quantity: qty
+        });
+        
+        // Deduct from Product Inventory
         const pIndex = products.findIndex(p => p.id === pId);
         if(pIndex !== -1) {
           products[pIndex].currentStock = Math.max(0, (products[pIndex].currentStock ?? products[pIndex].initialStock ?? 0) - qty);
@@ -430,45 +556,123 @@ window.saveMatch = function() {
 }
 
 function generateForecast(homeId, awayId) {
-  const pastMatches = LS.getMatches().filter(m => (m.home_team_id === homeId && m.away_team_id === awayId) || (m.home_team_id === awayId && m.away_team_id === homeId));
-  if(pastMatches.length === 0) return document.getElementById('forecastContent').innerHTML = `<p class="muted">No historical data for forecast.</p>`;
+  const container = document.getElementById('forecastContent');
+  const pastMatches = LS.getMatches().filter(m => 
+    (m.home_team_id === homeId && m.away_team_id === awayId) ||
+    (m.home_team_id === awayId && m.away_team_id === homeId)
+  );
   
-  const sales = LS.getSales().filter(s => pastMatches.map(m => m.match_id).includes(s.match_id));
-  if(sales.length === 0) return document.getElementById('forecastContent').innerHTML = `<p class="muted">Histories found, but no sales recorded.</p>`;
+  if(pastMatches.length === 0) {
+    container.innerHTML = `<p class="muted">No historical data for this matchup to generate forecast.</p>`;
+    return;
+  }
   
+  // Get all sales for these matches
+  const matchIds = pastMatches.map(m => m.match_id);
+  const sales = LS.getSales().filter(s => matchIds.includes(s.match_id));
+  const products = LS.getProducts();
+  
+  if (sales.length === 0) {
+    container.innerHTML = `<p class="muted">Historical matches exist, but zero canteen sales on record.</p>`;
+    return;
+  }
+  
+  // Aggregate sales
   const agg = {};
-  sales.forEach(s => agg[s.product_id] = (agg[s.product_id] || 0) + parseInt(s.quantity, 10));
+  sales.forEach(s => {
+    agg[s.product_id] = (agg[s.product_id] || 0) + parseInt(s.quantity, 10);
+  });
   
-  const reqs = Object.entries(agg).map(([pId, total]) => ({ pId, avgQty: Math.ceil(total / pastMatches.length) })).sort((a,b) => b.avgQty - a.avgQty).slice(0, 3);
-  document.getElementById('forecastContent').innerHTML = reqs.map(rec => {
-    const label = LS.getProducts().find(prod => prod.id === rec.pId)?.name || rec.pId;
-    return `<div class="forecast-item"><div><div class="forecast-item__sku">${rec.pId}</div><div class="forecast-item__name">${label}</div></div><div style="text-align:right"><div class="forecast-item__qty">+${rec.avgQty}</div><div class="forecast-item__unit">Predicted</div></div></div>`;
-  }).join('') + `<div class="forecast-meta">Based on ${pastMatches.length} previous matchups</div>`;
+  // Calculate average per match and sort
+  const reqs = Object.entries(agg)
+    .map(([pId, total]) => ({
+      pId,
+      avgQty: Math.ceil(total / pastMatches.length)
+    }))
+    .sort((a,b) => b.avgQty - a.avgQty)
+    .slice(0, 3); // top 3 recommendations
+    
+  container.innerHTML = reqs.map(rec => {
+    const p = products.find(prod => prod.id === rec.pId);
+    const label = p ? escHtml(p.name) : rec.pId;
+    return `
+      <div class="forecast-item">
+        <div>
+          <div class="forecast-item__sku">${rec.pId}</div>
+          <div class="forecast-item__name">${label}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="forecast-item__qty">+${rec.avgQty}</div>
+          <div class="forecast-item__unit">Predicted Demand</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  container.innerHTML += `<div class="forecast-meta">Based on ${pastMatches.length} previous matchups</div>`;
 }
 
+/* ──────────────────────────────────────────────────────────────
+   HISTORY
+────────────────────────────────────────────────────────────── */
 function renderHistory() {
   const matches = LS.getMatches();
   const teams = LS.getTeams();
   const tbody = document.getElementById('matchesBody');
   document.getElementById('matchCount').textContent = `${matches.length} matches`;
   
-  if (!matches.length) tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No matches recorded yet.</td></tr>';
-  else tbody.innerHTML = [...matches].reverse().map(m => {
-    const hName = teams.find(t=>t.id===m.home_team_id)?.name || m.home_team_id;
-    const aName = teams.find(t=>t.id===m.away_team_id)?.name || m.away_team_id;
-    const tempStr = m.weather_temp_c !== '' && m.weather_temp_c !== null ? `${m.weather_temp_c}°C` : '—';
-    let sCls = m.status === 'Completed' ? 'status-chip--completed' : m.status === 'Cancelled' ? 'status-chip--cancelled' : m.status === 'Postponed' ? 'status-chip--postponed' : 'status-chip--in-progress';
-    return `<tr><td><span class="sku-chip">${m.match_id}</span></td><td><strong>${m.date || '—'}</strong></td><td>${SPORT_CONFIG[m.sport_type]?.name || m.sport_type}</td><td>${escHtml(hName)}</td><td>${escHtml(aName)}</td><td><strong>${m.home_score} - ${m.away_score}</strong></td><td>${tempStr}</td><td><span class="status-chip ${sCls}">${m.status}</span></td><td><button class="delete-btn" onclick="window.deleteMatch('${m.match_id}')">Delete</button></td></tr>`;
-  }).join('');
+  if (!matches.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No matches recorded yet.</td></tr>';
+  } else {
+    tbody.innerHTML = [...matches].reverse().map(m => {
+      const hName = teams.find(t=>t.id===m.home_team_id)?.name || m.home_team_id;
+      const aName = teams.find(t=>t.id===m.away_team_id)?.name || m.away_team_id;
+      const sportName = SPORT_CONFIG[m.sport_type]?.name || m.sport_type;
+      const tempStr = m.weather_temp_c !== '' && m.weather_temp_c !== null ? `${m.weather_temp_c}°C` : '—';
+      
+      let statusClass = 'status-chip--in-progress';
+      if (m.status === 'Completed') statusClass = 'status-chip--completed';
+      if (m.status === 'Cancelled') statusClass = 'status-chip--cancelled';
+      if (m.status === 'Postponed') statusClass = 'status-chip--postponed';
 
+      return `
+      <tr>
+        <td><span class="sku-chip">${m.match_id}</span></td>
+        <td><strong>${m.date || '—'}</strong></td>
+        <td>${sportName}</td>
+        <td>${escHtml(hName)}</td>
+        <td>${escHtml(aName)}</td>
+        <td><strong>${m.home_score} - ${m.away_score}</strong></td>
+        <td>${tempStr}</td>
+        <td><span class="status-chip ${statusClass}">${m.status}</span></td>
+        <td><button class="delete-btn" onclick="deleteMatch('${m.match_id}')">Delete</button></td>
+      </tr>
+      `;
+    }).join('');
+  }
+
+  // Render sales
   const sales = LS.getSales();
   const products = LS.getProducts();
-  document.getElementById('salesCount').textContent = `${sales.length} sales`;
-  if (!sales.length) document.getElementById('salesBody').innerHTML = '<tr><td colspan="4" class="empty-state">No sales recorded.</td></tr>';
-  else document.getElementById('salesBody').innerHTML = [...sales].reverse().map(s => {
-    const p = products.find(prod => prod.id === s.product_id);
-    return `<tr><td><span class="sku-chip">${s.sales_id}</span></td><td><span class="sku-chip sku-chip--outline">${s.match_id}</span></td><td>${p ? `${escHtml(p.name)} (${escHtml(p.size)})` : s.product_id}</td><td><strong>${s.quantity}</strong></td></tr>`;
-  }).join('');
+  const salesBody = document.getElementById('salesBody');
+  document.getElementById('salesCount').textContent = `${sales.length} sales record${sales.length !== 1 ? 's' : ''}`;
+  
+  if (!sales.length) {
+    salesBody.innerHTML = '<tr><td colspan="4" class="empty-state">No sales recorded yet.</td></tr>';
+  } else {
+    salesBody.innerHTML = [...sales].reverse().map(s => {
+      const p = products.find(prod => prod.id === s.product_id);
+      const pName = p ? `${p.name} (${p.size})` : s.product_id;
+      return `
+      <tr>
+        <td><span class="sku-chip">${s.sales_id}</span></td>
+        <td><span class="sku-chip sku-chip--outline">${s.match_id}</span></td>
+        <td>${escHtml(pName)}</td>
+        <td><strong>${s.quantity}</strong></td>
+      </tr>
+      `;
+    }).join('');
+  }
 }
 
 window.deleteMatch = function(id) {
@@ -476,52 +680,112 @@ window.deleteMatch = function(id) {
   LS.setMatches(LS.getMatches().filter(m => m.match_id !== id));
   LS.setSales(LS.getSales().filter(s => s.match_id !== id));
   renderHistory();
+  showToast(`Match ${id} deleted`, 'info');
 };
 
+/* ──────────────────────────────────────────────────────────────
+   DATA EXPORTS (CSV)
+────────────────────────────────────────────────────────────── */
 function toCSV(dataArr) {
   if (!dataArr || !dataArr.length) return '';
   const headers = Object.keys(dataArr[0]);
-  return [headers.join(','), ...dataArr.map(obj => headers.map(h => `"${String(obj[h]??"").replace(/"/g, '""')}"`).join(','))].join('\n');
+  const rows = dataArr.map(obj => 
+    headers.map(h => {
+      let val = obj[h];
+      if (val === null || val === undefined) val = '';
+      const str = String(val).replace(/"/g, '""');
+      return `"${str}"`;
+    }).join(',')
+  );
+  return [headers.join(','), ...rows].join('\n');
 }
 
 function downloadStr(filename, content) {
+  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([content], { type: 'text/csv;charset=utf-8;' }));
+  a.href = URL.createObjectURL(blob);
   a.download = filename;
   a.click();
 }
 
-window.exportMatches = () => LS.getMatches().length ? downloadStr('matches.csv', toCSV(LS.getMatches())) : showToast('Empty','error');
-window.exportSales = () => LS.getSales().length ? downloadStr('sales.csv', toCSV(LS.getSales())) : showToast('Empty','error');
-window.exportTeams = () => LS.getTeams().length ? downloadStr('teams.csv', toCSV(LS.getTeams())) : showToast('Empty','error');
-window.exportProducts = () => LS.getProducts().length ? downloadStr('products.csv', toCSV(LS.getProducts())) : showToast('Empty','error');
+window.exportMatches = () => {
+  const m = LS.getMatches();
+  if(!m.length) return showToast('No matches to export', 'error');
+  downloadStr('matches.csv', toCSV(m));
+};
 
+window.exportSales = () => {
+  const s = LS.getSales();
+  if(!s.length) return showToast('No sales to export', 'error');
+  downloadStr('sales.csv', toCSV(s));
+};
+
+window.exportTeams = () => {
+  const t = LS.getTeams();
+  if(!t.length) return showToast('No teams to export', 'error');
+  downloadStr('teams.csv', toCSV(t));
+};
+
+window.exportProducts = () => {
+  const p = LS.getProducts();
+  if(!p.length) return showToast('No products to export', 'error');
+  downloadStr('products.csv', toCSV(p));
+};
+
+/* ──────────────────────────────────────────────────────────────
+   DATA IMPORTS (CSV) - Extremely basic parsing for demo
+────────────────────────────────────────────────────────────── */
 window.handleCSVImport = function(type) {
-  const id = type === 'matches' ? 'importMatchesFile' : 'importSalesFile';
-  const file = document.getElementById(id).files[0];
-  if (!file) return;
+  const inputId = type === 'matches' ? 'importMatchesFile' : 'importSalesFile';
+  const file = document.getElementById(inputId).files[0];
+  if (!file) return showToast(`Please select a file to import ${type}`, 'error');
+  
   const reader = new FileReader();
   reader.onload = function(e) {
+    const text = e.target.result;
     try {
-      const line = (s) => s.trim().split('\n');
-      const lines = line(e.target.result);
-      if (lines.length < 2) return;
-      const h = lines[0].split(',').map(x => x.replace(/"/g, '').trim());
-      const data = lines.slice(1).map(l => {
-        const v = l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').replace(/""/g, '"').trim());
-        const obj = {};
-        h.forEach((key, i) => obj[key] = /^\d+$/.test(v[i]) ? parseInt(v[i], 10) : /^\d+\.\d+$/.test(v[i]) ? parseFloat(v[i]) : v[i]);
-        return obj;
-      });
-      type === 'matches' ? LS.setMatches(data) : LS.setSales(data);
-      document.getElementById(id).value = '';
+      const data = parseCSV(text);
+      if (type === 'matches') {
+        LS.setMatches(data);
+      } else {
+        LS.setSales(data);
+      }
+      showToast(`Successfully imported ${data.length} ${type}!`, 'success');
+      document.getElementById(inputId).value = '';
       renderHistory();
-      showToast('Imported successfully', 'success');
-    } catch(err) { showToast('Error', 'error'); }
+    } catch(err) {
+      showToast(`Error parsing CSV: ${err.message}`, 'error');
+    }
   };
   reader.readAsText(file);
 };
 
+// Extremely naive CSV parser
+function parseCSV(str) {
+  const lines = str.trim().split('\n');
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+  
+  return lines.slice(1).map(line => {
+    // Regex to split by comma, ignoring commas within quotes
+    const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+    const values = line.split(regex).map(v => v.replace(/^"|"$/g, '').replace(/""/g, '"').trim());
+    
+    const obj = {};
+    headers.forEach((h, i) => { 
+      // simple type inference
+      let val = values[i];
+      if (/^\d+$/.test(val)) val = parseInt(val, 10);
+      else if (/^\d+\.\d+$/.test(val)) val = parseFloat(val);
+      obj[h] = val; 
+    });
+    return obj;
+  });
+}
+
 window.clearAllData = function() {
-  if (confirm('⚠️ WARNING: Erase ALL data?')) { localStorage.clear(); location.reload(); }
+  if (confirm('⚠️ WARNING: This will permanently erase ALL data in this app. Proceed?')) {
+    localStorage.clear();
+    location.reload();
+  }
 };
