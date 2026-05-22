@@ -249,9 +249,10 @@ window.addProduct = function() {
   
   const prods = LS.getProducts();
   
+  const norm = (s) => String(s || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+  
   const existingIndex = prods.findIndex(p => 
-    String(p.name || '').trim().toLowerCase() === String(name || '').trim().toLowerCase() && 
-    String(p.size || '').trim().toLowerCase() === String(size || '').trim().toLowerCase()
+    norm(p.name) === norm(name) && norm(p.size) === norm(size)
   );
 
   if (existingIndex !== -1) {
