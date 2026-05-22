@@ -104,9 +104,46 @@ document.addEventListener('DOMContentLoaded', () => {
   
   renderTeams();
   updateTeamSelects();
+  deduplicateProducts();
   renderProducts();
   renderHistory();
 });
+
+function deduplicateProducts() {
+  const prods = LS.getProducts();
+  if (!prods || prods.length === 0) return;
+
+  const norm = (s) => String(s || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+  const unique = [];
+  const replacements = {};
+
+  prods.forEach(p => {
+    const existing = unique.find(u => norm(u.name) === norm(p.name) && norm(u.size) === norm(p.size));
+    if (existing) {
+      existing.initialStock = parseInt(existing.initialStock || 0, 10) + parseInt(p.initialStock || 0, 10);
+      existing.currentStock = parseInt(existing.currentStock || 0, 10) + parseInt(p.currentStock ?? p.initialStock ?? 0, 10);
+      replacements[p.id] = existing.id;
+    } else {
+      unique.push(p);
+    }
+  });
+
+  if (Object.keys(replacements).length > 0) {
+    LS.setProducts(unique);
+    
+    const sales = LS.getSales();
+    let salesUpdated = false;
+    sales.forEach(s => {
+      if (replacements[s.product_id]) {
+        s.product_id = replacements[s.product_id];
+        salesUpdated = true;
+      }
+    });
+    if (salesUpdated) {
+      LS.setSales(sales);
+    }
+  }
+}
 
 function prefillDate() {
   document.getElementById('matchDate').valueAsDate = new Date();
