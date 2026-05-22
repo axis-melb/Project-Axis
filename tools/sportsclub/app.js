@@ -1,11 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════
-   AusClub Pro — app.js (100% Client-Side Fixed Edition)
+   AusClub Pro — app.js (100% Fixed English Version)
 ═══════════════════════════════════════════════════════════════ */
 
 'use strict';
 
 const state = {
-  match: null,
+  match: null, 
 };
 
 const SPORTS = {
@@ -108,7 +108,7 @@ function initTabs() {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   TEAM REGISTRATION
+   TEAM REGISTRATION (Strictly English)
 ────────────────────────────────────────────────────────────── */
 function getTeams() { return JSON.parse(localStorage.getItem('ac_teams')) || []; }
 function saveTeams(teams) { localStorage.setItem('ac_teams', JSON.stringify(teams)); }
@@ -223,14 +223,12 @@ function addProduct() {
   
   saveProducts(products);
   
-  // 清空表单
   nameInput.value = ''; 
   sizeInput.value = ''; 
   costInput.value = ''; 
   retailInput.value = ''; 
   stockInput.value = '0';
   
-  // 实时刷新表格和POS选择菜单
   renderProducts();
   refreshCanteenSelectDropdown();
 }
@@ -279,14 +277,13 @@ function renderProducts() {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   SCOREBOARD & CANTEEN DROPDOWN CONTROL PANEL
+   SCOREBOARD & LIVE CANTEEN SALES DRIVER
 ────────────────────────────────────────────────────────────── */
 function getMatches() { return JSON.parse(localStorage.getItem('ac_matches')) || []; }
 function saveMatches(matches) { localStorage.setItem('ac_matches', JSON.stringify(matches)); }
 function getSales() { return JSON.parse(localStorage.getItem('ac_sales')) || []; }
 function saveSales(sales) { localStorage.setItem('ac_sales', JSON.stringify(sales)); }
 
-// 动态刷新记分板下方的下拉菜单选项
 function refreshCanteenSelectDropdown() {
   const selectEl = document.getElementById('canteenProductSelect');
   if (!selectEl) return;
@@ -299,9 +296,8 @@ function refreshCanteenSelectDropdown() {
   });
 }
 
-// 处理下拉菜单选择并记录销售
 function handleDropdownSale() {
-  if (!state.match) { alert('Please start a match first before logging sales.'); return; }
+  if (!state.match) { alert('Please start a match first.'); return; }
   const selectEl = document.getElementById('canteenProductSelect');
   const productId = selectEl.value;
   if (!productId) return;
@@ -311,36 +307,30 @@ function handleDropdownSale() {
   
   if (pIndex !== -1) {
     if (products[pIndex].currentStock <= 0) {
-      alert('Out of stock! Cannot sell this item.');
+      alert('Out of Stock!');
       selectEl.value = '';
       return;
     }
     
-    // 扣减库存
     products[pIndex].currentStock -= 1;
     saveProducts(products);
     
-    // 记录销售流水
     const sales = getSales();
     sales.push({
-      sales_id: 'S' + Date.now() + Math.floor(Math.random() * 10),
+      sales_id: 'S' + Date.now(),
       match_id: state.match.match_id,
       product_id: productId,
       quantity: 1
     });
     saveSales(sales);
     
-    // UI同步刷新
     renderProducts();
     refreshCanteenSelectDropdown();
-    renderCanteenLiveWidget(); // 同时也刷新快捷卡片
-    
-    // 重置选择状态
+    renderCanteenLiveWidget();
     selectEl.value = '';
   }
 }
 
-// 记分板中间区域的横向实时卡片小工具
 function renderCanteenLiveWidget() {
   const livesalesWidget = document.getElementById('livesales-widget');
   if (!livesalesWidget) return;
@@ -348,20 +338,15 @@ function renderCanteenLiveWidget() {
   livesalesWidget.innerHTML = '';
 
   if (products.length === 0) {
-    livesalesWidget.innerHTML = '<p style="color: #666; font-style: italic; font-size:12px;">No products defined in Canteen.</p>';
+    livesalesWidget.innerHTML = '<p style="color:#666; font-style:italic; font-size:12px;">No products defined.</p>';
     return;
   }
 
   products.forEach((product) => {
     const card = document.createElement('div');
     const currStock = product.currentStock !== undefined ? product.currentStock : product.initialStock;
-    
-    card.style.cssText = "background: #111; border: 1px solid #333; padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; gap: 10px; font-size: 13px;";
-
-    const info = document.createElement('div');
-    info.innerHTML = `<span style="font-weight:bold; color:#fff;">${product.name}</span> <span style="color:#888; font-size:11px;">(Qty: <span style="color:${currStock <= 3 ? '#ff4d4d' : '#00ffcc'}">${currStock}</span>)</span>`;
-
-    card.appendChild(info);
+    card.style.cssText = "background:#111; border:1px solid #333; padding:6px 12px; border-radius:6px; display:inline-flex; align-items:center; gap:8px; font-size:13px; margin-right:6px; margin-bottom:6px;";
+    card.innerHTML = `<span style="font-weight:bold; color:#fff;">${product.name}</span> <span style="color:#888;">(Stock: <span style="color:${currStock <= 3 ? '#ff4d4d' : '#00ffcc'}">${currStock}</span>)</span>`;
     livesalesWidget.appendChild(card);
   });
 }
@@ -377,7 +362,7 @@ function startMatch() {
   let notes = document.getElementById('matchNotes').value.trim();
 
   if (!sport || !homeId || !awayId) { alert('Please select Sport, Home Team and Away Team.'); return; }
-  if (homeId === awayId) { alert('Home and Away teams cannot be the same.'); return; }
+  if (homeId === awayId) { alert('Teams must be different.'); return; }
 
   const teams = getTeams();
   const homeTeam = teams.find(t => t.id === homeId);
@@ -426,7 +411,7 @@ function renderScoringButtons() {
   config.home.forEach(b => {
     const btn = document.createElement('button');
     btn.className = 'btn btn--secondary';
-    btn.style.width = "100%"; btn.style.marginBottom = "8px";
+    btn.style.cssText = "width:100%; margin-bottom:8px; padding:10px; font-weight:bold; background:#222; color:#fff; border:1px solid #444; border-radius:4px; cursor:pointer;";
     btn.textContent = b.label;
     btn.addEventListener('click', () => {
       state.match.homeScoreState[b.key] = (state.match.homeScoreState[b.key] || 0) + b.value;
@@ -439,7 +424,7 @@ function renderScoringButtons() {
   config.away.forEach(b => {
     const btn = document.createElement('button');
     btn.className = 'btn btn--secondary';
-    btn.style.width = "100%"; btn.style.marginBottom = "8px";
+    btn.style.cssText = "width:100%; margin-bottom:8px; padding:10px; font-weight:bold; background:#222; color:#fff; border:1px solid #444; border-radius:4px; cursor:pointer;";
     btn.textContent = b.label;
     btn.addEventListener('click', () => {
       state.match.awayScoreState[b.key] = (state.match.awayScoreState[b.key] || 0) + b.value;
@@ -466,7 +451,6 @@ function saveMatch() {
   const sales = getSales();
   const products = getProducts();
 
-  // 结算本场比赛的所有商品总零售账目与总量
   const thisMatchSales = sales.filter(s => s.match_id === state.match.match_id);
   let totalItemsSold = 0;
   let totalRevenue = 0;
@@ -474,9 +458,7 @@ function saveMatch() {
   thisMatchSales.forEach(sale => {
     totalItemsSold += sale.quantity;
     const prod = products.find(p => p.id === sale.product_id);
-    if (prod) {
-      totalRevenue += (sale.quantity * prod.retail);
-    }
+    if (prod) { totalRevenue += (sale.quantity * prod.retail); }
   });
 
   const config = SPORTS[state.match.sport_type];
@@ -499,7 +481,7 @@ function saveMatch() {
   matches.push(savedRecord);
   saveMatches(matches);
 
-  alert(`Match saved successfully!\n\nCanteen Performance:\n- Items Sold: ${totalItemsSold} pcs\n- Total Revenue: $${totalRevenue.toFixed(2)}`);
+  alert(`Match Saved Successfully!\nItems Sold: ${totalItemsSold}\nRevenue: $${totalRevenue.toFixed(2)}`);
   resetMatch();
 }
 
@@ -522,7 +504,7 @@ function setDefaults() {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   HISTORY VIEW RENDERING
+   HISTORY VIEW RENDERING (100% Raw English Data Only)
 ────────────────────────────────────────────────────────────── */
 function renderHistoryTable() {
   const tbody = document.getElementById('matchesBody');
@@ -554,7 +536,7 @@ function renderHistoryTable() {
       <td><strong>${awayTeam}</strong></td>
       <td><strong style="color:#ffc107;">${m.home_score} - ${m.away_score}</strong></td>
       <td>${m.weather_temp_c}°C</td>
-      <td><span style="color: #00ffcc; font-weight:bold;">${itemsSold} sold (${revenue})</span></td>
+      <td><span style="color:#00ffcc; font-weight:bold;">${itemsSold} sold (${revenue})</span></td>
       <td><span style="padding:2px 6px; border-radius:4px; font-size:11px; background:${m.status==='Cancelled'?'#ff4d4d':'#00ffcc'}; color:#000;">${m.status}</span></td>
     `;
     tbody.appendChild(tr);
@@ -562,7 +544,7 @@ function renderHistoryTable() {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   DATA MANAGEMENT VIEWS
+   DATA MANAGEMENT
 ────────────────────────────────────────────────────────────── */
 function convertToCSV(objArray) {
   if (objArray.length === 0) return '';
@@ -597,12 +579,10 @@ function clearAllData() {
    INITIALIZATION
 ────────────────────────────────────────────────────────────── */
 function initEventListeners() {
-  // Scoreboard
   document.getElementById('startMatchBtn').addEventListener('click', startMatch);
   document.getElementById('resetMatchBtn').addEventListener('click', resetMatch);
   document.getElementById('saveMatchBtn').addEventListener('click', saveMatch);
   
-  // 下拉菜单销售按钮绑定
   document.getElementById('logDropdownSaleBtn').addEventListener('click', handleDropdownSale);
   
   const heatOkBtn = document.getElementById('heatOkBtn');
@@ -613,11 +593,18 @@ function initEventListeners() {
     });
   }
 
-  // 核心数据添加按钮监听
+  // 绑定球队添加按钮
   document.getElementById('addTeamBtn').addEventListener('click', addTeam);
-  document.getElementById('addProductBtn').addEventListener('click', addProduct);
 
-  // CSV 数据导出
+  // 重要修复：阻止表单的默认刷新提交事件，确保 Black Tea 能添加进去
+  const addProductBtn = document.getElementById('addProductBtn');
+  if (addProductBtn) {
+    addProductBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      addProduct();
+    });
+  }
+
   document.getElementById('exportMatchesBtn').addEventListener('click', exportMatches);
   document.getElementById('exportSalesBtn').addEventListener('click', exportSales);
   document.getElementById('exportTeamsBtn').addEventListener('click', exportTeams);
