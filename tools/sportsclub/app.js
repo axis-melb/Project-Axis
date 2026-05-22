@@ -1,11 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════
-   AusClub Pro — app.js (100% Fixed English Version)
+   AusClub Pro — app.js (Defensive Clean Edition)
 ═══════════════════════════════════════════════════════════════ */
 
 'use strict';
 
 const state = {
-  match: null, 
+  match: null,
 };
 
 const SPORTS = {
@@ -108,7 +108,7 @@ function initTabs() {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   TEAM REGISTRATION (Strictly English)
+   TEAM REGISTRATION
 ────────────────────────────────────────────────────────────── */
 function getTeams() { return JSON.parse(localStorage.getItem('ac_teams')) || []; }
 function saveTeams(teams) { localStorage.setItem('ac_teams', JSON.stringify(teams)); }
@@ -201,11 +201,13 @@ function addProduct() {
   const retailInput = document.getElementById('productRetail');
   const stockInput = document.getElementById('productStock');
 
+  if (!nameInput) return;
+
   const name = nameInput.value.trim();
-  const size = sizeInput.value.trim();
-  const cost = parseFloat(costInput.value) || 0;
-  const retail = parseFloat(retailInput.value) || 0;
-  const stock = parseInt(stockInput.value) || 0;
+  const size = sizeInput ? sizeInput.value.trim() : '';
+  const cost = costInput ? parseFloat(costInput.value) || 0 : 0;
+  const retail = retailInput ? parseFloat(retailInput.value) || 0 : 0;
+  const stock = stockInput ? parseInt(stockInput.value) || 0 : 0;
 
   if (!name) { alert('Please enter a product name.'); return; }
   const products = getProducts();
@@ -223,11 +225,11 @@ function addProduct() {
   
   saveProducts(products);
   
-  nameInput.value = ''; 
-  sizeInput.value = ''; 
-  costInput.value = ''; 
-  retailInput.value = ''; 
-  stockInput.value = '0';
+  if (nameInput) nameInput.value = ''; 
+  if (sizeInput) sizeInput.value = ''; 
+  if (costInput) costInput.value = ''; 
+  if (retailInput) retailInput.value = ''; 
+  if (stockInput) stockInput.value = '0';
   
   renderProducts();
   refreshCanteenSelectDropdown();
@@ -277,7 +279,7 @@ function renderProducts() {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   SCOREBOARD & LIVE CANTEEN SALES DRIVER
+   SCOREBOARD & DROPDOWN SALES
 ────────────────────────────────────────────────────────────── */
 function getMatches() { return JSON.parse(localStorage.getItem('ac_matches')) || []; }
 function saveMatches(matches) { localStorage.setItem('ac_matches', JSON.stringify(matches)); }
@@ -307,7 +309,7 @@ function handleDropdownSale() {
   
   if (pIndex !== -1) {
     if (products[pIndex].currentStock <= 0) {
-      alert('Out of Stock!');
+      alert('Out of stock!');
       selectEl.value = '';
       return;
     }
@@ -338,14 +340,14 @@ function renderCanteenLiveWidget() {
   livesalesWidget.innerHTML = '';
 
   if (products.length === 0) {
-    livesalesWidget.innerHTML = '<p style="color:#666; font-style:italic; font-size:12px;">No products defined.</p>';
+    livesalesWidget.innerHTML = '<p style="color: #666; font-style: italic; font-size:12px;">No products defined.</p>';
     return;
   }
 
   products.forEach((product) => {
     const card = document.createElement('div');
     const currStock = product.currentStock !== undefined ? product.currentStock : product.initialStock;
-    card.style.cssText = "background:#111; border:1px solid #333; padding:6px 12px; border-radius:6px; display:inline-flex; align-items:center; gap:8px; font-size:13px; margin-right:6px; margin-bottom:6px;";
+    card.style.cssText = "background: #111; border: 1px solid #333; padding: 6px 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; margin-right: 6px; margin-bottom: 6px;";
     card.innerHTML = `<span style="font-weight:bold; color:#fff;">${product.name}</span> <span style="color:#888;">(Stock: <span style="color:${currStock <= 3 ? '#ff4d4d' : '#00ffcc'}">${currStock}</span>)</span>`;
     livesalesWidget.appendChild(card);
   });
@@ -362,7 +364,7 @@ function startMatch() {
   let notes = document.getElementById('matchNotes').value.trim();
 
   if (!sport || !homeId || !awayId) { alert('Please select Sport, Home Team and Away Team.'); return; }
-  if (homeId === awayId) { alert('Teams must be different.'); return; }
+  if (homeId === awayId) { alert('Home and Away teams cannot be the same.'); return; }
 
   const teams = getTeams();
   const homeTeam = teams.find(t => t.id === homeId);
@@ -411,9 +413,10 @@ function renderScoringButtons() {
   config.home.forEach(b => {
     const btn = document.createElement('button');
     btn.className = 'btn btn--secondary';
-    btn.style.cssText = "width:100%; margin-bottom:8px; padding:10px; font-weight:bold; background:#222; color:#fff; border:1px solid #444; border-radius:4px; cursor:pointer;";
+    btn.style.cssText = "width: 100%; margin-bottom: 8px; padding: 10px; font-weight: bold;";
     btn.textContent = b.label;
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
       state.match.homeScoreState[b.key] = (state.match.homeScoreState[b.key] || 0) + b.value;
       state.match.homeScoreState = config.calcScore(state.match.homeScoreState);
       updateScoreboardDisplay();
@@ -424,9 +427,10 @@ function renderScoringButtons() {
   config.away.forEach(b => {
     const btn = document.createElement('button');
     btn.className = 'btn btn--secondary';
-    btn.style.cssText = "width:100%; margin-bottom:8px; padding:10px; font-weight:bold; background:#222; color:#fff; border:1px solid #444; border-radius:4px; cursor:pointer;";
+    btn.style.cssText = "width: 100%; margin-bottom: 8px; padding: 10px; font-weight: bold;";
     btn.textContent = b.label;
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
       state.match.awayScoreState[b.key] = (state.match.awayScoreState[b.key] || 0) + b.value;
       state.match.awayScoreState = config.calcScore(state.match.awayScoreState);
       updateScoreboardDisplay();
@@ -458,7 +462,9 @@ function saveMatch() {
   thisMatchSales.forEach(sale => {
     totalItemsSold += sale.quantity;
     const prod = products.find(p => p.id === sale.product_id);
-    if (prod) { totalRevenue += (sale.quantity * prod.retail); }
+    if (prod) {
+      totalRevenue += (sale.quantity * prod.retail);
+    }
   });
 
   const config = SPORTS[state.match.sport_type];
@@ -481,7 +487,7 @@ function saveMatch() {
   matches.push(savedRecord);
   saveMatches(matches);
 
-  alert(`Match Saved Successfully!\nItems Sold: ${totalItemsSold}\nRevenue: $${totalRevenue.toFixed(2)}`);
+  alert(`Match saved successfully!\n\nItems Sold: ${totalItemsSold}\nTotal Revenue: $${totalRevenue.toFixed(2)}`);
   resetMatch();
 }
 
@@ -489,7 +495,7 @@ function resetMatch() {
   state.match = null;
   document.getElementById('livePanel').classList.add('hidden');
   document.querySelector('.card--setup').classList.remove('hidden');
-  document.getElementById('matchNotes').value = '';
+  if(document.getElementById('matchNotes')) document.getElementById('matchNotes').value = '';
   setDefaults();
   renderHistoryTable();
 }
@@ -503,9 +509,6 @@ function setDefaults() {
   tInput.value = now.toTimeString().split(' ')[0].slice(0, 5);
 }
 
-/* ──────────────────────────────────────────────────────────────
-   HISTORY VIEW RENDERING (100% Raw English Data Only)
-────────────────────────────────────────────────────────────── */
 function renderHistoryTable() {
   const tbody = document.getElementById('matchesBody');
   const countSpan = document.getElementById('matchCount');
@@ -536,16 +539,13 @@ function renderHistoryTable() {
       <td><strong>${awayTeam}</strong></td>
       <td><strong style="color:#ffc107;">${m.home_score} - ${m.away_score}</strong></td>
       <td>${m.weather_temp_c}°C</td>
-      <td><span style="color:#00ffcc; font-weight:bold;">${itemsSold} sold (${revenue})</span></td>
+      <td><span style="color: #00ffcc; font-weight:bold;">${itemsSold} sold (${revenue})</span></td>
       <td><span style="padding:2px 6px; border-radius:4px; font-size:11px; background:${m.status==='Cancelled'?'#ff4d4d':'#00ffcc'}; color:#000;">${m.status}</span></td>
     `;
     tbody.appendChild(tr);
   });
 }
 
-/* ──────────────────────────────────────────────────────────────
-   DATA MANAGEMENT
-────────────────────────────────────────────────────────────── */
 function convertToCSV(objArray) {
   if (objArray.length === 0) return '';
   const headers = Object.keys(objArray[0]).join(',');
@@ -575,15 +575,12 @@ function clearAllData() {
   }
 }
 
-/* ──────────────────────────────────────────────────────────────
-   INITIALIZATION
-────────────────────────────────────────────────────────────── */
 function initEventListeners() {
-  document.getElementById('startMatchBtn').addEventListener('click', startMatch);
-  document.getElementById('resetMatchBtn').addEventListener('click', resetMatch);
-  document.getElementById('saveMatchBtn').addEventListener('click', saveMatch);
+  document.getElementById('startMatchBtn').addEventListener('click', (e) => { e.preventDefault(); startMatch(); });
+  document.getElementById('resetMatchBtn').addEventListener('click', (e) => { e.preventDefault(); resetMatch(); });
+  document.getElementById('saveMatchBtn').addEventListener('click', (e) => { e.preventDefault(); saveMatch(); });
   
-  document.getElementById('logDropdownSaleBtn').addEventListener('click', handleDropdownSale);
+  document.getElementById('logDropdownSaleBtn').addEventListener('click', (e) => { e.preventDefault(); handleDropdownSale(); });
   
   const heatOkBtn = document.getElementById('heatOkBtn');
   if (heatOkBtn) {
@@ -593,17 +590,8 @@ function initEventListeners() {
     });
   }
 
-  // 绑定球队添加按钮
-  document.getElementById('addTeamBtn').addEventListener('click', addTeam);
-
-  // 重要修复：阻止表单的默认刷新提交事件，确保 Black Tea 能添加进去
-  const addProductBtn = document.getElementById('addProductBtn');
-  if (addProductBtn) {
-    addProductBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      addProduct();
-    });
-  }
+  document.getElementById('addTeamBtn').addEventListener('click', (e) => { e.preventDefault(); addTeam(); });
+  document.getElementById('addProductBtn').addEventListener('click', (e) => { e.preventDefault(); addProduct(); });
 
   document.getElementById('exportMatchesBtn').addEventListener('click', exportMatches);
   document.getElementById('exportSalesBtn').addEventListener('click', exportSales);
