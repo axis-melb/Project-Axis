@@ -5,14 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AusClub Pro · Scoreboard & Smart Canteen</title>
   <meta name="description" content="Universal Australian Community Sports Club Scoreboard & Smart Canteen Predictor" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- HEAT ALERT OVERLAY -->
+<!-- HEAT OVERLAY -->
 <div id="heatOverlay" class="heat-overlay hidden" role="alert" aria-live="assertive">
   <div class="heat-overlay__box">
     <div class="heat-overlay__icon">🌡️</div>
@@ -25,34 +23,29 @@
 </div>
 
 <!-- TOAST NOTIFICATION -->
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="toast" class="toast" role="status"></div>
 
-<!-- HEADER -->
 <header class="site-header">
   <div class="site-header__inner">
     <div class="site-header__brand">
-      <span class="brand-mark">●</span>
-      <span class="brand-name">AusClub<em>Pro</em></span>
+      <span class="brand-mark">●</span><span class="brand-name">AusClub<em>Pro</em></span>
     </div>
     <nav class="tab-nav" role="navigation" aria-label="Main sections">
       <button class="tab-btn active" data-tab="scoreboard">📋 Scoreboard</button>
       <button class="tab-btn" data-tab="teams">🏆 Teams</button>
       <button class="tab-btn" data-tab="canteen">🧃 Canteen</button>
       <button class="tab-btn" data-tab="history">📊 History</button>
-      <button class="tab-btn" data-tab="export">💾 Data</button>
+      <button class="tab-btn" data-tab="data">💾 Data</button>
     </nav>
   </div>
 </header>
 
-<!-- MAIN CONTENT -->
 <main class="main-content">
-
   <!-- TAB: SCOREBOARD -->
   <section id="tab-scoreboard" class="tab-panel active" aria-label="Scoreboard">
-
     <div class="panel-header">
       <h1>Live Match <span class="accent">Scoreboard</span></h1>
-      <p class="panel-sub">Set up a new match and track scores and canteen sales in real time.</p>
+      <p class="panel-sub">Set up a new match and track scores in real time.</p>
     </div>
 
     <!-- Match Setup Card -->
@@ -87,20 +80,17 @@
         </div>
         <div class="form-group">
           <label for="homeTeamSelect">Home Team</label>
-          <select id="homeTeamSelect">
-            <option value="">— Select Team —</option>
-          </select>
+          <select id="homeTeamSelect"><option value="">— Select Team —</option></select>
         </div>
         <div class="form-group">
           <label for="awayTeamSelect">Away Team</label>
-          <select id="awayTeamSelect">
-            <option value="">— Select Team —</option>
-          </select>
+          <select id="awayTeamSelect"><option value="">— Select Team —</option></select>
         </div>
         <div class="form-group">
           <label for="matchStatus">Status</label>
           <select id="matchStatus">
             <option value="Completed">Completed</option>
+            <option value="In Progress">In Progress</option>
             <option value="Postponed">Postponed</option>
             <option value="Cancelled">Cancelled</option>
           </select>
@@ -116,9 +106,8 @@
       </div>
     </div>
 
-    <!-- Live Scoring Panel (hidden until match started) -->
+    <!-- Live Panel -->
     <div id="livePanel" class="live-panel hidden">
-
       <!-- Scoreboard Display -->
       <div class="scoreboard-display">
         <div class="scoreboard-display__team scoreboard-display__team--home">
@@ -141,7 +130,7 @@
         </div>
       </div>
 
-      <!-- Scoring Buttons (dynamic per sport) -->
+      <!-- Controls -->
       <div class="scoring-section">
         <div class="scoring-col">
           <div class="scoring-col__label" id="homeLabel">HOME</div>
@@ -153,7 +142,7 @@
         </div>
       </div>
 
-      <!-- Live Canteen Sales Tracker -->
+      <!-- Live Sales -->
       <div class="card card--canteen-sales">
         <div class="card__head">
           <h3>Live Canteen Sales</h3>
@@ -165,32 +154,27 @@
         </div>
       </div>
 
-      <!-- Smart Forecast Panel -->
+      <!-- Smart Forecast -->
       <div class="card card--forecast" id="forecastPanel">
         <div class="card__head">
           <h3>🔮 Smart Canteen Forecast</h3>
           <span class="badge badge--purple">AI Powered</span>
         </div>
         <div id="forecastContent" class="forecast-content">
-          <p class="muted">Start a match to generate a forecast based on historical matchups.</p>
+          <p class="muted">Start a match to generate a forecast.</p>
         </div>
       </div>
-
     </div>
-
   </section>
 
   <!-- TAB: TEAMS -->
   <section id="tab-teams" class="tab-panel" aria-label="Team Management">
     <div class="panel-header">
       <h1>Team <span class="accent">Master Data</span></h1>
-      <p class="panel-sub">Register clubs and manage team records with auto-generated SKUs.</p>
     </div>
     <div class="two-col-layout">
       <div class="card">
-        <div class="card__head">
-          <h2>Add New Team</h2>
-        </div>
+        <div class="card__head"><h2>Add New Team</h2></div>
         <div class="form-stack">
           <div class="form-group">
             <label for="teamName">Team Name</label>
@@ -208,7 +192,7 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="teamSuburb">Club Suburb / Location</label>
+            <label for="teamSuburb">Club Suburb</label>
             <input type="text" id="teamSuburb" placeholder="e.g. Fitzroy, VIC" />
           </div>
           <button class="btn btn--primary" id="addTeamBtn">+ Add Team</button>
@@ -221,15 +205,7 @@
         </div>
         <div class="table-wrap">
           <table class="data-table" id="teamsTable">
-            <thead>
-              <tr>
-                <th>SKU</th>
-                <th>Team Name</th>
-                <th>Sport</th>
-                <th>Location</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
+            <thead><tr><th>SKU</th><th>Team Name</th><th>Sport</th><th>Location</th><th>Actions</th></tr></thead>
             <tbody id="teamsBody"></tbody>
           </table>
         </div>
@@ -241,32 +217,29 @@
   <section id="tab-canteen" class="tab-panel" aria-label="Canteen Inventory">
     <div class="panel-header">
       <h1>Canteen <span class="accent">Products</span></h1>
-      <p class="panel-sub">Manage concession beverage and snack inventory.</p>
     </div>
     <div class="two-col-layout">
       <div class="card">
-        <div class="card__head">
-          <h2>Add Product / Variant</h2>
-        </div>
+        <div class="card__head"><h2>Add Product</h2></div>
         <div class="form-stack">
           <div class="form-group">
             <label for="productName">Product Name</label>
             <input type="text" id="productName" placeholder="e.g. Coca-Cola" />
           </div>
           <div class="form-group">
-            <label for="productSize">Volume / Size</label>
+            <label for="productSize">Size</label>
             <input type="text" id="productSize" placeholder="e.g. 375ml" />
           </div>
           <div class="form-group">
-            <label for="productCost">Cost Price (AUD $)</label>
+            <label for="productCost">Cost ($)</label>
             <input type="number" id="productCost" placeholder="1.50" min="0" step="0.01" />
           </div>
           <div class="form-group">
-            <label for="productRetail">Retail Price (AUD $)</label>
+            <label for="productRetail">Retail ($)</label>
             <input type="number" id="productRetail" placeholder="3.50" min="0" step="0.01" />
           </div>
           <div class="form-group">
-            <label for="productStock">Initial Stock Level</label>
+            <label for="productStock">Initial Stock</label>
             <input type="number" id="productStock" placeholder="0" min="0" />
           </div>
           <button class="btn btn--primary" id="addProductBtn">+ Add Product</button>
@@ -281,15 +254,8 @@
           <table class="data-table" id="productsTable">
             <thead>
               <tr>
-                <th>SKU</th>
-                <th>Product</th>
-                <th>Size</th>
-                <th>Cost</th>
-                <th>Retail</th>
-                <th>Margin</th>
-                <th>Initial Stock</th>
-                <th>Current Stock</th>
-                <th>Actions</th>
+                <th>SKU</th><th>Product</th><th>Size</th><th>Cost</th><th>Retail</th><th>Margin</th>
+                <th>Init Stock</th><th>Cur Stock</th><th>Actions</th>
               </tr>
             </thead>
             <tbody id="productsBody"></tbody>
@@ -302,10 +268,11 @@
   <!-- TAB: HISTORY -->
   <section id="tab-history" class="tab-panel" aria-label="Match History">
     <div class="panel-header">
-      <h1>Match <span class="accent">History</span></h1>
-      <p class="panel-sub">Full log of all recorded matches and outcomes.</p>
+      <h1>Match & Sales <span class="accent">History</span></h1>
     </div>
-    <div class="card card--table card--full">
+
+    <!-- Match History -->
+    <div class="card card--table card--full" style="margin-bottom: var(--sp-6);">
       <div class="card__head">
         <h2>All Matches</h2>
         <span class="badge badge--info" id="matchCount">0 matches</span>
@@ -314,103 +281,77 @@
         <table class="data-table" id="matchesTable">
           <thead>
             <tr>
-              <th>Match ID</th>
-              <th>Date</th>
-              <th>Sport</th>
-              <th>Home Team</th>
-              <th>Away Team</th>
-              <th>Score</th>
-              <th>Temp</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>Match ID</th><th>Date</th><th>Sport</th><th>Home</th><th>Away</th><th>Score</th><th>Temp</th><th>Status</th><th>Actions</th>
             </tr>
           </thead>
           <tbody id="matchesBody"></tbody>
         </table>
       </div>
     </div>
+
+    <!-- Sales History -->
+    <div class="card card--table card--full">
+      <div class="card__head">
+        <h2>Live Canteen Sales History</h2>
+        <span class="badge badge--green" id="salesCount">0 sales</span>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="salesTable">
+          <thead>
+            <tr><th>Sales ID</th><th>Match ID</th><th>Product (Size)</th><th>Quantity Sold</th></tr>
+          </thead>
+          <tbody id="salesBody"></tbody>
+        </table>
+      </div>
+    </div>
   </section>
 
-  <!-- TAB: EXPORT (DATA) -->
-  <section id="tab-export" class="tab-panel" aria-label="Data Export">
+  <!-- TAB: DATA EXPORTS -->
+  <section id="tab-data" class="tab-panel" aria-label="Data Export">
     <div class="panel-header">
       <h1>Data <span class="accent">Import & Export</span></h1>
-      <p class="panel-sub">Download relational CSV files or restore historical data into the application.</p>
     </div>
     <div class="export-grid">
       <div class="card card--export">
         <div class="export-icon">📥</div>
         <h3>Import matches.csv</h3>
-        <p>Overwrite local match history from CSV.</p>
-        <input type="file" id="importMatchesFile" accept=".csv" class="form-control" style="background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--sp-2) var(--sp-3); width: 100%; color: var(--text-primary); margin-bottom: var(--sp-3);" />
-        <button class="btn btn--primary btn--full" id="importMatchesBtn">⬆ Import matches.csv</button>
+        <input type="file" id="importMatchesFile" accept=".csv" style="width: 100%; margin-bottom: var(--sp-3);" />
+        <button class="btn btn--primary btn--full" id="importMatchesBtn">⬆ Import matches</button>
       </div>
-
       <div class="card card--export">
         <div class="export-icon">📦</div>
         <h3>Import sales.csv</h3>
-        <p>Overwrite local sales data from CSV.</p>
-        <input type="file" id="importSalesFile" accept=".csv" class="form-control" style="background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--sp-2) var(--sp-3); width: 100%; color: var(--text-primary); margin-bottom: var(--sp-3);" />
-        <button class="btn btn--primary btn--full" id="importSalesBtn">⬆ Import sales.csv</button>
+        <input type="file" id="importSalesFile" accept=".csv" style="width: 100%; margin-bottom: var(--sp-3);" />
+        <button class="btn btn--primary btn--full" id="importSalesBtn">⬆ Import sales</button>
       </div>
-
       <div class="card card--export">
         <div class="export-icon">📋</div>
-        <h3>matches.csv</h3>
-        <p>Full match records including teams, scores, weather, and status. Primary key: <code>match_id</code>.</p>
-        <div class="schema-preview">
-          <code>match_id · date · time · weather_temp_c · sport_type · home_team_id · away_team_id · home_score · away_score · status · notes</code>
-        </div>
+        <h3>Download matches.csv</h3>
         <button class="btn btn--primary btn--full" id="exportMatchesBtn">⬇ Download matches.csv</button>
       </div>
-
       <div class="card card--export">
         <div class="export-icon">🧃</div>
-        <h3>sales.csv</h3>
-        <p>Canteen sales by match. Foreign keys: <code>match_id</code> → matches, <code>product_id</code> → products.</p>
-        <div class="schema-preview">
-          <code>sales_id · match_id · product_id · quantity</code>
-        </div>
+        <h3>Download sales.csv</h3>
         <button class="btn btn--primary btn--full" id="exportSalesBtn">⬇ Download sales.csv</button>
       </div>
-
       <div class="card card--export">
         <div class="export-icon">🏆</div>
-        <h3>teams.csv</h3>
-        <p>Team master data. Primary key: <code>team_id</code>.</p>
-        <div class="schema-preview">
-          <code>team_id · team_name · sport_type · suburb</code>
-        </div>
+        <h3>Download teams.csv</h3>
         <button class="btn btn--primary btn--full" id="exportTeamsBtn">⬇ Download teams.csv</button>
       </div>
-
       <div class="card card--export">
         <div class="export-icon">🛒</div>
-        <h3>products.csv</h3>
-        <p>Product master / SKU catalogue. Primary key: <code>product_id</code>.</p>
-        <div class="schema-preview">
-          <code>product_id · product_name · size · cost_price · retail_price</code>
-        </div>
+        <h3>Download products.csv</h3>
         <button class="btn btn--primary btn--full" id="exportProductsBtn">⬇ Download products.csv</button>
       </div>
-
       <div class="card card--export card--export--danger">
         <div class="export-icon">⚠️</div>
         <h3>Clear All Data</h3>
-        <p>Permanently erase all LocalStorage data for this application. This action cannot be undone.</p>
         <button class="btn btn--danger btn--full" id="clearDataBtn">🗑 Clear All Data</button>
       </div>
     </div>
   </section>
-
 </main>
-
-<footer class="site-footer">
-  <div class="site-footer__inner">
-    <span>AusClub<em>Pro</em> · Universal Community Sports Dashboard</span>
-    <span>Data stored locally · No servers · Optimized for offline</span>
-  </div>
-</footer>
 
 <script src="app.js"></script>
 </body>
