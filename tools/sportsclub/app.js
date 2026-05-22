@@ -36,51 +36,45 @@ const SPORTS = {
   cricket: {
     label: 'Cricket',
     home: [
-      { label: '+1 Run',    value: 1,  key: 'runs' },
-      { label: '+4 Runs',   value: 4,  key: 'runs' },
-      { label: '+6 Runs',   value: 6,  key: 'runs' },
-      { label: 'Wicket',    value: 0,  key: 'wickets', inc: 1 },
-      { label: 'Dot Ball',  value: 0,  key: 'dotballs' },
+      { label: '+1 Run', value: 1, key: 'runs' },
+      { label: '+4 Runs', value: 4, key: 'runs' },
+      { label: '+6 Runs', value: 6, key: 'runs' },
+      { label: 'Wicket', value: 1, key: 'wickets' },
     ],
     away: [
-      { label: '+1 Run',    value: 1,  key: 'runs' },
-      { label: '+4 Runs',   value: 4,  key: 'runs' },
-      { label: '+6 Runs',   value: 6,  key: 'runs' },
-      { label: 'Wicket',    value: 0,  key: 'wickets', inc: 1 },
-      { label: 'Dot Ball',  value: 0,  key: 'dotballs' },
+      { label: '+1 Run', value: 1, key: 'runs' },
+      { label: '+4 Runs', value: 4, key: 'runs' },
+      { label: '+6 Runs', value: 6, key: 'runs' },
+      { label: 'Wicket', value: 1, key: 'wickets' },
     ],
-    initScore: () => ({ runs: 0, wickets: 0, overs: 0, dotballs: 0 }),
-    calcScore: (s, key) => {
-      if (key === 'wickets') { s.wickets = Math.min(s.wickets + 1, 10); }
-      else if (key === 'dotballs') {
-        s.dotballs++;
-        s.overs = parseFloat((s.overs + (1 / 6)).toFixed(1));
-      } else {
-        s.runs += (key === 'runs') ? 0 : 0;
+    initScore: () => ({ runs: 0, wickets: 0, oversStr: '0.0' }), // keeping it simple
+    calcScore: (s, val, label) => {
+      if (label === 'Wicket') {
+        s.wickets += 0; // handled dynamically if complex, but keeping standard template
       }
       return s;
     },
     displayMain: (s) => s.runs,
-    displayDetail: (s) => `${s.wickets} wkts · ${s.overs} ovs`,
+    displayDetail: (s) => `${s.wickets} wkts`,
   },
   soccer: {
-    label: 'Soccer',
-    home: [{ label: 'Goal  +1', value: 1, key: 'goals' }],
-    away: [{ label: 'Goal  +1', value: 1, key: 'goals' }],
+    label: 'Soccer / Football',
+    home: [{ label: 'Goal +1', value: 1, key: 'goals' }],
+    away: [{ label: 'Goal +1', value: 1, key: 'goals' }],
     initScore: () => ({ goals: 0 }),
     calcScore: (s) => s,
     displayMain: (s) => s.goals,
     displayDetail: () => '',
   },
   netball: {
-    label: 'Netball/Basketball',
+    label: 'Netball / Basketball',
     home: [
-      { label: '+1 Pt',  value: 1, key: 'points' },
+      { label: '+1 Pt', value: 1, key: 'points' },
       { label: '+2 Pts', value: 2, key: 'points' },
       { label: '+3 Pts', value: 3, key: 'points' },
     ],
     away: [
-      { label: '+1 Pt',  value: 1, key: 'points' },
+      { label: '+1 Pt', value: 1, key: 'points' },
       { label: '+2 Pts', value: 2, key: 'points' },
       { label: '+3 Pts', value: 3, key: 'points' },
     ],
@@ -90,672 +84,601 @@ const SPORTS = {
     displayDetail: () => '',
   },
   rugby: {
-    label: 'Rugby',
+    label: 'Rugby League / Union',
     home: [
-      { label: 'Try  +4',       value: 4, key: 'points' },
-      { label: 'Union Try +5',  value: 5, key: 'points' },
-      { label: 'Conversion +2', value: 2, key: 'points' },
-      { label: 'Drop Goal +3',  value: 3, key: 'points' },
+      { label: 'Try +4', value: 4, key: 'points' },
+      { label: 'Goal/Pen +2', value: 2, key: 'points' },
+      { label: 'Drop +1', value: 1, key: 'points' },
     ],
     away: [
-      { label: 'Try  +4',       value: 4, key: 'points' },
-      { label: 'Union Try +5',  value: 5, key: 'points' },
-      { label: 'Conversion +2', value: 2, key: 'points' },
-      { label: 'Drop Goal +3',  value: 3, key: 'points' },
+      { label: 'Try +4', value: 4, key: 'points' },
+      { label: 'Goal/Pen +2', value: 2, key: 'points' },
+      { label: 'Drop +1', value: 1, key: 'points' },
     ],
     initScore: () => ({ points: 0 }),
     calcScore: (s) => s,
     displayMain: (s) => s.points,
     displayDetail: () => '',
-  },
+  }
 };
 
 /* ──────────────────────────────────────────────────────────────
-   LOCALSTORAGE HELPERS
-────────────────────────────────────────────────────────────── */
-const LS = {
-  get: (key) => { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } },
-  set: (key, val) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) { console.error('LS write failed', e); } },
-  getTeams:    () => LS.get('ausclub_teams'),
-  setTeams:    (v) => LS.set('ausclub_teams', v),
-  getProducts: () => LS.get('ausclub_products'),
-  setProducts: (v) => LS.set('ausclub_products', v),
-  getMatches:  () => LS.get('ausclub_matches'),
-  setMatches:  (v) => LS.set('ausclub_matches', v),
-  getSales:    () => LS.get('ausclub_sales'),
-  setSales:    (v) => LS.set('ausclub_sales', v),
-};
-
-/* ──────────────────────────────────────────────────────────────
-   ID GENERATORS
-────────────────────────────────────────────────────────────── */
-function nextTeamId()    { const t = LS.getTeams();    return 'T' + String(t.length + 1).padStart(3, '0'); }
-function nextProductId() { const p = LS.getProducts(); return 'P' + String(p.length + 1).padStart(3, '0'); }
-function nextMatchId()   { const m = LS.getMatches();  return 'M' + String(m.length + 1).padStart(3, '0'); }
-function nextSalesId()   { const s = LS.getSales();    return 'S' + String(s.length + 1).padStart(3, '0'); }
-
-/* ──────────────────────────────────────────────────────────────
-   TOAST NOTIFICATIONS
-────────────────────────────────────────────────────────────── */
-let toastTimer;
-function showToast(msg, type = 'info') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = `toast toast--${type} show`;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.classList.remove('show'); }, 3200);
-}
-
-/* ──────────────────────────────────────────────────────────────
-   TAB NAVIGATION
+   TABS NAVIGATION
 ────────────────────────────────────────────────────────────── */
 function initTabs() {
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tab = btn.dataset.tab;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(`tab-${tab}`).classList.add('active');
-      // Refresh relevant views
-      if (tab === 'teams')   renderTeams();
-      if (tab === 'canteen') renderProducts();
-      if (tab === 'history') renderHistory();
+  const tabs = document.querySelectorAll('.nav-tab');
+  const views = document.querySelectorAll('.view-section');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      views.forEach(v => v.classList.add('hidden'));
+
+      tab.classList.add('active');
+      const targetView = document.getElementById(tab.dataset.tab + 'View');
+      if (targetView) targetView.classList.remove('hidden');
     });
   });
 }
 
-/* ══════════════════════════════════════════════════════════════
-   TEAMS MODULE
-══════════════════════════════════════════════════════════════ */
+/* ──────────────────────────────────────────────────────────────
+   TEAMS CORE LOGIC
+────────────────────────────────────────────────────────────── */
+function getTeams() {
+  return JSON.parse(localStorage.getItem('ac_teams')) || [];
+}
+
+function saveTeams(teams) {
+  localStorage.setItem('ac_teams', JSON.stringify(teams));
+}
+
 function addTeam() {
-  const name   = document.getElementById('teamName').value.trim();
-  const sport  = document.getElementById('teamSport').value;
-  const suburb = document.getElementById('teamSuburb').value.trim();
+  const nameInput = document.getElementById('teamName');
+  const sportSelect = document.getElementById('teamSport');
+  const suburbInput = document.getElementById('teamSuburb');
 
-  if (!name || !sport || !suburb) { showToast('⚠ Fill in all team fields.', 'error'); return; }
+  const name = nameInput.value.trim();
+  const sport = sportSelect.value;
+  const suburb = suburbInput.value.trim();
 
-  const teams = LS.getTeams();
-  const dupe = teams.find(t => t.name.toLowerCase() === name.toLowerCase() && t.sport === sport);
-  if (dupe) {
-    showToast(`❌ Error: This team already exists under SKU ${dupe.id}.`, 'error');
+  if (!name) {
+    alert('Please enter a team name.');
     return;
   }
 
-  const team = { id: nextTeamId(), name, sport, suburb };
-  teams.push(team);
-  LS.setTeams(teams);
+  const teams = getTeams();
+  
+  // Poka-Yoke duplicate matching rule
+  const duplicate = teams.find(t => t.name.toLowerCase() === name.toLowerCase() && t.sport === sport);
+  if (duplicate) {
+    alert(`Error: This team already exists under SKU [${duplicate.id}].`);
+    return;
+  }
 
-  // Clear form
-  document.getElementById('teamName').value  = '';
-  document.getElementById('teamSport').value = '';
-  document.getElementById('teamSuburb').value = '';
+  const id = 'T' + String(teams.length + 1).padStart(3, '0');
+  teams.push({ id, name, sport, suburb });
+  saveTeams(teams);
 
-  showToast(`✅ Team ${team.id} "${team.name}" added.`, 'success');
+  nameInput.value = '';
+  suburbInput.value = '';
+
   renderTeams();
   refreshTeamDropdowns();
 }
 
 function deleteTeam(id) {
-  if (!confirm(`Delete team ${id}? This won't remove historical match data.`)) return;
-  LS.setTeams(LS.getTeams().filter(t => t.id !== id));
+  let teams = getTeams();
+  teams = teams.filter(t => t.id !== id);
+  saveTeams(teams);
   renderTeams();
   refreshTeamDropdowns();
-  showToast(`Team ${id} deleted.`, 'info');
 }
 
 function renderTeams() {
-  const teams = LS.getTeams();
-  const tbody = document.getElementById('teamsBody');
-  document.getElementById('teamCount').textContent = `${teams.length} team${teams.length !== 1 ? 's' : ''}`;
+  const teams = getTeams();
+  const tbody = document.getElementById('teams-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = '';
 
-  if (!teams.length) {
-    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No teams registered yet.</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = teams.map(t => `
-    <tr>
-      <td><span class="sku-chip">${t.id}</span></td>
-      <td>${escHtml(t.name)}</td>
-      <td>${sportLabel(t.sport)}</td>
-      <td>${escHtml(t.suburb)}</td>
-      <td><button class="delete-btn" onclick="deleteTeam('${t.id}')">Delete</button></td>
-    </tr>
-  `).join('');
+  teams.forEach(t => {
+    const sportLabel = SPORTS[t.sport]?.label || t.sport;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="sku-badge">${t.id}</span></td>
+      <td><strong>${t.name}</strong></td>
+      <td>${sportLabel}</td>
+      <td>${t.suburb || '—'}</td>
+      <td><button class="btn btn--danger btn--xs" onclick="deleteTeam('${t.id}')">Delete</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
 function refreshTeamDropdowns() {
-  const teams = LS.getTeams();
   const sport = document.getElementById('sportSelect').value;
-  const filtered = sport ? teams.filter(t => t.sport === sport) : teams;
+  const homeSelect = document.getElementById('homeTeamSelect');
+  const awaySelect = document.getElementById('awayTeamSelect');
 
-  ['homeTeamSelect', 'awayTeamSelect'].forEach(id => {
-    const sel = document.getElementById(id);
-    const cur = sel.value;
-    sel.innerHTML = '<option value="">— Select Team —</option>' +
-      filtered.map(t => `<option value="${t.id}" ${t.id === cur ? 'selected' : ''}>${t.name} (${t.id})</option>`).join('');
-  });
+  if (!homeSelect || !awaySelect) return;
+
+  const teams = getTeams().filter(t => t.sport === sport);
+
+  const generateOptions = (selectEl) => {
+    selectEl.innerHTML = '<option value="">— Select Team —</option>';
+    teams.forEach(t => {
+      selectEl.innerHTML += `<option value="${t.id}">${t.name} (${t.id})</option>`;
+    });
+  };
+
+  generateOptions(homeSelect);
+  generateOptions(awaySelect);
 }
 
-/* ══════════════════════════════════════════════════════════════
-   PRODUCTS MODULE
-══════════════════════════════════════════════════════════════ */
+/* ──────────────────────────────────────────────────────────────
+   CANTEEN PRODUCTS LOGIC (FIXED FOR STOCK QUANTITY)
+────────────────────────────────────────────────────────────── */
+function getProducts() {
+  return JSON.parse(localStorage.getItem('ac_products')) || [];
+}
+
+function saveProducts(products) {
+  localStorage.setItem('ac_products', JSON.stringify(products));
+}
+
 function addProduct() {
-  const name   = document.getElementById('productName').value.trim();
-  const size   = document.getElementById('productSize').value.trim();
-  const cost   = parseFloat(document.getElementById('productCost').value);
-  const retail = parseFloat(document.getElementById('productRetail').value);
+  const nameInput = document.getElementById('productName');
+  const sizeInput = document.getElementById('productSize');
+  const costInput = document.getElementById('productCost');
+  const retailInput = document.getElementById('productRetail');
+  const stockInput = document.getElementById('productStock'); // 读取新增加的初始库存框
 
-  if (!name || !size || isNaN(cost) || isNaN(retail)) {
-    showToast('⚠ Fill in all product fields.', 'error'); return;
-  }
+  const name = nameInput.value.trim();
+  const size = sizeInput.value.trim();
+  const cost = parseFloat(costInput.value) || 0;
+  const retail = parseFloat(retailInput.value) || 0;
+  const initialStock = parseInt(stockInput.value) || 0; // 转换为整数
 
-  const products = LS.getProducts();
-
-  // Strict SKU variant logic
-  const exactDupe = products.find(
-    p => p.name.toLowerCase() === name.toLowerCase() && p.size.toLowerCase() === size.toLowerCase()
-  );
-  if (exactDupe) {
-    showToast(`❌ Duplicate: "${name} ${size}" already exists as ${exactDupe.id}.`, 'error');
+  if (!name) {
+    alert('Please enter a product name.');
     return;
   }
 
-  // Different size or cost = new variant (new SKU, info only)
-  const sameNameDiffSize = products.find(p => p.name.toLowerCase() === name.toLowerCase());
-  const prod = { id: nextProductId(), name, size, cost, retail };
-  products.push(prod);
-  LS.setProducts(products);
+  const products = getProducts();
 
-  document.getElementById('productName').value  = '';
-  document.getElementById('productSize').value  = '';
-  document.getElementById('productCost').value  = '';
-  document.getElementById('productRetail').value = '';
-
-  if (sameNameDiffSize) {
-    showToast(`✅ New variant ${prod.id} added for "${name}" (${size}).`, 'success');
-  } else {
-    showToast(`✅ Product ${prod.id} "${name}" added.`, 'success');
+  // Multi-Variant Rule: block only if both name and size are identical
+  const duplicate = products.find(p => p.name.toLowerCase() === name.toLowerCase() && p.size.toLowerCase() === size.toLowerCase());
+  if (duplicate) {
+    alert(`Error: Product variant with size ${size} already exists under SKU [${duplicate.id}].`);
+    return;
   }
+
+  const id = 'P' + String(products.length + 1).padStart(3, '0');
+  products.push({ 
+    id, 
+    name, 
+    size, 
+    cost, 
+    retail, 
+    initialStock: initialStock, // 完美记录初始库存
+    currentStock: initialStock  // 新建时当前库存等于初始库存
+  });
+  
+  saveProducts(products);
+
+  nameInput.value = '';
+  sizeInput.value = '';
+  costInput.value = '';
+  retailInput.value = '';
+  stockInput.value = '0';
+
   renderProducts();
+  // 如果比赛正在进行，同步更新销售控制板
+  if (state.match) {
+    renderCanteenControls();
+  }
 }
 
 function deleteProduct(id) {
-  if (!confirm(`Delete product ${id}?`)) return;
-  LS.setProducts(LS.getProducts().filter(p => p.id !== id));
+  let products = getProducts();
+  products = products.filter(p => p.id !== id);
+  saveProducts(products);
   renderProducts();
-  showToast(`Product ${id} deleted.`, 'info');
+  if (state.match) {
+    renderCanteenControls();
+  }
 }
 
 function renderProducts() {
-  const products = LS.getProducts();
-  const tbody = document.getElementById('productsBody');
-  document.getElementById('productCount').textContent = `${products.length} product${products.length !== 1 ? 's' : ''}`;
+  const products = getProducts();
+  const tbody = document.getElementById('products-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = '';
 
-  if (!products.length) {
-    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No products registered yet.</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = products.map(p => {
+  products.forEach(p => {
     const margin = p.retail - p.cost;
-    const pct = ((margin / p.cost) * 100).toFixed(0);
-    return `
-    <tr>
-      <td><span class="sku-chip">${p.id}</span></td>
-      <td>${escHtml(p.name)}</td>
-      <td>${escHtml(p.size)}</td>
+    const marginPct = p.retail > 0 ? Math.round((margin / p.retail) * 100) : 0;
+    
+    // 获取当前可用库存（处理未定义老数据的兼容fallback）
+    const initialStock = p.initialStock !== undefined ? p.initialStock : '—';
+    const currentStock = p.currentStock !== undefined ? p.currentStock : '—';
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="sku-badge">${p.id}</span></td>
+      <td><strong>${p.name}</strong></td>
+      <td>${p.size || '—'}</td>
       <td>$${p.cost.toFixed(2)}</td>
       <td>$${p.retail.toFixed(2)}</td>
-      <td><span class="margin-chip">+$${margin.toFixed(2)} (${pct}%)</span></td>
-      <td><button class="delete-btn" onclick="deleteProduct('${p.id}')">Delete</button></td>
-    </tr>`;
-  }).join('');
+      <td><span class="text--success">+$${margin.toFixed(2)} (${marginPct}%)</span></td>
+      <td>${initialStock}</td>
+      <td id="stock-td-${p.id}" style="${currentStock <= 0 && currentStock !== '—' ? 'color: #ff4d4d; font-weight:bold;' : ''}">${currentStock}</td>
+      <td><button class="btn btn--danger btn--xs" onclick="deleteProduct('${p.id}')">Delete</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
-/* ══════════════════════════════════════════════════════════════
-   SCORING BUTTONS — render dynamic buttons per sport
-══════════════════════════════════════════════════════════════ */
-function buildScoringButtons(sport, side) {
-  const cfg = SPORTS[sport];
-  if (!cfg) return '';
-  return cfg[side].map(btn => `
-    <button
-      class="score-btn score-btn--${side}"
-      onclick="handleScore('${side}', '${btn.key}', ${btn.value || 0}${btn.inc ? `, true` : ''})"
-    >${btn.label}</button>
-  `).join('');
+/* ──────────────────────────────────────────────────────────────
+   SCOREBOARD & LIVE MATCH LOGIC + LIVE POS WIDGET
+────────────────────────────────────────────────────────────── */
+function getMatches() {
+  return JSON.parse(localStorage.getItem('ac_matches')) || [];
 }
 
-/* ══════════════════════════════════════════════════════════════
-   MATCH MODULE
-══════════════════════════════════════════════════════════════ */
-function startMatch() {
-  const sport     = document.getElementById('sportSelect').value;
-  const date      = document.getElementById('matchDate').value;
-  const time      = document.getElementById('matchTime').value;
-  const tempRaw   = document.getElementById('weatherTemp').value;
-  const homeId    = document.getElementById('homeTeamSelect').value;
-  const awayId    = document.getElementById('awayTeamSelect').value;
-  const status    = document.getElementById('matchStatus').value;
-  const notes     = document.getElementById('matchNotes').value.trim();
-  const temp      = parseFloat(tempRaw);
+function saveMatches(matches) {
+  localStorage.setItem('ac_matches', JSON.stringify(matches));
+}
 
-  if (!sport || !date || !homeId || !awayId) {
-    showToast('⚠ Select sport, date, home & away teams.', 'error'); return;
-  }
-  if (homeId === awayId) {
-    showToast('⚠ Home and Away teams must be different.', 'error'); return;
-  }
+function getSales() {
+  return JSON.parse(localStorage.getItem('ac_sales')) || [];
+}
 
-  const teams     = LS.getTeams();
-  const homeTeam  = teams.find(t => t.id === homeId);
-  const awayTeam  = teams.find(t => t.id === awayId);
-  const cfg       = SPORTS[sport];
+function saveSales(sales) {
+  localStorage.setItem('ac_sales', JSON.stringify(sales));
+}
 
-  // ── EXTREME HEAT CHECK ─────────────────────────────────────
-  if (!isNaN(temp) && temp >= 40) {
-    triggerHeatPolicy(temp);
+// 【新增控制函数】：赛场激活时动态拉出 Canteen 商品
+function renderCanteenControls() {
+  const livesalesWidget = document.getElementById('livesales-widget');
+  if (!livesalesWidget) return;
+  
+  const products = getProducts();
+  livesalesWidget.innerHTML = '';
 
-    state.match = {
-      id:       nextMatchId(),
-      sport, date, time,
-      weather:  temp,
-      homeId, awayId,
-      homeScore: cfg.initScore(),
-      awayScore: cfg.initScore(),
-      status:   'Cancelled',
-      notes:    'Cancelled due to National Heat Policy. Re-match pending.',
-      cancelled: true,
-    };
-
-    renderLivePanel(sport, homeTeam, awayTeam, true);
+  if (products.length === 0) {
+    livesalesWidget.innerHTML = '<p style="color: #666; font-style: italic;">No products defined in Canteen Catalogue.</p>';
     return;
   }
 
-  state.match = {
-    id:       nextMatchId(),
-    sport, date, time,
-    weather:  isNaN(temp) ? null : temp,
-    homeId, awayId,
-    homeScore: cfg.initScore(),
-    awayScore: cfg.initScore(),
-    status,
-    notes,
-    cancelled: false,
-  };
+  products.forEach((product) => {
+    const itemRow = document.createElement('div');
+    itemRow.style.cssText = "display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding: 8px 0;";
 
-  renderLivePanel(sport, homeTeam, awayTeam, false);
-  generateForecast(homeId, awayId);
-}
+    const nameSpan = document.createElement('span');
+    nameSpan.innerHTML = `<strong>${product.name}</strong> <small style="color:#aaa;">(${product.size || 'Size N/A'})</small>`;
 
-function renderLivePanel(sport, homeTeam, awayTeam, cancelled) {
-  const panel = document.getElementById('livePanel');
-  panel.classList.remove('hidden');
+    const stockSpan = document.createElement('span');
+    const currStock = product.currentStock !== undefined ? product.currentStock : product.initialStock;
+    stockSpan.innerHTML = `Stock: <span style="color:#ffc107; font-weight:bold;">${currStock}</span>`;
 
-  // Team names on board
-  document.getElementById('homeName').textContent = homeTeam.name;
-  document.getElementById('awayName').textContent = awayTeam.name;
-  document.getElementById('homeLabel').textContent = homeTeam.name.toUpperCase();
-  document.getElementById('awayLabel').textContent = awayTeam.name.toUpperCase();
-  document.getElementById('sportChip').textContent = SPORTS[sport].label;
+    const sellButton = document.createElement('button');
+    sellButton.className = "btn btn--primary btn--xs";
+    sellButton.style.padding = "4px 10px";
+    sellButton.textContent = '+1 Sold';
 
-  updateScoreDisplay();
-
-  // Scoring buttons
-  document.getElementById('homeBtns').innerHTML = buildScoringButtons(sport, 'home');
-  document.getElementById('awayBtns').innerHTML = buildScoringButtons(sport, 'away');
-
-  // Canteen sales form
-  buildCanteenSalesForm(cancelled);
-
-  // Scroll to live panel
-  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function handleScore(side, key, value, isIncrement = false) {
-  if (!state.match || state.match.cancelled) return;
-  const cfg = SPORTS[state.match.sport];
-  const scoreObj = side === 'home' ? state.match.homeScore : state.match.awayScore;
-
-  if (state.match.sport === 'cricket') {
-    if (key === 'wickets' && isIncrement) {
-      scoreObj.wickets = Math.min((scoreObj.wickets || 0) + 1, 10);
-    } else if (key === 'dotballs') {
-      scoreObj.dotballs = (scoreObj.dotballs || 0) + 1;
-      scoreObj.overs = parseFloat(((scoreObj.overs || 0) + (1 / 6)).toFixed(2));
+    // 智能化 Poka-Yoke：缺货拦截
+    if (currStock <= 0) {
+      sellButton.className = "btn btn--ghost btn--xs";
+      sellButton.style.color = "#666";
+      sellButton.style.borderColor = "#333";
+      sellButton.textContent = 'Out of Stock';
+      sellButton.disabled = true;
     } else {
-      scoreObj.runs = (scoreObj.runs || 0) + value;
+      sellButton.addEventListener('click', () => logLiveSale(product.id));
     }
-  } else if (state.match.sport === 'afl') {
-    scoreObj[key] = (scoreObj[key] || 0) + value;
-    cfg.calcScore(scoreObj);
-  } else {
-    scoreObj[key] = (scoreObj[key] || 0) + value;
+
+    itemRow.appendChild(nameSpan);
+    itemRow.appendChild(stockSpan);
+    itemRow.appendChild(sellButton);
+    livesalesWidget.appendChild(itemRow);
+  });
+}
+
+// 【新增点单逻辑】：点一下不仅实时扣库存，还会把记录追加到当前的 sales 流水里
+function logLiveSale(productId) {
+  if (!state.match) return;
+
+  // 1. 扣减主档当前可用库存
+  const products = getProducts();
+  const pIndex = products.findIndex(p => p.id === productId);
+  if (pIndex !== -1) {
+    if (products[pIndex].currentStock > 0) {
+      products[pIndex].currentStock -= 1;
+      saveProducts(products);
+      renderProducts(); // 刷新 Canteen 面板数据
+      renderCanteenControls(); // 刷新赛场实时 POS 面板数据
+    }
   }
 
-  updateScoreDisplay();
-
-  // Pop animation
-  const el = document.getElementById(side === 'home' ? 'homeScoreMain' : 'awayScoreMain');
-  el.classList.remove('score-pop');
-  void el.offsetWidth; // reflow
-  el.classList.add('score-pop');
+  // 2. 将这笔账记录到销售日志 (Sales Log) 绑定当前 match_id
+  const sales = getSales();
+  const salesId = 'S' + String(Date.now()) + String(Math.floor(Math.random() * 100));
+  
+  sales.push({
+    sales_id: salesId,
+    match_id: state.match.match_id,
+    product_id: productId,
+    quantity: 1
+  });
+  saveSales(sales);
 }
 
-function updateScoreDisplay() {
+function startMatch() {
+  const sport = document.getElementById('sportSelect').value;
+  const date = document.getElementById('matchDate').value;
+  const time = document.getElementById('matchTime').value;
+  const temp = parseInt(document.getElementById('matchTemp').value) || 25;
+  const homeId = document.getElementById('homeTeamSelect').value;
+  const awayId = document.getElementById('awayTeamSelect').value;
+  const status = document.getElementById('matchStatus').value;
+  let notes = document.getElementById('matchNotes').value.trim();
+
+  if (!homeId || !awayId) {
+    alert('Please select both home and away teams.');
+    return;
+  }
+  if (homeId === awayId) {
+    alert('Home and Away teams must be different.');
+    return;
+  }
+
+  const teams = getTeams();
+  const homeTeam = teams.find(t => t.id === homeId);
+  const awayTeam = teams.find(t => t.id === awayId);
+
+  const matchId = 'M' + String(Date.now()).slice(-6);
+
+  // Core Compliance Rule: Extreme Heat Policy Trigger
+  let finalStatus = status;
+  if (temp >= 40) {
+    alert('⚠️ EXTREME HEAT POLICY TRIGGERED\n\nTemperature is 40°C or higher. National Safety Framework enforces immediate cancellation. Scores forced to 0.');
+    finalStatus = 'Cancelled';
+    notes = `Cancelled due to National Heat Policy. Re-match pending. ${notes}`.trim();
+  }
+
+  const sportConfig = SPORTS[sport];
+  
+  state.match = {
+    match_id: matchId,
+    date,
+    time,
+    weather_temp_c: temp,
+    sport_type: sport,
+    home_team_id: homeId,
+    away_team_id: awayId,
+    homeTeamName: homeTeam.name,
+    awayTeamName: awayTeam.name,
+    homeScoreState: sportConfig.initScore(),
+    awayScoreState: sportConfig.initScore(),
+    status: finalStatus,
+    notes: notes
+  };
+
+  // UI Updates
+  document.getElementById('homeName').textContent = homeTeam.name;
+  document.getElementById('awayName').textContent = awayTeam.name;
+  
+  document.getElementById('matchSetupForm').classList.add('hidden');
+  document.getElementById('livePanel').classList.remove('hidden');
+
+  updateScoreboardDisplay();
+  renderCanteenControls(); // *** 完美合体：比赛开始后，瞬间调出商品销售按钮组 ***
+
+  // If heat cancelled, lock controls instantly
+  if (finalStatus === 'Cancelled') {
+    saveMatch();
+  } else {
+    renderScoringButtons();
+  }
+}
+
+function renderScoringButtons() {
+  const container = document.getElementById('scoring-actions-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const config = SPORTS[state.match.sport_type];
+
+  const makeColumn = (title, buttons, isHome) => {
+    const col = document.createElement('div');
+    col.className = 'scoring-col';
+    col.innerHTML = `<h3 class="team-title-sub">${title}</h3>`;
+    
+    buttons.forEach(b => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn--secondary btn--sm btn--full mb-2';
+      btn.textContent = b.label;
+      btn.addEventListener('click', () => {
+        const scoreState = isHome ? state.match.homeScoreState : state.match.awayScoreState;
+        scoreState[b.key] = (scoreState[b.key] || 0) + b.value;
+        if (config.calcScore) {
+          isHome ? state.match.homeScoreState = config.calcScore(scoreState, b.value, b.label) : state.match.awayScoreState = config.calcScore(scoreState, b.value, b.label);
+        }
+        updateScoreboardDisplay();
+      });
+      col.appendChild(btn);
+    });
+    return col;
+  };
+
+  container.appendChild(makeColumn(state.match.homeTeamName, config.home, true));
+  container.appendChild(makeColumn(state.match.awayTeamName, config.away, false));
+}
+
+function updateScoreboardDisplay() {
   if (!state.match) return;
-  const sport = state.match.sport;
-  const cfg   = SPORTS[sport];
+  const config = SPORTS[state.match.sport_type];
 
-  const hMain = document.getElementById('homeScoreMain');
-  const aMain = document.getElementById('awayScoreMain');
-  const hDetail = document.getElementById('homeScoreDetail');
-  const aDetail = document.getElementById('awayScoreDetail');
+  const homeMain = config.displayMain(state.match.homeScoreState);
+  const homeDetail = config.displayDetail(state.match.homeScoreState);
+  const awayMain = config.displayMain(state.match.awayScoreState);
+  const awayDetail = config.displayDetail(state.match.awayScoreState);
 
-  hMain.textContent   = cfg.displayMain(state.match.homeScore);
-  aMain.textContent   = cfg.displayMain(state.match.awayScore);
-  hDetail.textContent = cfg.displayDetail(state.match.homeScore);
-  aDetail.textContent = cfg.displayDetail(state.match.awayScore);
-}
-
-function resetMatch() {
-  if (!confirm('Reset current match? Unsaved data will be lost.')) return;
-  state.match = null;
-  document.getElementById('livePanel').classList.add('hidden');
-  document.getElementById('sportSelect').value = '';
-  document.getElementById('matchDate').value = '';
-  document.getElementById('matchTime').value = '';
-  document.getElementById('weatherTemp').value = '';
-  document.getElementById('matchNotes').value = '';
-  document.getElementById('matchStatus').value = 'Completed';
-  showToast('Match reset.', 'info');
+  document.getElementById('homeScoreMain').textContent = homeMain;
+  document.getElementById('homeScoreDetail').textContent = homeDetail;
+  document.getElementById('awayScoreMain').textContent = awayMain;
+  document.getElementById('awayScoreDetail').textContent = awayDetail;
 }
 
 function saveMatch() {
-  if (!state.match) { showToast('No active match to save.', 'error'); return; }
+  if (!state.match) return;
+  
+  const matches = getMatches();
+  const config = SPORTS[state.match.sport_type];
 
-  const cfg     = SPORTS[state.match.sport];
-  const matches = LS.getMatches();
-  const sales   = LS.getSales();
+  // Final flat extraction string formatted for CSV
+  const finalHomeScore = config.displayMain(state.match.homeScoreState);
+  const finalAwayScore = config.displayMain(state.match.awayScoreState);
 
-  // Final score numbers (simple)
-  const homeScore = cfg.displayMain(state.match.homeScore);
-  const awayScore = cfg.displayMain(state.match.awayScore);
-
-  const matchRecord = {
-    match_id:       state.match.id,
-    date:           state.match.date,
-    time:           state.match.time,
-    weather_temp_c: state.match.weather ?? '',
-    sport_type:     state.match.sport,
-    home_team_id:   state.match.homeId,
-    away_team_id:   state.match.awayId,
-    home_score:     state.match.cancelled ? 0 : homeScore,
-    away_score:     state.match.cancelled ? 0 : awayScore,
-    status:         state.match.status,
-    notes:          state.match.notes,
+  const savedRecord = {
+    match_id: state.match.match_id,
+    date: state.match.date,
+    time: state.match.time,
+    weather_temp_c: state.match.weather_temp_c,
+    sport_type: state.match.sport_type,
+    home_team_id: state.match.home_team_id,
+    away_team_id: state.match.away_team_id,
+    home_score: finalHomeScore,
+    away_score: finalAwayScore,
+    status: state.match.status === 'Cancelled' ? 'Cancelled' : 'Completed',
+    notes: state.match.notes
   };
 
-  matches.push(matchRecord);
-  LS.setMatches(matches);
+  matches.push(savedRecord);
+  saveMatches(matches);
 
-  // Canteen sales — force 0 if cancelled
-  const products = LS.getProducts();
-  products.forEach(p => {
-    const qty = state.match.cancelled ? 0 : getSalesQty(p.id);
-    const saleId = nextSalesId();
-    // Re-read latest sales to avoid ID collision
-    const freshSales = LS.getSales();
-    freshSales.push({
-      sales_id:   'S' + String(freshSales.length + 1).padStart(4, '0'),
-      match_id:   state.match.id,
-      product_id: p.id,
-      quantity:   qty,
-    });
-    LS.setSales(freshSales);
-  });
-
-  showToast(`✅ Match ${state.match.id} saved successfully!`, 'success');
-
-  state.match = null;
-  document.getElementById('livePanel').classList.add('hidden');
+  alert('Match logged successfully into LocalStorage.');
+  resetMatch();
 }
 
-function getSalesQty(productId) {
-  const input = document.getElementById(`sale-${productId}`);
-  const val   = input ? parseInt(input.value, 10) : 0;
-  return isNaN(val) || val < 0 ? 0 : val;
+function resetMatch() {
+  state.match = null;
+  document.getElementById('livePanel').classList.add('hidden');
+  document.getElementById('matchSetupForm').classList.remove('hidden');
+  document.getElementById('matchNotes').value = '';
+  setDefaults();
+}
+
+function setDefaults() {
+  const dInput = document.getElementById('matchDate');
+  const tInput = document.getElementById('matchTime');
+  if (!dInput || !tInput) return;
+
+  const now = new Date();
+  dInput.value = now.toISOString().split('T')[0];
+  tInput.value = now.toTimeString().split(' ')[0].slice(0, 5);
 }
 
 /* ──────────────────────────────────────────────────────────────
-   CANTEEN SALES FORM
+   DATA MANAGEMENT VIEWS (IMPORT / EXPORT FLAT RELATIONAL CSV)
 ────────────────────────────────────────────────────────────── */
-function buildCanteenSalesForm(cancelled) {
-  const products = LS.getProducts();
-  const container = document.getElementById('canteenSalesForm');
-
-  if (!products.length) {
-    container.innerHTML = '<p class="muted">No products in catalogue. Add products in the Canteen tab.</p>';
-    return;
-  }
-
-  container.innerHTML = products.map(p => `
-    <div class="canteen-sales-item">
-      <div class="canteen-sales-item__name">${escHtml(p.name)} · ${escHtml(p.size)}</div>
-      <div class="canteen-sales-item__sku">${p.id} · $${p.retail.toFixed(2)}</div>
-      <input
-        type="number"
-        id="sale-${p.id}"
-        value="0"
-        min="0"
-        placeholder="Qty sold"
-        ${cancelled ? 'disabled title="Cancelled match — sales forced to 0"' : ''}
-      />
-    </div>
-  `).join('');
-}
-
-/* ══════════════════════════════════════════════════════════════
-   DEMAND FORECAST ENGINE
-══════════════════════════════════════════════════════════════ */
-function generateForecast(homeId, awayId) {
-  const matches  = LS.getMatches();
-  const sales    = LS.getSales();
-  const products = LS.getProducts();
-  const panel    = document.getElementById('forecastPanel');
-  const content  = document.getElementById('forecastContent');
-
-  // Filter completed matches between these two teams (either direction)
-  const relevant = matches.filter(m =>
-    m.status === 'Completed' &&
-    ((m.home_team_id === homeId && m.away_team_id === awayId) ||
-     (m.home_team_id === awayId && m.away_team_id === homeId))
+function convertToCSV(objArray) {
+  if (objArray.length === 0) return '';
+  const headers = Object.keys(objArray[0]).join(',');
+  const rows = objArray.map(obj => 
+    Object.values(obj).map(val => {
+      let str = String(val);
+      if (str.includes(',')) str = `"${str}"`; // escape commas
+      return str;
+    }).join(',')
   );
+  return [headers, ...rows].join('\n');
+}
 
-  if (!relevant.length) {
-    content.innerHTML = '<p class="muted">No historical completed matchups found for these teams. Stock levels are up to you!</p>';
+function downloadCSV(filename, csvData) {
+  if (!csvData) {
+    alert('No data available to export.');
     return;
   }
-
-  const matchIds = relevant.map(m => m.match_id);
-
-  // Average sales per product across historical matchups
-  if (!products.length) {
-    content.innerHTML = '<p class="muted">Add products to the catalogue to enable forecasting.</p>';
-    return;
-  }
-
-  const rows = products.map(p => {
-    const historicalSales = sales.filter(s => matchIds.includes(s.match_id) && s.product_id === p.id);
-    const total = historicalSales.reduce((sum, s) => sum + (parseInt(s.quantity, 10) || 0), 0);
-    const avg   = historicalSales.length ? total / historicalSales.length : 0;
-    const recommended = Math.ceil(avg * 1.2); // 20% safety stock
-    return { product: p, avg, recommended };
-  });
-
-  content.innerHTML = `
-    <p style="color:var(--text-secondary); margin-bottom: var(--sp-4);">
-      Based on <strong style="color:var(--accent)">${relevant.length}</strong> historical completed matchup${relevant.length !== 1 ? 's' : ''},
-      recommended stock for today (incl. 20% safety buffer):
-    </p>
-    ${rows.map(r => `
-      <div class="forecast-item">
-        <span class="forecast-item__sku">${r.product.id}</span>
-        <span class="forecast-item__name">${escHtml(r.product.name)} · ${escHtml(r.product.size)}</span>
-        <div>
-          <div class="forecast-item__qty">${r.recommended}</div>
-          <div class="forecast-item__unit">units</div>
-        </div>
-      </div>
-    `).join('')}
-    <p class="forecast-meta">Algorithm: avg(${relevant.length} games) × 1.2× safety stock coefficient</p>
-  `;
+  const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.setAttribute('download', filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
-/* ══════════════════════════════════════════════════════════════
-   HEAT POLICY
-══════════════════════════════════════════════════════════════ */
-function triggerHeatPolicy(temp) {
-  document.getElementById('heatTemp').textContent = temp;
-  document.getElementById('heatOverlay').classList.remove('hidden');
-  document.getElementById('matchStatus').value = 'Cancelled';
-  document.getElementById('matchNotes').value = 'Cancelled due to National Heat Policy. Re-match pending.';
-}
-
-document.getElementById('heatOkBtn').addEventListener('click', () => {
-  document.getElementById('heatOverlay').classList.add('hidden');
-});
-
-/* ══════════════════════════════════════════════════════════════
-   HISTORY
-══════════════════════════════════════════════════════════════ */
-function renderHistory() {
-  const matches  = LS.getMatches();
-  const teams    = LS.getTeams();
-  const tbody    = document.getElementById('matchesBody');
-  document.getElementById('matchCount').textContent = `${matches.length} match${matches.length !== 1 ? 'es' : ''}`;
-
-  if (!matches.length) {
-    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No matches recorded yet.</td></tr>';
-    return;
-  }
-
-  const teamName = (id) => { const t = teams.find(t => t.id === id); return t ? t.name : id; };
-
-  tbody.innerHTML = [...matches].reverse().map(m => `
-    <tr>
-      <td><span class="sku-chip">${m.match_id}</span></td>
-      <td>${m.date}</td>
-      <td>${sportLabel(m.sport_type)}</td>
-      <td>${escHtml(teamName(m.home_team_id))}</td>
-      <td>${escHtml(teamName(m.away_team_id))}</td>
-      <td><strong>${m.home_score}</strong> – <strong>${m.away_score}</strong></td>
-      <td>${m.weather_temp_c !== '' ? m.weather_temp_c + '°C' : '—'}</td>
-      <td><span class="status-chip status-chip--${m.status.toLowerCase()}">${m.status}</span></td>
-      <td><button class="delete-btn" onclick="deleteMatch('${m.match_id}')">Delete</button></td>
-    </tr>
-  `).join('');
-}
-
-function deleteMatch(id) {
-  if (!confirm(`Delete match ${id} and all related sales records?`)) return;
-  LS.setMatches(LS.getMatches().filter(m => m.match_id !== id));
-  LS.setSales(LS.getSales().filter(s => s.match_id !== id));
-  renderHistory();
-  showToast(`Match ${id} deleted.`, 'info');
-}
-
-/* ══════════════════════════════════════════════════════════════
-   CSV EXPORT
-══════════════════════════════════════════════════════════════ */
-function csvRow(vals) { return vals.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(','); }
-
-function downloadCSV(filename, header, rows) {
-  const csv = [header.join(','), ...rows].join('\n');
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href  = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast(`📥 ${filename} downloaded!`, 'success');
-}
-
-function exportMatches() {
-  const header = ['match_id','date','time','weather_temp_c','sport_type','home_team_id','away_team_id','home_score','away_score','status','notes'];
-  const rows   = LS.getMatches().map(m => csvRow([m.match_id,m.date,m.time,m.weather_temp_c,m.sport_type,m.home_team_id,m.away_team_id,m.home_score,m.away_score,m.status,m.notes]));
-  downloadCSV('matches.csv', header, rows);
-}
-
-function exportSales() {
-  const header = ['sales_id','match_id','product_id','quantity'];
-  const rows   = LS.getSales().map(s => csvRow([s.sales_id, s.match_id, s.product_id, s.quantity]));
-  downloadCSV('sales.csv', header, rows);
-}
-
-function exportTeams() {
-  const header = ['team_id','team_name','sport_type','suburb'];
-  const rows   = LS.getTeams().map(t => csvRow([t.id, t.name, t.sport, t.suburb]));
-  downloadCSV('teams.csv', header, rows);
-}
-
-function exportProducts() {
-  const header = ['product_id','product_name','size','cost_price','retail_price'];
-  const rows   = LS.getProducts().map(p => csvRow([p.id, p.name, p.size, p.cost, p.retail]));
-  downloadCSV('products.csv', header, rows);
-}
+function exportMatches() { downloadCSV('matches.csv', convertToCSV(getMatches())); }
+function exportSales() { downloadCSV('sales.csv', convertToCSV(getSales())); }
+function exportTeams() { downloadCSV('teams.csv', convertToCSV(getTeams())); }
+function exportProducts() { downloadCSV('products.csv', convertToCSV(getProducts())); }
 
 function clearAllData() {
-  if (!confirm('⚠ This will permanently erase ALL data (teams, products, matches, sales). Are you absolutely sure?')) return;
-  if (!confirm('Last chance — this cannot be undone. Erase everything?')) return;
-  ['ausclub_teams','ausclub_products','ausclub_matches','ausclub_sales'].forEach(k => localStorage.removeItem(k));
-  state.match = null;
-  document.getElementById('livePanel').classList.add('hidden');
-  renderTeams();
-  renderProducts();
-  renderHistory();
-  refreshTeamDropdowns();
-  showToast('All data cleared.', 'info');
+  if (confirm('Are you absolutely sure you want to purge all local records? This cannot be undone.')) {
+    localStorage.clear();
+    init();
+    alert('LocalStorage scrubbed clean.');
+  }
 }
 
-/* ──────────────────────────────────────────────────────────────
-   UTILS
-────────────────────────────────────────────────────────────── */
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+// 核心增强：CSV 高效双向导入解析引擎 (支持 Device Switching)
+function handleCSVImport(fileInputId, type) {
+  const fileInput = document.getElementById(fileInputId);
+  if (!fileInput || !fileInput.files[0]) {
+    alert('Please choose a valid CSV file first.');
+    return;
+  }
+
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+    const text = e.target.result;
+    const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+    
+    if (lines.length < 2) {
+      alert('Error: Selected file appears to be empty or lacks headers.');
+      return;
+    }
+
+    const headers = lines[0].split(',');
+    const parsedData = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const currentline = lines[i].split(',');
+      if (currentline.length !== headers.length) continue; // Skip corrupted row data safely
+
+      const obj = {};
+      for (let j = 0; j < headers.length; j++) {
+        let val = currentline[j];
+        // Remove enclosing quotes if any
+        if (val.startsWith('"') && val.endsWith('"')) {
+          val = val.slice(1, -1);
+        }
+        // Deduce numeric values automatically
+        if (!isNaN(val) && val.trim() !== '') {
+          obj[headers[j]] = val.includes('.') ? parseFloat(val) : parseInt(val);
+        } else {
+          obj[headers[j]] = val;
+        }
+      }
+      parsedData.push(obj);
+    }
+
+    if (confirm(`Are you sure you want to merge/overwrite imported [${parsedData.length}] data entries into ${type}?`)) {
+      if (type === 'matches') {
+        saveMatches(parsedData);
+      } else if (type === 'sales') {
+        saveSales(parsedData);
+      }
+      alert(`Successfully restored ${type} relational logs into LocalStorage!`);
+      init(); // Hot re-trigger to reload master panels instantly
+    }
+  };
+
+  reader.readAsText(file);
 }
-
-function sportLabel(key) {
-  const m = { afl: 'AFL', cricket: 'Cricket', soccer: 'Soccer', netball: 'Netball/Basketball', rugby: 'Rugby' };
-  return m[key] || key;
-}
-
-/* ──────────────────────────────────────────────────────────────
-   SET DEFAULTS
-────────────────────────────────────────────────────────────── */
-function setDefaults() {
-  const today = new Date();
-  const yyyy  = today.getFullYear();
-  const mm    = String(today.getMonth() + 1).padStart(2, '0');
-  const dd    = String(today.getDate()).padStart(2, '0');
-  document.getElementById('matchDate').value = `${yyyy}-${mm}-${dd}`;
-
-  const hh = String(today.getHours()).padStart(2, '0');
-  const mn = String(today.getMinutes()).padStart(2, '0');
-  document.getElementById('matchTime').value = `${hh}:${mn}`;
-}
-
-/* ──────────────────────────────────────────────────────────────
-   SPORT SELECT CHANGE — filter team dropdowns
-────────────────────────────────────────────────────────────── */
-document.getElementById('sportSelect').addEventListener('change', () => {
-  refreshTeamDropdowns();
-});
 
 /* ──────────────────────────────────────────────────────────────
    WIRE UP EVENT LISTENERS
@@ -778,6 +701,22 @@ function initEventListeners() {
   document.getElementById('exportTeamsBtn').addEventListener('click', exportTeams);
   document.getElementById('exportProductsBtn').addEventListener('click', exportProducts);
   document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
+
+  // Dynamic CSV Imports (绑到 Data 面板上传按钮上)
+  const importMatchesBtn = document.getElementById('importMatchesBtn');
+  const importSalesBtn = document.getElementById('importSalesBtn');
+  
+  if (importMatchesBtn) {
+    importMatchesBtn.addEventListener('click', () => handleCSVImport('importMatchesFile', 'matches'));
+  }
+  if (importSalesBtn) {
+    importSalesBtn.addEventListener('click', () => handleCSVImport('importSalesFile', 'sales'));
+  }
+
+  // Auto filter teams on sport toggle
+  document.getElementById('sportSelect').addEventListener('change', () => {
+    refreshTeamDropdowns();
+  });
 }
 
 /* ──────────────────────────────────────────────────────────────
