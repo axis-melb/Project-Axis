@@ -1,88 +1,106 @@
-/* ═══════════════════════════════════════════════════════════════
-   AusClub Pro — app.js
-   Stable Local Storage Implementation with strict NaN safeguards
-═══════════════════════════════════════════════════════════════ */
-
-'use strict';
-
-const state = { match: null };
-
-/* ── SPORT SCORING CONFIG ──────────── */
-const SPORTS = {
+const SPORT_CONFIG = {
   afl: {
-    label: 'AFL',
-    home: [{ label: 'Goal  +6', value: 6, key: 'goals' }, { label: 'Behind +1', value: 1, key: 'behinds' }],
-    away: [{ label: 'Goal  +6', value: 6, key: 'goals' }, { label: 'Behind +1', value: 1, key: 'behinds' }],
-    initScore: () => ({ goals: 0, behinds: 0, total: 0 }),
-    calcScore: (s) => { s.total = s.goals * 6 + s.behinds; return s; },
-    displayMain: (s) => s.total,
-    displayDetail: (s) => `${s.goals}.${s.behinds}`,
+    name: 'AFL',
+    buttons: [
+      { label: 'Goal (6)', key: 'goals', value: 6, inc: true },
+      { label: 'Behind (1)', key: 'behinds', value: 1, inc: true }
+    ],
+    format: (scores) => `${scores.goals}.${scores.behinds} (${(scores.goals * 6) + scores.behinds})`
   },
   cricket: {
-    label: 'Cricket',
-    home: [{ label: '+1 Run', value: 1, key: 'runs' }, { label: '+4 Runs', value: 4, key: 'runs' }, { label: '+6 Runs', value: 6, key: 'runs' }, { label: 'Wicket', value: 0, key: 'wickets', inc: 1 }, { label: 'Dot Ball', value: 0, key: 'dotballs' }],
-    away: [{ label: '+1 Run', value: 1, key: 'runs' }, { label: '+4 Runs', value: 4, key: 'runs' }, { label: '+6 Runs', value: 6, key: 'runs' }, { label: 'Wicket', value: 0, key: 'wickets', inc: 1 }, { label: 'Dot Ball', value: 0, key: 'dotballs' }],
-    initScore: () => ({ runs: 0, wickets: 0, overs: 0.0, dotballs: 0 }),
-    calcScore: (s) => s,
-    displayMain: (s) => s.runs,
-    displayDetail: (s) => `${s.wickets} wkts · ${s.overs} ovs`,
+    name: 'Cricket',
+    buttons: [
+      { label: 'Run +1', key: 'runs', value: 1, inc: false },
+      { label: 'Four +4', key: 'runs', value: 4, inc: false },
+      { label: 'Six +6', key: 'runs', value: 6, inc: false },
+      { label: 'Wicket', key: 'wickets', value: 1, inc: true }
+    ],
+    format: (scores) => `${scores.runs} / ${scores.wickets}`
   },
   soccer: {
-    label: 'Soccer',
-    home: [{ label: 'Goal  +1', value: 1, key: 'goals' }],
-    away: [{ label: 'Goal  +1', value: 1, key: 'goals' }],
-    initScore: () => ({ goals: 0 }),
-    calcScore: (s) => s,
-    displayMain: (s) => s.goals,
-    displayDetail: () => '',
+    name: 'Soccer',
+    buttons: [{ label: 'Goal +1', key: 'goals', value: 1, inc: false }],
+    format: (scores) => `${scores.goals}`
   },
   netball: {
-    label: 'Netball/Basketball',
-    home: [{ label: '+1 Pt', value: 1, key: 'points' }, { label: '+2 Pts', value: 2, key: 'points' }, { label: '+3 Pts', value: 3, key: 'points' }],
-    away: [{ label: '+1 Pt', value: 1, key: 'points' }, { label: '+2 Pts', value: 2, key: 'points' }, { label: '+3 Pts', value: 3, key: 'points' }],
-    initScore: () => ({ points: 0 }),
-    calcScore: (s) => s,
-    displayMain: (s) => s.points,
-    displayDetail: () => '',
+    name: 'Netball',
+    buttons: [{ label: 'Goal +1', key: 'goals', value: 1, inc: false }],
+    format: (scores) => `${scores.goals}`
   },
   rugby: {
-    label: 'Rugby',
-    home: [{ label: 'Try  +4', value: 4, key: 'points' }, { label: 'Union Try +5', value: 5, key: 'points' }, { label: 'Conversion +2', value: 2, key: 'points' }, { label: 'Drop Goal +3', value: 3, key: 'points' }],
-    away: [{ label: 'Try  +4', value: 4, key: 'points' }, { label: 'Union Try +5', value: 5, key: 'points' }, { label: 'Conversion +2', value: 2, key: 'points' }, { label: 'Drop Goal +3', value: 3, key: 'points' }],
-    initScore: () => ({ points: 0 }),
-    calcScore: (s) => s,
-    displayMain: (s) => s.points,
-    displayDetail: () => '',
-  },
+    name: 'Rugby',
+    buttons: [
+      { label: 'Try (4/5)', key: 'score', value: 5, inc: false }, 
+      { label: 'Conversion (2)', key: 'score', value: 2, inc: false },
+      { label: 'Penalty (3)', key: 'score', value: 3, inc: false }
+    ],
+    format: (scores) => `${scores.score}`
+  }
 };
 
-/* ── LOCALSTORAGE SAFE WRAPPERS ──────── */
 const LS = {
-  get: (key) => { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } },
-  set: (key, val) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) { console.error('LS Error', e); } },
-  getTeams: () => LS.get('ausclub_teams'), setTeams: (v) => LS.set('ausclub_teams', v),
-  getProducts: () => LS.get('ausclub_products'), setProducts: (v) => LS.set('ausclub_products', v),
-  getMatches: () => LS.get('ausclub_matches'), setMatches: (v) => LS.set('ausclub_matches', v),
-  getSales: () => LS.get('ausclub_sales'), setSales: (v) => LS.set('ausclub_sales', v),
+  get: (key) => JSON.parse(localStorage.getItem(key) || '[]'),
+  set: (key, data) => localStorage.setItem(key, JSON.stringify(data)),
+  getTeams: () => LS.get('ausclub_teams'),
+  setTeams: (t) => LS.set('ausclub_teams', t),
+  getProducts: () => LS.get('ausclub_products'),
+  setProducts: (p) => LS.set('ausclub_products', p),
+  getMatches: () => LS.get('ausclub_matches'),
+  setMatches: (m) => LS.set('ausclub_matches', m),
+  getSales: () => LS.get('ausclub_sales'),
+  setSales: (s) => LS.set('ausclub_sales', s)
 };
 
-function nextId(prefix, arr) { return prefix + String(arr.length + 1).padStart(3, '0'); }
+const state = {
+  match: {
+    active: false,
+    id: null,
+    sport: null,
+    homeId: null,
+    awayId: null,
+    homeScores: {},
+    awayScores: {},
+    cancelled: false,
+    salesCounter: {}
+  }
+};
 
-/* ── TOAST NOTIFICATIONS ────────────── */
-let toastTimer;
-function showToast(msg, type = 'info') {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.className = `toast toast--${type} show`;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.classList.remove('show'); }, 3200);
+const escHtml = (str) => {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+};
+
+const generateId = (prefix, nextNum) => `${prefix}${String(nextNum).padStart(3, '0')}`;
+
+const showToast = (msg, type = 'info') => {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = `toast toast--${type} show`;
+  setTimeout(() => toast.classList.remove('show'), 3000);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTabs();
+  bindGlobalEvents();
+  prefillDate();
+  renderTeams();
+  updateTeamSelects();
+  renderProducts();
+  renderHistory();
+});
+
+function prefillDate() {
+  document.getElementById('matchDate').valueAsDate = new Date();
+  const now = new Date();
+  document.getElementById('matchTime').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 }
 
-/* ── TABS ────────────── */
 function initTabs() {
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
-      document.querySelectorAll('.tab-btn, .tab-panel').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById(`tab-${tab}`).classList.add('active');
       if (tab === 'teams') renderTeams();
@@ -92,450 +110,418 @@ function initTabs() {
   });
 }
 
-/* ── TEAMS MODULE ────────────── */
-function addTeam() {
+function bindGlobalEvents() {
+  document.getElementById('addTeamBtn').addEventListener('click', addTeam);
+  document.getElementById('addProductBtn').addEventListener('click', addProduct);
+  document.getElementById('startMatchBtn').addEventListener('click', startMatch);
+  document.getElementById('saveMatchBtn').addEventListener('click', saveMatch);
+  document.getElementById('resetMatchBtn').addEventListener('click', resetMatch);
+  document.getElementById('heatOkBtn').addEventListener('click', () => {
+    document.getElementById('heatOverlay').classList.add('hidden');
+  });
+  document.getElementById('exportMatchesBtn').addEventListener('click', exportMatches);
+  document.getElementById('exportSalesBtn').addEventListener('click', exportSales);
+  document.getElementById('exportTeamsBtn').addEventListener('click', exportTeams);
+  document.getElementById('exportProductsBtn').addEventListener('click', exportProducts);
+  document.getElementById('importMatchesBtn').addEventListener('click', () => handleCSVImport('matches'));
+  document.getElementById('importSalesBtn').addEventListener('click', () => handleCSVImport('sales'));
+  document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
+  document.getElementById('sportSelect').addEventListener('change', updateTeamSelects);
+}
+
+window.addTeam = function() {
   const name = document.getElementById('teamName').value.trim();
   const sport = document.getElementById('teamSport').value;
   const suburb = document.getElementById('teamSuburb').value.trim();
-
-  if (!name || !sport || !suburb) return showToast('⚠ Fill in all team fields.', 'error');
+  
+  if (!name || !sport) return showToast('Name and Sport required.', 'error');
+  
   const teams = LS.getTeams();
-  if (teams.find(t => t.name.toLowerCase() === name.toLowerCase() && t.sport === sport)) return showToast('❌ Team already exists.', 'error');
-
-  const team = { id: nextId('T', teams), name, sport, suburb };
-  teams.push(team); LS.setTeams(teams);
+  const nextNum = teams.length > 0 ? Math.max(...teams.map(t => parseInt(t.id.replace('T','')))) + 1 : 1;
+  const team = { id: generateId('T', nextNum), name, sport, suburb };
+  
+  teams.push(team);
+  LS.setTeams(teams);
   
   document.getElementById('teamName').value = '';
-  document.getElementById('teamSport').value = '';
   document.getElementById('teamSuburb').value = '';
-  showToast(`✅ Team ${team.name} added.`, 'success');
-  renderTeams(); refreshTeamDropdowns();
-}
-
-window.deleteTeam = function(id) {
-  if (!confirm(`Delete team ${id}?`)) return;
-  LS.setTeams(LS.getTeams().filter(t => t.id !== id));
-  renderTeams(); refreshTeamDropdowns();
-  showToast(`Team deleted.`, 'info');
+  
+  renderTeams();
+  updateTeamSelects();
+  showToast(`Team ${team.name} registered.`, 'success');
 };
 
 function renderTeams() {
   const teams = LS.getTeams();
   const tbody = document.getElementById('teamsBody');
   document.getElementById('teamCount').textContent = `${teams.length} teams`;
-  if (!teams.length) return tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No teams found.</td></tr>';
-
+  
+  if (!teams.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No teams registered.</td></tr>';
+    return;
+  }
+  
   tbody.innerHTML = teams.map(t => `
     <tr>
       <td><span class="sku-chip">${t.id}</span></td>
-      <td>${escHtml(t.name)}</td>
-      <td>${t.sport.toUpperCase()}</td>
+      <td><strong>${escHtml(t.name)}</strong></td>
+      <td>${(SPORT_CONFIG[t.sport]?.name || t.sport).toUpperCase()}</td>
       <td>${escHtml(t.suburb)}</td>
       <td><button class="delete-btn" onclick="window.deleteTeam('${t.id}')">Delete</button></td>
-    </tr>`).join('');
+    </tr>
+  `).join('');
 }
 
-function refreshTeamDropdowns() {
-  const teams = LS.getTeams();
+window.deleteTeam = function(id) {
+  if(!confirm('Delete this team?')) return;
+  LS.setTeams(LS.getTeams().filter(t => t.id !== id));
+  renderTeams();
+  updateTeamSelects();
+  showToast('Team deleted', 'info');
+};
+
+function updateTeamSelects() {
   const sport = document.getElementById('sportSelect').value;
-  const filtered = sport ? teams.filter(t => t.sport === sport) : teams;
-  
-  ['homeTeamSelect', 'awayTeamSelect'].forEach(id => {
-    const sel = document.getElementById(id); const cur = sel.value;
-    sel.innerHTML = '<option value="">— Select Team —</option>' + filtered.map(t => `<option value="${t.id}" ${t.id === cur ? 'selected' : ''}>${t.name} (${t.id})</option>`).join('');
-  });
+  const allTeams = LS.getTeams();
+  const filtered = sport ? allTeams.filter(t => t.sport === sport) : allTeams;
+  const opts = '<option value="">— Select Team —</option>' + 
+    filtered.map(t => `<option value="${t.id}">${escHtml(t.name)} (${t.id})</option>`).join('');
+  document.getElementById('homeTeamSelect').innerHTML = opts;
+  document.getElementById('awayTeamSelect').innerHTML = opts;
 }
 
-/* ── PRODUCTS MODULE ────────────── */
-function addProduct() {
+window.addProduct = function() {
   const name = document.getElementById('productName').value.trim();
   const size = document.getElementById('productSize').value.trim();
   const cost = parseFloat(document.getElementById('productCost').value) || 0;
   const retail = parseFloat(document.getElementById('productRetail').value) || 0;
+  const initStock = parseInt(document.getElementById('productStock').value, 10) || 0;
+  if (!name) return showToast('Product name required.', 'error');
   
-  // Safe parsing to prevent NaN errors corrupting stock tracking
-  let initStock = parseInt(document.getElementById('productStock').value, 10);
-  if (isNaN(initStock)) initStock = 0;
-
-  if (!name || !size) return showToast('⚠ Provide Name & Size.', 'error');
+  const prods = LS.getProducts();
+  const nextNum = prods.length > 0 ? Math.max(...prods.map(p => parseInt(p.id.replace('P','')))) + 1 : 1;
+  const product = { id: generateId('P', nextNum), name, size, cost, retail, initialStock: initStock, currentStock: initStock };
   
-  const products = LS.getProducts();
-  if (products.find(p => p.name.toLowerCase() === name.toLowerCase() && p.size.toLowerCase() === size.toLowerCase())) {
-    return showToast('❌ Variant already exists.', 'error');
-  }
-
-  const prod = { id: nextId('P', products), name, size, cost, retail, initialStock: initStock, currentStock: initStock };
-  products.push(prod); LS.setProducts(products);
+  prods.push(product);
+  LS.setProducts(prods);
+  ['productName','productSize','productCost','productRetail','productStock'].forEach(id => document.getElementById(id).value = '');
   
-  document.getElementById('productName').value = '';
-  document.getElementById('productSize').value = '';
-  document.getElementById('productCost').value = '';
-  document.getElementById('productRetail').value = '';
-  document.getElementById('productStock').value = '';
-  
-  showToast(`✅ Product ${name} added.`, 'success');
   renderProducts();
-}
-
-window.deleteProduct = function(id) {
-  if (!confirm(`Delete product ${id}?`)) return;
-  LS.setProducts(LS.getProducts().filter(p => p.id !== id));
-  renderProducts();
-  showToast(`Product deleted.`, 'info');
+  showToast('Added to catalogue.', 'success');
 };
 
 function renderProducts() {
   const products = LS.getProducts();
   const tbody = document.getElementById('productsBody');
   document.getElementById('productCount').textContent = `${products.length} products`;
-  if (!products.length) return tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No products registered yet.</td></tr>';
-
+  
+  if (!products.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No products registered.</td></tr>';
+    return;
+  }
+  
   tbody.innerHTML = products.map(p => {
     const margin = p.retail - p.cost;
     const pct = p.cost > 0 ? ((margin / p.cost) * 100).toFixed(0) : '0';
-    
-    // Safety check formatting
-    let initStk = parseInt(p.initialStock);
-    if (isNaN(initStk)) initStk = 0;
-    let curStk = parseInt(p.currentStock);
-    if (isNaN(curStk)) curStk = initStk;
-
     return `
     <tr>
       <td><span class="sku-chip">${p.id}</span></td>
-      <td>${escHtml(p.name)}</td>
-      <td>${escHtml(p.size)}</td>
-      <td>$${parseFloat(p.cost).toFixed(2)}</td>
-      <td>$${parseFloat(p.retail).toFixed(2)}</td>
+      <td>${escHtml(p.name || '')}</td>
+      <td>${escHtml(p.size || '')}</td>
+      <td>$${(p.cost || 0).toFixed(2)}</td>
+      <td>$${(p.retail || 0).toFixed(2)}</td>
       <td><span class="margin-chip">+$${margin.toFixed(2)} (${pct}%)</span></td>
-      <td>${initStk}</td>
-      <td><strong style="color:var(--text-primary);">${curStk}</strong></td>
+      <td>${p.initialStock || 0}</td>
+      <td><strong>${p.currentStock ?? p.initialStock ?? 0}</strong></td>
       <td><button class="delete-btn" onclick="window.deleteProduct('${p.id}')">Delete</button></td>
     </tr>`;
   }).join('');
 }
 
-/* ── SCORING LOGIC ────────────── */
-function buildScoringButtons(sport, side) {
-  const cfg = SPORTS[sport]; if (!cfg) return '';
-  return cfg[side].map(btn => `
-    <button class="score-btn score-btn--${side}" onclick="window.handleScore('${side}', '${btn.key}', ${btn.value || 0}, ${btn.inc ? `true` : `false`})">
-      ${btn.label}
-    </button>
-  `).join('');
-}
-
-window.handleScore = function(side, key, value, isIncrement) {
-  if (!state.match || state.match.cancelled) return;
-  const cfg = SPORTS[state.match.sport];
-  const scoreObj = side === 'home' ? state.match.homeScore : state.match.awayScore;
-  value = parseFloat(value) || 0;
-
-  if (state.match.sport === 'cricket') {
-    if (key === 'wickets' && isIncrement) {
-      scoreObj.wickets = Math.min((scoreObj.wickets || 0) + 1, 10);
-    } else if (key === 'dotballs') {
-      scoreObj.dotballs = (scoreObj.dotballs || 0) + 1;
-      scoreObj.overs = parseFloat(((scoreObj.overs || 0) + (1 / 6)).toFixed(1));
-    } else {
-      scoreObj.runs = (scoreObj.runs || 0) + value;
-    }
-  } else if (state.match.sport === 'afl') {
-    scoreObj[key] = (scoreObj[key] || 0) + value;
-    cfg.calcScore(scoreObj);
-  } else {
-    scoreObj[key] = (scoreObj[key] || 0) + value;
-  }
-
-  updateScoreDisplay();
-
-  const el = document.getElementById(side === 'home' ? 'homeScoreMain' : 'awayScoreMain');
-  if(el) {
-    el.classList.remove('score-pop'); void el.offsetWidth; el.classList.add('score-pop');
-  }
+window.deleteProduct = function(id) {
+  if(!confirm('Delete this product?')) return;
+  LS.setProducts(LS.getProducts().filter(p => p.id !== id));
+  renderProducts();
 };
 
-/* ── MATCH MODULE ────────────── */
-function startMatch() {
+window.startMatch = function() {
   const sport = document.getElementById('sportSelect').value;
-  const date = document.getElementById('matchDate').value;
-  const time = document.getElementById('matchTime').value;
-  const tempRaw = document.getElementById('weatherTemp').value;
-  const homeId = document.getElementById('homeTeamSelect').value;
-  const awayId = document.getElementById('awayTeamSelect').value;
-
-  if (!sport || !date || !homeId || !awayId) return showToast('⚠ Select sport, date & teams.', 'error');
-  if (homeId === awayId) return showToast('⚠ Teams must be different.', 'error');
-
-  const teams = LS.getTeams();
-  const homeTeam = teams.find(t => t.id === homeId);
-  const awayTeam = teams.find(t => t.id === awayId);
-  const cfg = SPORTS[sport];
-  const temp = parseFloat(tempRaw);
-
-  const isHeatRisk = !isNaN(temp) && temp >= 40;
+  const hId = document.getElementById('homeTeamSelect').value;
+  const aId = document.getElementById('awayTeamSelect').value;
+  const temp = parseFloat(document.getElementById('weatherTemp').value);
   
-  state.match = {
-    id: nextId('M', LS.getMatches()), sport, date, time, weather: isNaN(temp) ? null : temp,
-    homeId, awayId, homeScore: cfg.initScore(), awayScore: cfg.initScore(),
-    status: isHeatRisk ? 'Cancelled' : document.getElementById('matchStatus').value,
-    notes: isHeatRisk ? 'Cancelled due to National Heat Policy.' : document.getElementById('matchNotes').value,
-    cancelled: isHeatRisk,
-    salesCounter: {}
-  };
-
+  if (!sport || !hId || !aId) return showToast('Sport and both teams are required to start.', 'error');
+  if (hId === aId) return showToast('Home and Away teams must be different.', 'error');
+  
   const matches = LS.getMatches();
+  const nextNum = matches.length > 0 ? Math.max(...matches.map(m => parseInt(m.match_id.replace('M','')))) + 1 : 1;
+  const matchId = generateId('M', nextNum);
+  
+  state.match = { active: true, id: matchId, sport, homeId: hId, awayId: aId, homeScores: {}, awayScores: {}, cancelled: false, salesCounter: {} };
+  
+  if (!isNaN(temp) && temp >= 40) {
+    state.match.cancelled = true;
+    document.getElementById('matchNotes').value = "CANCELLED: National Heat Policy triggered (>40°C).";
+    document.getElementById('heatTemp').textContent = temp;
+    document.getElementById('heatOverlay').classList.remove('hidden');
+    document.getElementById('matchStatus').value = 'Cancelled';
+  } else {
+    document.getElementById('matchStatus').value = 'In Progress';
+  }
+  
   matches.push({
-    match_id: state.match.id, date: state.match.date, time: state.match.time, 
-    weather_temp_c: state.match.weather ?? '', sport_type: state.match.sport,
-    home_team_id: state.match.homeId, away_team_id: state.match.awayId,
-    home_score: 0, away_score: 0, status: isHeatRisk ? "Cancelled" : "In Progress", notes: state.match.notes,
+    match_id:       state.match.id,
+    date:           document.getElementById('matchDate').value,
+    time:           document.getElementById('matchTime').value,
+    weather_temp_c: isNaN(temp) ? '' : temp,
+    sport_type:     sport,
+    home_team_id:   hId,
+    away_team_id:   aId,
+    home_score:     0,
+    away_score:     0,
+    status:         state.match.cancelled ? 'Cancelled' : 'In Progress',
+    notes:          document.getElementById('matchNotes').value
   });
   LS.setMatches(matches);
-
-  if (isHeatRisk) { triggerHeatPolicy(temp); }
-
-  renderLivePanel(sport, homeTeam, awayTeam, isHeatRisk);
-  generateForecast(homeId, awayId);
+  
+  const teams = LS.getTeams();
+  document.getElementById('homeName').textContent = escHtml(teams.find(t=>t.id===hId)?.name) || 'Home';
+  document.getElementById('awayName').textContent = escHtml(teams.find(t=>t.id===aId)?.name) || 'Away';
+  document.getElementById('sportChip').textContent = SPORT_CONFIG[sport].name;
+  
+  buildScoringButtons(state.match.cancelled);
+  buildCanteenSalesForm(state.match.cancelled);
+  updateScoreboardDisplay();
+  generateForecast(hId, aId);
+  
+  document.getElementById('livePanel').classList.remove('hidden');
+  ['sportSelect','homeTeamSelect','awayTeamSelect','startMatchBtn'].forEach(id => document.getElementById(id).disabled = true);
 }
 
-function updateScoreDisplay() {
-  if (!state.match) return;
-  const cfg = SPORTS[state.match.sport];
-  document.getElementById('homeScoreMain').textContent = cfg.displayMain(state.match.homeScore);
-  document.getElementById('awayScoreMain').textContent = cfg.displayMain(state.match.awayScore);
-  document.getElementById('homeScoreDetail').textContent = cfg.displayDetail(state.match.homeScore);
-  document.getElementById('awayScoreDetail').textContent = cfg.displayDetail(state.match.awayScore);
+window.resetMatch = function() {
+  if (state.match.active && !confirm('Reset live panel? Data remains saved in History.')) return;
+  state.match.active = false;
+  document.getElementById('livePanel').classList.add('hidden');
+  ['sportSelect','homeTeamSelect','awayTeamSelect','startMatchBtn'].forEach(id => document.getElementById(id).disabled = false);
+  prefillDate();
+  document.getElementById('weatherTemp').value = '';
+  document.getElementById('matchNotes').value = '';
+  document.getElementById('matchStatus').value = 'Completed';
+  document.getElementById('homeTeamSelect').value = '';
+  document.getElementById('awayTeamSelect').value = '';
+  document.getElementById('sportSelect').value = '';
 }
 
-function renderLivePanel(sport, homeTeam, awayTeam, cancelled) {
-  const panel = document.getElementById('livePanel');
-  panel.classList.remove('hidden');
-
-  document.getElementById('homeName').textContent = homeTeam.name;
-  document.getElementById('awayName').textContent = awayTeam.name;
-  document.getElementById('homeLabel').textContent = homeTeam.name.toUpperCase();
-  document.getElementById('awayLabel').textContent = awayTeam.name.toUpperCase();
-  document.getElementById('sportChip').textContent = SPORTS[sport].label;
-
-  updateScoreDisplay();
-  document.getElementById('homeBtns').innerHTML = buildScoringButtons(sport, 'home');
-  document.getElementById('awayBtns').innerHTML = buildScoringButtons(sport, 'away');
-
-  buildCanteenSalesForm(cancelled);
-  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+function buildScoringButtons(disabled) {
+  const sConfig = SPORT_CONFIG[state.match.sport];
+  const hBtns = document.getElementById('homeBtns');
+  const aBtns = document.getElementById('awayBtns');
+  
+  const makeBtn = (side, btn) => {
+    return `<button class="score-btn score-btn--${side}" 
+              onclick="window.handleScore('${side}', '${btn.key}', ${btn.value || 0}${btn.inc ? `, true` : ''})"
+              ${disabled ? 'disabled style="opacity:0.5;cursor:not-allowed"' : ''}>
+              ${btn.label}
+            </button>`;
+  };
+  
+  hBtns.innerHTML = sConfig.buttons.map(b => makeBtn('home', b)).join('');
+  aBtns.innerHTML = sConfig.buttons.map(b => makeBtn('away', b)).join('');
 }
 
-/* ── LIVE CANTEEN SALES LOGIC ────────────── */
-function buildCanteenSalesForm(cancelled) {
+window.handleScore = function(side, key, value, isIncrement = false) {
+  if (state.match.cancelled) return;
+  const scoresObj = side === 'home' ? state.match.homeScores : state.match.awayScores;
+  
+  if (isIncrement && scoresObj[key] !== undefined) {
+    scoresObj[key] += 1;
+  } else {
+    scoresObj[key] = (scoresObj[key] || 0) + value;
+  }
+  
+  updateScoreboardDisplay();
+  const displayEl = document.getElementById(`${side}ScoreDisplay`);
+  displayEl.classList.add('score-pop');
+  setTimeout(() => displayEl.classList.remove('score-pop'), 350);
+}
+
+function updateScoreboardDisplay() {
+  const cfg = SPORT_CONFIG[state.match.sport];
+  const hScores = Object.assign(Object.fromEntries(cfg.buttons.map(b=>[b.key, 0])), state.match.homeScores);
+  const aScores = Object.assign(Object.fromEntries(cfg.buttons.map(b=>[b.key, 0])), state.match.awayScores);
+  document.getElementById('homeScoreMain').textContent = cfg.format(hScores);
+  document.getElementById('awayScoreMain').textContent = cfg.format(aScores);
+}
+
+function getNumericScore(scores, sport) {
+  if (sport === 'afl') return (scores.goals || 0) * 6 + (scores.behinds || 0);
+  if (sport === 'cricket') return (scores.runs || 0);
+  return Object.values(scores).reduce((a,b) => a+b, 0);
+}
+
+function buildCanteenSalesForm(disabled) {
   const products = LS.getProducts();
   const container = document.getElementById('canteenSalesForm');
-
-  if (!products || products.length === 0) {
-    container.innerHTML = '<p class="muted" style="grid-column: 1/-1;">No products found in catalogue. Go to Canteen tab and Add Product to enable live tracking.</p>';
-    return;
-  }
-
+  
+  if(!products.length) return container.innerHTML = `<p class="muted">No products available.</p>`;
+  
   container.innerHTML = products.map(p => {
     state.match.salesCounter[p.id] = state.match.salesCounter[p.id] || 0;
-    
-    let initStk = parseInt(p.initialStock); if (isNaN(initStk)) initStk = 0;
-    let curStk = parseInt(p.currentStock); if (isNaN(curStk)) curStk = initStk;
-    
-    const isOut = curStk <= 0;
-    const disabledStr = (cancelled || isOut) ? 'disabled style="filter: grayscale(1); cursor: not-allowed; opacity: 0.5;"' : '';
-    const btnLabel = isOut ? 'OUT OF STOCK' : '[+1 Sold]';
-
     return `
-    <div class="canteen-sales-item" style="display: flex; flex-direction: column; gap: 8px;">
-      <div class="canteen-sales-item__name">${escHtml(p.name)} (${escHtml(p.size)})</div>
-      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9em;">
-          <div class="canteen-sales-item__sku" style="margin: 0;">Stock: <strong id="stock-${p.id}" style="color:var(--text-primary); font-size: 1.1em;">${curStk}</strong></div>
-          <div class="canteen-sales-item__sku" style="margin: 0;">Sold Today: <strong id="sold-${p.id}" style="color:var(--text-primary); font-size: 1.1em;">${state.match.salesCounter[p.id]}</strong></div>
+    <div class="canteen-sales-item">
+      <div class="canteen-sales-item__name">${escHtml(p.name)} - ${escHtml(p.size)}</div>
+      <div class="canteen-sales-item__sku">${p.id} · $${p.retail.toFixed(2)}</div>
+      <div style="display:flex;gap:8px;">
+        <input type="number" id="saleQty_${p.id}" value="${state.match.salesCounter[p.id]}" readonly />
+        <button class="btn btn--primary" onclick="window.sellProduct('${p.id}')" ${disabled ? 'disabled' : ''}>+1 Sold</button>
       </div>
-      <button class="btn btn--primary" style="margin-top: 4px;" id="btn-sell-${p.id}" ${disabledStr} onclick="window.sellProduct('${p.id}')">${btnLabel}</button>
     </div>
-  `}).join('');
+    `;
+  }).join('');
 }
 
 window.sellProduct = function(productId) {
-  if (!state.match || state.match.cancelled) return;
-  const products = LS.getProducts();
-  const pIndex = products.findIndex(prod => prod.id === productId);
-  if (pIndex === -1) return;
-
-  let initStock = parseInt(products[pIndex].initialStock); if(isNaN(initStock)) initStock = 0;
-  let currentStock = parseInt(products[pIndex].currentStock); if(isNaN(currentStock)) currentStock = initStock;
-  
-  if (currentStock <= 0) return;
-
-  // 1. Immediately deduct stock
-  products[pIndex].currentStock = currentStock - 1;
-  LS.setProducts(products);
-  
-  // 2. Increment match UI sales counter
+  if(state.match.cancelled) return;
   state.match.salesCounter[productId] = (state.match.salesCounter[productId] || 0) + 1;
-
-  // 3. Log sales item securely
-  const freshSales = LS.getSales();
-  freshSales.push({
-    sales_id: 'S' + String(freshSales.length + 1).padStart(4, '0'),
-    match_id: state.match.id,
-    product_id: productId,
-    quantity: 1,
-  });
-  LS.setSales(freshSales);
-
-  // 4. Update the live Stock/Sales texts safely
-  document.getElementById(`stock-${productId}`).textContent = products[pIndex].currentStock;
-  document.getElementById(`sold-${productId}`).textContent = state.match.salesCounter[productId];
-
-  // 5. Instantly disable if depleted
-  if (products[pIndex].currentStock <= 0) {
-    const btn = document.getElementById(`btn-sell-${productId}`);
-    if (btn) {
-      btn.disabled = true;
-      btn.style.filter = "grayscale(1)"; btn.style.opacity = "0.5"; btn.style.cursor = "not-allowed";
-      btn.textContent = "OUT OF STOCK";
-    }
-  }
-};
-
-/* ── Finalise & Reset ────────────── */
-function resetMatch() {
-  if (!confirm('Reset current match window? (Canteen stock deductions are permanent).')) return;
-  if (state.match && state.match.id) {
-    LS.setMatches(LS.getMatches().filter(m => m.match_id !== state.match.id));
-    LS.setSales(LS.getSales().filter(m => m.match_id !== state.match.id));
-  }
-  state.match = null;
-  document.getElementById('livePanel').classList.add('hidden');
-  document.getElementById('matchDate').value = '';
-  document.getElementById('matchNotes').value = '';
-  showToast('Match reset/cleared.', 'info');
+  document.getElementById(`saleQty_${productId}`).value = state.match.salesCounter[productId];
 }
 
-function saveMatch() {
-  if (!state.match) return;
-  const cfg = SPORTS[state.match.sport];
+window.saveMatch = function() {
+  if (!state.match.active) return;
   const matches = LS.getMatches();
+  let sales = LS.getSales();
+  let products = LS.getProducts();
+  
+  const sport = state.match.sport;
+  const cfg = SPORT_CONFIG[sport];
+  const hScores = Object.assign(Object.fromEntries(cfg.buttons.map(b=>[b.key, 0])), state.match.homeScores);
+  const aScores = Object.assign(Object.fromEntries(cfg.buttons.map(b=>[b.key, 0])), state.match.awayScores);
   
   const mIndex = matches.findIndex(m => m.match_id === state.match.id);
   if (mIndex !== -1) {
+    matches[mIndex].date = document.getElementById('matchDate').value || matches[mIndex].date;
+    matches[mIndex].time = document.getElementById('matchTime').value || matches[mIndex].time;
+    matches[mIndex].weather_temp_c = document.getElementById('weatherTemp').value !== '' ? document.getElementById('weatherTemp').value : matches[mIndex].weather_temp_c;
     matches[mIndex].status = document.getElementById('matchStatus').value || 'Completed';
-    matches[mIndex].home_score = state.match.cancelled ? 0 : cfg.displayMain(state.match.homeScore);
-    matches[mIndex].away_score = state.match.cancelled ? 0 : cfg.displayMain(state.match.awayScore);
+    matches[mIndex].home_score = state.match.cancelled ? 0 : getNumericScore(hScores, sport);
+    matches[mIndex].away_score = state.match.cancelled ? 0 : getNumericScore(aScores, sport);
     matches[mIndex].notes = document.getElementById('matchNotes').value;
     LS.setMatches(matches);
   }
-
-  showToast(`✅ Match saved successfully! Check History panel.`, 'success');
-  state.match = null;
-  document.getElementById('livePanel').classList.add('hidden');
-  renderHistory();
   
-  // Auto-switch to history tab so they can see the records working properly
-  document.querySelector('.tab-btn[data-tab="history"]').click();
+  if(!state.match.cancelled) {
+    Object.entries(state.match.salesCounter).forEach(([pId, qty]) => {
+      if(qty > 0) {
+        const nextSalesNum = sales.length > 0 ? Math.max(...sales.map(s => parseInt(s.sales_id.replace('S','')))) + 1 : 1;
+        sales.push({ sales_id: generateId('S', nextSalesNum), match_id: state.match.id, product_id: pId, quantity: qty });
+        const pIndex = products.findIndex(p => p.id === pId);
+        if(pIndex !== -1) {
+          products[pIndex].currentStock = Math.max(0, (products[pIndex].currentStock ?? products[pIndex].initialStock ?? 0) - qty);
+        }
+      }
+    });
+    LS.setSales(sales);
+    LS.setProducts(products);
+  }
+  
+  showToast(`Match ${state.match.id} saved!`, 'success');
+  renderHistory();
+  renderProducts();
 }
 
-/* ── ALL REMAINING EVENT & DATA LOGIC ────────────── */
-
 function generateForecast(homeId, awayId) {
-  const relevant = LS.getMatches().filter(m => m.status === 'Completed' && ((m.home_team_id === homeId && m.away_team_id === awayId) || (m.home_team_id === awayId && m.away_team_id === homeId)));
-  const content = document.getElementById('forecastContent');
-  if (!relevant.length) return content.innerHTML = '<p class="muted">No historical matchups found. Stock is up to you!</p>';
-
-  const rows = LS.getProducts().map(p => {
-    const historical = LS.getSales().filter(s => relevant.some(r => r.match_id === s.match_id) && s.product_id === p.id);
-    const avg = historical.length ? historical.reduce((sum, s) => sum + (parseInt(s.quantity) || 0), 0) / historical.length : 0;
-    return { product: p, recommended: Math.ceil(avg * 1.2) };
-  });
-
-  content.innerHTML = `
-    <p style="color:var(--text-secondary); margin-bottom: var(--sp-4);">Based on <strong>${relevant.length}</strong> previous matches (incl 20% safety stock buffer):</p>
-    ${rows.map(r => `
-      <div class="forecast-item">
-        <span class="forecast-item__name">${escHtml(r.product.name)}</span>
-        <div class="forecast-item__qty">${r.recommended}</div>
-      </div>`).join('')}
-  `;
+  const pastMatches = LS.getMatches().filter(m => (m.home_team_id === homeId && m.away_team_id === awayId) || (m.home_team_id === awayId && m.away_team_id === homeId));
+  if(pastMatches.length === 0) return document.getElementById('forecastContent').innerHTML = `<p class="muted">No historical data for forecast.</p>`;
+  
+  const sales = LS.getSales().filter(s => pastMatches.map(m => m.match_id).includes(s.match_id));
+  if(sales.length === 0) return document.getElementById('forecastContent').innerHTML = `<p class="muted">Histories found, but no sales recorded.</p>`;
+  
+  const agg = {};
+  sales.forEach(s => agg[s.product_id] = (agg[s.product_id] || 0) + parseInt(s.quantity, 10));
+  
+  const reqs = Object.entries(agg).map(([pId, total]) => ({ pId, avgQty: Math.ceil(total / pastMatches.length) })).sort((a,b) => b.avgQty - a.avgQty).slice(0, 3);
+  document.getElementById('forecastContent').innerHTML = reqs.map(rec => {
+    const label = LS.getProducts().find(prod => prod.id === rec.pId)?.name || rec.pId;
+    return `<div class="forecast-item"><div><div class="forecast-item__sku">${rec.pId}</div><div class="forecast-item__name">${label}</div></div><div style="text-align:right"><div class="forecast-item__qty">+${rec.avgQty}</div><div class="forecast-item__unit">Predicted</div></div></div>`;
+  }).join('') + `<div class="forecast-meta">Based on ${pastMatches.length} previous matchups</div>`;
 }
 
 function renderHistory() {
-  const matches = LS.getMatches(); const teams = LS.getTeams();
+  const matches = LS.getMatches();
+  const teams = LS.getTeams();
   const tbody = document.getElementById('matchesBody');
   document.getElementById('matchCount').textContent = `${matches.length} matches`;
-  if (!matches.length) return tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No matches found.</td></tr>';
+  
+  if (!matches.length) tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No matches recorded yet.</td></tr>';
+  else tbody.innerHTML = [...matches].reverse().map(m => {
+    const hName = teams.find(t=>t.id===m.home_team_id)?.name || m.home_team_id;
+    const aName = teams.find(t=>t.id===m.away_team_id)?.name || m.away_team_id;
+    const tempStr = m.weather_temp_c !== '' && m.weather_temp_c !== null ? `${m.weather_temp_c}°C` : '—';
+    let sCls = m.status === 'Completed' ? 'status-chip--completed' : m.status === 'Cancelled' ? 'status-chip--cancelled' : m.status === 'Postponed' ? 'status-chip--postponed' : 'status-chip--in-progress';
+    return `<tr><td><span class="sku-chip">${m.match_id}</span></td><td><strong>${m.date || '—'}</strong></td><td>${SPORT_CONFIG[m.sport_type]?.name || m.sport_type}</td><td>${escHtml(hName)}</td><td>${escHtml(aName)}</td><td><strong>${m.home_score} - ${m.away_score}</strong></td><td>${tempStr}</td><td><span class="status-chip ${sCls}">${m.status}</span></td><td><button class="delete-btn" onclick="window.deleteMatch('${m.match_id}')">Delete</button></td></tr>`;
+  }).join('');
 
-  tbody.innerHTML = [...matches].reverse().map(m => `
-    <tr>
-      <td><span class="sku-chip">${m.match_id}</span></td>
-      <td>${m.date}</td>
-      <td>${(m.sport_type || '').toUpperCase()}</td>
-      <td>${escHtml((teams.find(t => t.id === m.home_team_id) || {}).name || m.home_team_id)}</td>
-      <td>${escHtml((teams.find(t => t.id === m.away_team_id) || {}).name || m.away_team_id)}</td>
-      <td><strong>${m.home_score}</strong> – <strong>${m.away_score}</strong></td>
-      <td>${m.weather_temp_c ? m.weather_temp_c + '°C' : '—'}</td>
-      <td><span class="status-chip status-chip--${m.status.toLowerCase()}">${m.status}</span></td>
-      <td><button class="delete-btn" onclick="window.deleteMatch('${m.match_id}')">Del</button></td>
-    </tr>`).join('');
+  const sales = LS.getSales();
+  const products = LS.getProducts();
+  document.getElementById('salesCount').textContent = `${sales.length} sales`;
+  if (!sales.length) document.getElementById('salesBody').innerHTML = '<tr><td colspan="4" class="empty-state">No sales recorded.</td></tr>';
+  else document.getElementById('salesBody').innerHTML = [...sales].reverse().map(s => {
+    const p = products.find(prod => prod.id === s.product_id);
+    return `<tr><td><span class="sku-chip">${s.sales_id}</span></td><td><span class="sku-chip sku-chip--outline">${s.match_id}</span></td><td>${p ? `${escHtml(p.name)} (${escHtml(p.size)})` : s.product_id}</td><td><strong>${s.quantity}</strong></td></tr>`;
+  }).join('');
 }
 
 window.deleteMatch = function(id) {
-  if (!confirm(`Delete Match ${id} and all its sales records?`)) return;
+  if(!confirm('Delete this match and all its associated sales records?')) return;
   LS.setMatches(LS.getMatches().filter(m => m.match_id !== id));
   LS.setSales(LS.getSales().filter(s => s.match_id !== id));
   renderHistory();
 };
 
-function triggerHeatPolicy(temp) {
-  document.getElementById('heatTemp').textContent = temp;
-  document.getElementById('heatOverlay').classList.remove('hidden');
+function toCSV(dataArr) {
+  if (!dataArr || !dataArr.length) return '';
+  const headers = Object.keys(dataArr[0]);
+  return [headers.join(','), ...dataArr.map(obj => headers.map(h => `"${String(obj[h]??"").replace(/"/g, '""')}"`).join(','))].join('\n');
 }
 
-function clearAllData() {
-  if (!confirm(`⚠️ Permanently wipe all LocalStorage data? Cannot be undone.`)) return;
-  ['ausclub_teams','ausclub_products','ausclub_matches','ausclub_sales'].forEach(k => localStorage.removeItem(k));
-  location.reload();
+function downloadStr(filename, content) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], { type: 'text/csv;charset=utf-8;' }));
+  a.download = filename;
+  a.click();
 }
 
-function escHtml(str) { return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+window.exportMatches = () => LS.getMatches().length ? downloadStr('matches.csv', toCSV(LS.getMatches())) : showToast('Empty','error');
+window.exportSales = () => LS.getSales().length ? downloadStr('sales.csv', toCSV(LS.getSales())) : showToast('Empty','error');
+window.exportTeams = () => LS.getTeams().length ? downloadStr('teams.csv', toCSV(LS.getTeams())) : showToast('Empty','error');
+window.exportProducts = () => LS.getProducts().length ? downloadStr('products.csv', toCSV(LS.getProducts())) : showToast('Empty','error');
 
-/* ── INIT & EVENT LISTENERS ────────────── */
-function initEventListeners() {
-  document.getElementById('sportSelect').addEventListener('change', refreshTeamDropdowns);
-  document.getElementById('heatOkBtn').addEventListener('click', () => document.getElementById('heatOverlay').classList.add('hidden'));
-  document.getElementById('startMatchBtn').addEventListener('click', startMatch);
-  document.getElementById('resetMatchBtn').addEventListener('click', resetMatch);
-  document.getElementById('saveMatchBtn').addEventListener('click', saveMatch);
-  document.getElementById('addTeamBtn').addEventListener('click', addTeam);
-  document.getElementById('addProductBtn').addEventListener('click', addProduct);
-  document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
-  
-  // Set default times
-  const today = new Date();
-  document.getElementById('matchDate').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-  document.getElementById('matchTime').value = `${String(today.getHours()).padStart(2, '0')}:${String(today.getMinutes()).padStart(2, '0')}`;
-}
+window.handleCSVImport = function(type) {
+  const id = type === 'matches' ? 'importMatchesFile' : 'importSalesFile';
+  const file = document.getElementById(id).files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const line = (s) => s.trim().split('\n');
+      const lines = line(e.target.result);
+      if (lines.length < 2) return;
+      const h = lines[0].split(',').map(x => x.replace(/"/g, '').trim());
+      const data = lines.slice(1).map(l => {
+        const v = l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').replace(/""/g, '"').trim());
+        const obj = {};
+        h.forEach((key, i) => obj[key] = /^\d+$/.test(v[i]) ? parseInt(v[i], 10) : /^\d+\.\d+$/.test(v[i]) ? parseFloat(v[i]) : v[i]);
+        return obj;
+      });
+      type === 'matches' ? LS.setMatches(data) : LS.setSales(data);
+      document.getElementById(id).value = '';
+      renderHistory();
+      showToast('Imported successfully', 'success');
+    } catch(err) { showToast('Error', 'error'); }
+  };
+  reader.readAsText(file);
+};
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Demo Seed: Insert placeholder data if brand new load so you can click Start Match immediately.
-  if (LS.getTeams().length === 0) {
-    LS.setTeams([
-      { id: 'T001', name: 'Lions', sport: 'afl', suburb: 'Brisbane' },
-      { id: 'T002', name: 'Magpies', sport: 'afl', suburb: 'Collingwood' }
-    ]);
-  }
-  if (LS.getProducts().length === 0) {
-    LS.setProducts([
-      { id: 'P001', name: 'Coca-Cola', size: '375ml', cost: 1.5, retail: 3.5, initialStock: 50, currentStock: 50 },
-      { id: 'P002', name: 'Beef Pie', size: '1pc', cost: 2.0, retail: 5.5, initialStock: 30, currentStock: 30 }
-    ]);
-  }
-
-  initTabs();
-  initEventListeners();
-  renderTeams();
-  renderProducts();
-  refreshTeamDropdowns();
-});
+window.clearAllData = function() {
+  if (confirm('⚠️ WARNING: Erase ALL data?')) { localStorage.clear(); location.reload(); }
+};
