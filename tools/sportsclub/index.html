@@ -12,9 +12,6 @@
 </head>
 <body>
 
-<!-- ════════════════════════════════════════════════════════
-     HEAT ALERT OVERLAY
-════════════════════════════════════════════════════════ -->
 <div id="heatOverlay" class="heat-overlay hidden" role="alert" aria-live="assertive">
   <div class="heat-overlay__box">
     <div class="heat-overlay__icon">🌡️</div>
@@ -26,14 +23,8 @@
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════
-     TOAST NOTIFICATION
-════════════════════════════════════════════════════════ -->
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<!-- ════════════════════════════════════════════════════════
-     HEADER
-════════════════════════════════════════════════════════ -->
 <header class="site-header">
   <div class="site-header__inner">
     <div class="site-header__brand">
@@ -50,12 +41,8 @@
   </div>
 </header>
 
-<!-- ════════════════════════════════════════════════════════
-     MAIN CONTENT
-════════════════════════════════════════════════════════ -->
 <main class="main-content">
 
-  <!-- ─── TAB: SCOREBOARD ─────────────────────────────── -->
   <section id="tab-scoreboard" class="tab-panel active" aria-label="Scoreboard">
 
     <div class="panel-header">
@@ -63,7 +50,6 @@
       <p class="panel-sub">Set up a new match and track scores in real time.</p>
     </div>
 
-    <!-- Match Setup Card -->
     <div class="card card--setup">
       <div class="card__head">
         <h2>Match Setup</h2>
@@ -124,15 +110,8 @@
       </div>
     </div>
 
-   <div id="livePanel" class="live-panel hidden">
+    <div id="livePanel" class="live-panel hidden">
 
-    <div class="livesales-panel mt-4 mb-4">
-        <h4 class="mb-3 text-gold" style="color: #ffc107; font-weight: bold;">LIVE CANTEEN SALES</h4>
-        <div id="livesales-widget" class="livesales-widget">
-            </div>
-    </div>
-
-    <div class="scoreboard-display">
       <div class="scoreboard-display">
         <div class="scoreboard-display__team scoreboard-display__team--home">
           <div class="team-label" id="homeName">Home</div>
@@ -154,7 +133,12 @@
         </div>
       </div>
 
-      <!-- Scoring Buttons (dynamic per sport) -->
+      <div class="livesales-panel mt-3 mb-3" style="background: rgba(255, 193, 7, 0.05); border: 1px solid rgba(255,193,7,0.25); padding: 14px; border-radius: 8px;">
+        <h4 class="mb-2 text-gold" style="color: #ffc107; font-weight: bold; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase;">🥤 Live Canteen Sales</h4>
+        <div id="livesales-widget" class="livesales-widget" style="display: flex; flex-wrap: wrap; gap: 10px;">
+          </div>
+      </div>
+
       <div class="scoring-section">
         <div class="scoring-col">
           <div class="scoring-col__label" id="homeLabel">HOME</div>
@@ -166,20 +150,13 @@
         </div>
       </div>
 
-      <!-- Canteen Sales Entry -->
-      <div class="card card--canteen-sales">
-        <div class="card__head">
-          <h3>Live Canteen Sales</h3>
-          <span class="badge badge--green">Live Entry</span>
-        </div>
-        <div id="canteenSalesForm" class="canteen-sales-grid"></div>
-        <div class="card__actions">
-          <button class="btn btn--success" id="saveMatchBtn">✅ Save & Finalise Match</button>
+      <div class="card card--canteen-sales mt-3">
+        <div class="card__actions" style="padding: 0;">
+          <button class="btn btn--success btn--full" id="saveMatchBtn">✅ Save & Finalise Match</button>
         </div>
       </div>
 
-      <!-- Smart Forecast Panel -->
-      <div class="card card--forecast" id="forecastPanel">
+      <div class="card card--forecast mt-3" id="forecastPanel">
         <div class="card__head">
           <h3>🔮 Smart Canteen Forecast</h3>
           <span class="badge badge--purple">AI Powered</span>
@@ -189,12 +166,7 @@
         </div>
       </div>
 
-    </div><!-- /livePanel -->
-
-  </section><!-- /tab-scoreboard -->
-
-  <!-- ─── TAB: TEAMS ──────────────────────────────────── -->
-  <section id="tab-teams" class="tab-panel" aria-label="Team Management">
+    </div></section><section id="tab-teams" class="tab-panel" aria-label="Team Management">
 
     <div class="panel-header">
       <h1>Team <span class="accent">Master Data</span></h1>
@@ -252,10 +224,7 @@
       </div>
     </div>
 
-  </section><!-- /tab-teams -->
-
-  <!-- ─── TAB: CANTEEN ────────────────────────────────── -->
-  <section id="tab-canteen" class="tab-panel" aria-label="Canteen Inventory">
+  </section><section id="tab-canteen" class="tab-panel" aria-label="Canteen Inventory">
 
     <div class="panel-header">
       <h1>Canteen <span class="accent">Products</span></h1>
@@ -286,7 +255,7 @@
           </div>
           <div class="form-group">
             <label for="productStock">Initial Stock / Quantity</label>
-            <input type="number" id="productStock" placeholder="0" min="0" />
+            <input type="number" id="productStock" placeholder="0" min="0" value="0" />
           </div>
           <button class="btn btn--primary" id="addProductBtn">+ Add Product</button>
         </div>
@@ -318,10 +287,7 @@
       </div>
     </div>
 
-  </section><!-- /tab-canteen -->
-
-  <!-- ─── TAB: HISTORY ────────────────────────────────── -->
-  <section id="tab-history" class="tab-panel" aria-label="Match History">
+  </section><section id="tab-history" class="tab-panel" aria-label="Match History">
 
     <div class="panel-header">
       <h1>Match <span class="accent">History</span></h1>
@@ -337,15 +303,13 @@
         <table class="data-table" id="matchesTable">
           <thead>
             <tr>
-              <th>Match ID</th>
               <th>Date</th>
               <th>Sport</th>
-              <th>Home Team</th>
-              <th>Away Team</th>
-              <th>Score</th>
+              <th>Match Summary</th>
               <th>Temp</th>
+              <th>Items Sold</th>
+              <th>Canteen Revenue</th>
               <th>Status</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="matchesBody"></tbody>
@@ -353,10 +317,7 @@
       </div>
     </div>
 
-  </section><!-- /tab-history -->
-
-  <!-- ─── TAB: EXPORT ─────────────────────────────────── -->
-  <section id="tab-export" class="tab-panel" aria-label="Data Export">
+  </section><section id="tab-export" class="tab-panel" aria-label="Data Export">
 
     <div class="panel-header">
       <h1>Data <span class="accent">Import & Export</span></h1>
@@ -430,13 +391,8 @@
 
     </div>
 
-  </section><!-- /tab-export -->
+  </section></main>
 
-</main>
-
-<!-- ════════════════════════════════════════════════════════
-     FOOTER
-════════════════════════════════════════════════════════ -->
 <footer class="site-footer">
   <div class="site-footer__inner">
     <span>AusClub<em>Pro</em> · Universal Community Sports Dashboard</span>
