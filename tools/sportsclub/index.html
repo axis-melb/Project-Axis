@@ -67,17 +67,19 @@
             <option value="rugby">Rugby League / Rugby Union</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="matchDate">Date</label>
-          <input type="date" id="matchDate" />
-        </div>
-        <div class="form-group">
-          <label for="matchTime">Time</label>
-          <input type="time" id="matchTime" />
-        </div>
-        <div class="form-group">
-          <label for="weatherTemp">Temp (°C)</label>
-          <input type="number" id="weatherTemp" placeholder="e.g. 24" min="-10" max="60" />
+        <div class="form-grid-three" style="display: contents;">
+          <div class="form-group">
+            <label for="matchDate">Date</label>
+            <input type="date" id="matchDate" />
+          </div>
+          <div class="form-group">
+            <label for="matchTime">Time</label>
+            <input type="time" id="matchTime" />
+          </div>
+          <div class="form-group">
+            <label for="weatherTemp">Temp (°C)</label>
+            <input type="number" id="weatherTemp" placeholder="e.g. 24" min="-10" max="60" />
+          </div>
         </div>
         <div class="form-group">
           <label for="homeTeamSelect">Home Team</label>
@@ -133,41 +135,30 @@
         </div>
       </div>
 
-      <div class="livesales-panel mt-3 mb-3" style="background: rgba(255, 193, 7, 0.05); border: 1px solid rgba(255,193,7,0.25); padding: 14px; border-radius: 8px;">
-        <h4 class="mb-2 text-gold" style="color: #ffc107; font-weight: bold; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase;">🥤 Live Canteen Sales</h4>
-        <div id="livesales-widget" class="livesales-widget" style="display: flex; flex-wrap: wrap; gap: 10px;">
+      <div class="livesales-panel" style="background: rgba(255, 193, 7, 0.05); border: 1px solid rgba(255,193,7,0.2); padding: 16px; border-radius: var(--r-lg); margin: 20px 0;">
+        <h4 style="color: #ffc107; margin:0 0 12px 0; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; text-transform: uppercase;">🥤 Live Canteen Sales (POS)</h4>
+        <div id="livesales-widget" style="display: flex; flex-wrap: wrap; gap: 10px;">
           </div>
       </div>
 
-      <div class="scoring-section">
+      <div class="scoring-section" style="margin-bottom: 20px;">
         <div class="scoring-col">
-          <div class="scoring-col__label" id="homeLabel">HOME</div>
+          <div class="scoring-col__label" id="homeLabel">HOME SCORE CONTROLS</div>
           <div class="scoring-buttons" id="homeBtns"></div>
         </div>
         <div class="scoring-col">
-          <div class="scoring-col__label" id="awayLabel">AWAY</div>
+          <div class="scoring-col__label" id="awayLabel">AWAY SCORE CONTROLS</div>
           <div class="scoring-buttons" id="awayBtns"></div>
         </div>
       </div>
 
-      <div class="card card--canteen-sales mt-3">
+      <div class="card card--canteen-sales">
         <div class="card__actions" style="padding: 0;">
-          <button class="btn btn--success btn--full" id="saveMatchBtn">✅ Save & Finalise Match</button>
-        </div>
-      </div>
-
-      <div class="card card--forecast mt-3" id="forecastPanel">
-        <div class="card__head">
-          <h3>🔮 Smart Canteen Forecast</h3>
-          <span class="badge badge--purple">AI Powered</span>
-        </div>
-        <div id="forecastContent" class="forecast-content">
-          <p class="muted">Start a match to generate a forecast based on historical matchups.</p>
+          <button class="btn btn--success btn--full" id="saveMatchBtn" style="font-size:16px; padding:12px;">✅ Save & Finalise Match Results</button>
         </div>
       </div>
 
     </div></section><section id="tab-teams" class="tab-panel" aria-label="Team Management">
-
     <div class="panel-header">
       <h1>Team <span class="accent">Master Data</span></h1>
       <p class="panel-sub">Register clubs and manage team records with auto-generated SKUs.</p>
@@ -208,7 +199,7 @@
           <span class="badge badge--info" id="teamCount">0 teams</span>
         </div>
         <div class="table-wrap">
-          <table class="data-table" id="teamsTable">
+          <table class="data-table">
             <thead>
               <tr>
                 <th>SKU</th>
@@ -223,9 +214,9 @@
         </div>
       </div>
     </div>
+  </section>
 
-  </section><section id="tab-canteen" class="tab-panel" aria-label="Canteen Inventory">
-
+  <section id="tab-canteen" class="tab-panel" aria-label="Canteen Inventory">
     <div class="panel-header">
       <h1>Canteen <span class="accent">Products</span></h1>
       <p class="panel-sub">Manage concession inventory with SKU-level variant tracking.</p>
@@ -243,7 +234,7 @@
           </div>
           <div class="form-group">
             <label for="productSize">Volume / Size</label>
-            <input type="text" id="productSize" placeholder="e.g. 375ml, 600ml, 1L" />
+            <input type="text" id="productSize" placeholder="e.g. 375ml" />
           </div>
           <div class="form-group">
             <label for="productCost">Cost Price (AUD $)</label>
@@ -255,7 +246,7 @@
           </div>
           <div class="form-group">
             <label for="productStock">Initial Stock / Quantity</label>
-            <input type="number" id="productStock" placeholder="0" min="0" value="0" />
+            <input type="number" id="productStock" value="0" min="0" />
           </div>
           <button class="btn btn--primary" id="addProductBtn">+ Add Product</button>
         </div>
@@ -267,7 +258,7 @@
           <span class="badge badge--info" id="productCount">0 products</span>
         </div>
         <div class="table-wrap">
-          <table class="data-table" id="productsTable">
+          <table class="data-table">
             <thead>
               <tr>
                 <th>SKU</th>
@@ -276,8 +267,8 @@
                 <th>Cost</th>
                 <th>Retail</th>
                 <th>Margin</th>
-                <th>Initial Stock</th>
-                <th>Current Stock</th>
+                <th>Initial</th>
+                <th>Current</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -286,28 +277,30 @@
         </div>
       </div>
     </div>
+  </section>
 
-  </section><section id="tab-history" class="tab-panel" aria-label="Match History">
-
+  <section id="tab-history" class="tab-panel" aria-label="Match History">
     <div class="panel-header">
       <h1>Match <span class="accent">History</span></h1>
-      <p class="panel-sub">Full log of all recorded matches and outcomes.</p>
+      <p class="panel-sub">Full log of all recorded matches, outcomes, and local sales reports.</p>
     </div>
 
     <div class="card card--table card--full">
       <div class="card__head">
-        <h2>All Matches</h2>
+        <h2>All Matches Log</h2>
         <span class="badge badge--info" id="matchCount">0 matches</span>
       </div>
       <div class="table-wrap">
-        <table class="data-table" id="matchesTable">
+        <table class="data-table">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Date</th>
               <th>Sport</th>
-              <th>Match Summary</th>
-              <th>Temp</th>
-              <th>Items Sold</th>
+              <th>Home Team</th>
+              <th>Away Team</th>
+              <th>Score (Result)</th>
+              <th>Weather</th>
               <th>Canteen Revenue</th>
               <th>Status</th>
             </tr>
@@ -316,87 +309,58 @@
         </table>
       </div>
     </div>
+  </section>
 
-  </section><section id="tab-export" class="tab-panel" aria-label="Data Export">
-
+  <section id="tab-export" class="tab-panel" aria-label="Data Export">
     <div class="panel-header">
       <h1>Data <span class="accent">Import & Export</span></h1>
       <p class="panel-sub">Download relational CSV files or restore historical data into the application.</p>
     </div>
 
     <div class="export-grid">
-      
-      <div class="card card--export">
-        <div class="export-icon">📥</div>
-        <h3>Import matches.csv</h3>
-        <p>Overwrite local match history from CSV.</p>
-        <input type="file" id="importMatchesFile" accept=".csv" class="form-control" style="background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--sp-2) var(--sp-3); width: 100%; color: var(--text-primary); margin-bottom: var(--sp-3);" />
-        <button class="btn btn--primary btn--full" id="importMatchesBtn">⬆ Import matches.csv</button>
-      </div>
-
-      <div class="card card--export">
-        <div class="export-icon">📦</div>
-        <h3>Import sales.csv</h3>
-        <p>Overwrite local sales data from CSV.</p>
-        <input type="file" id="importSalesFile" accept=".csv" class="form-control" style="background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--sp-2) var(--sp-3); width: 100%; color: var(--text-primary); margin-bottom: var(--sp-3);" />
-        <button class="btn btn--primary btn--full" id="importSalesBtn">⬆ Import sales.csv</button>
-      </div>
-
       <div class="card card--export">
         <div class="export-icon">📋</div>
         <h3>matches.csv</h3>
-        <p>Full match records including teams, scores, weather, and status. Primary key: <code>match_id</code>.</p>
-        <div class="schema-preview">
-          <code>match_id · date · time · weather_temp_c · sport_type · home_team_id · away_team_id · home_score · away_score · status · notes</code>
-        </div>
+        <p>Full match records including team profiles and raw scores.</p>
         <button class="btn btn--primary btn--full" id="exportMatchesBtn">⬇ Download matches.csv</button>
       </div>
 
       <div class="card card--export">
         <div class="export-icon">🧃</div>
         <h3>sales.csv</h3>
-        <p>Canteen sales by match. Foreign keys: <code>match_id</code> → matches, <code>product_id</code> → products. Sales are <strong>0</strong> for cancelled matches.</p>
-        <div class="schema-preview">
-          <code>sales_id · match_id · product_id · quantity</code>
-        </div>
+        <p>Canteen transaction logs matching live records.</p>
         <button class="btn btn--primary btn--full" id="exportSalesBtn">⬇ Download sales.csv</button>
       </div>
 
       <div class="card card--export">
         <div class="export-icon">🏆</div>
         <h3>teams.csv</h3>
-        <p>Team master data. Primary key: <code>team_id</code>.</p>
-        <div class="schema-preview">
-          <code>team_id · team_name · sport_type · suburb</code>
-        </div>
+        <p>Team master data registration matrix.</p>
         <button class="btn btn--primary btn--full" id="exportTeamsBtn">⬇ Download teams.csv</button>
       </div>
 
       <div class="card card--export">
         <div class="export-icon">🛒</div>
         <h3>products.csv</h3>
-        <p>Product master / SKU catalogue. Primary key: <code>product_id</code>.</p>
-        <div class="schema-preview">
-          <code>product_id · product_name · size · cost_price · retail_price</code>
-        </div>
+        <p>Product SKU profile directory.</p>
         <button class="btn btn--primary btn--full" id="exportProductsBtn">⬇ Download products.csv</button>
       </div>
 
       <div class="card card--export card--export--danger">
         <div class="export-icon">⚠️</div>
         <h3>Clear All Data</h3>
-        <p>Permanently erase all LocalStorage data for this application. This action cannot be undone.</p>
+        <p>Permanently wipe all records from local index.</p>
         <button class="btn btn--danger btn--full" id="clearDataBtn">🗑 Clear All Data</button>
       </div>
-
     </div>
+  </section>
 
-  </section></main>
+</main>
 
 <footer class="site-footer">
   <div class="site-footer__inner">
     <span>AusClub<em>Pro</em> · Universal Community Sports Dashboard</span>
-    <span>Data stored locally · No servers · <a href="https://github.com" target="_blank" rel="noopener">GitHub Pages Ready</a></span>
+    <span>Data stored locally · No servers</span>
   </div>
 </footer>
 
