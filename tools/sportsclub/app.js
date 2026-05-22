@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   AusClub Pro — app.js (Defensive Clean Edition)
+   AusClub Pro — app.js (Bulletproof Defensive Edition)
 ═══════════════════════════════════════════════════════════════ */
 
 'use strict';
@@ -89,7 +89,7 @@ const SPORTS = {
 };
 
 /* ──────────────────────────────────────────────────────────────
-   TABS NAVIGATION SYSTEM
+   TABS SYSTEM
 ────────────────────────────────────────────────────────────── */
 function initTabs() {
   const tabs = document.querySelectorAll('.tab-btn');
@@ -117,9 +117,11 @@ function addTeam() {
   const nameInput = document.getElementById('teamName');
   const sportSelect = document.getElementById('teamSport');
   const suburbInput = document.getElementById('teamSuburb');
+  if (!nameInput || !sportSelect) return;
+
   const name = nameInput.value.trim();
   const sport = sportSelect.value;
-  const suburb = suburbInput.value.trim();
+  const suburb = suburbInput ? suburbInput.value.trim() : '';
 
   if (!name || !sport) { alert('Please enter team name and select sport.'); return; }
   const teams = getTeams();
@@ -128,7 +130,7 @@ function addTeam() {
   teams.push({ id, name, sport, suburb });
   saveTeams(teams);
   
-  nameInput.value = ''; suburbInput.value = '';
+  nameInput.value = ''; if (suburbInput) suburbInput.value = '';
   renderTeams(); 
   refreshTeamDropdowns();
 }
@@ -214,18 +216,13 @@ function addProduct() {
 
   const id = 'P' + String(products.length + 1).padStart(3, '0');
   products.push({ 
-    id, 
-    name, 
-    size, 
-    cost, 
-    retail, 
-    initialStock: stock, 
-    currentStock: stock  
+    id, name, size, cost, retail, 
+    initialStock: stock, currentStock: stock  
   });
   
   saveProducts(products);
   
-  if (nameInput) nameInput.value = ''; 
+  nameInput.value = ''; 
   if (sizeInput) sizeInput.value = ''; 
   if (costInput) costInput.value = ''; 
   if (retailInput) retailInput.value = ''; 
@@ -301,6 +298,7 @@ function refreshCanteenSelectDropdown() {
 function handleDropdownSale() {
   if (!state.match) { alert('Please start a match first.'); return; }
   const selectEl = document.getElementById('canteenProductSelect');
+  if (!selectEl) return;
   const productId = selectEl.value;
   if (!productId) return;
 
@@ -354,14 +352,25 @@ function renderCanteenLiveWidget() {
 }
 
 function startMatch() {
-  const sport = document.getElementById('sportSelect').value;
-  const date = document.getElementById('matchDate').value;
-  const time = document.getElementById('matchTime').value;
-  const temp = parseInt(document.getElementById('weatherTemp').value) || 25;
-  const homeId = document.getElementById('homeTeamSelect').value;
-  const awayId = document.getElementById('awayTeamSelect').value;
-  const status = document.getElementById('matchStatus').value;
-  let notes = document.getElementById('matchNotes').value.trim();
+  const sportEl = document.getElementById('sportSelect');
+  const dateEl = document.getElementById('matchDate');
+  const timeEl = document.getElementById('matchTime');
+  const tempEl = document.getElementById('weatherTemp');
+  const homeEl = document.getElementById('homeTeamSelect');
+  const awayEl = document.getElementById('awayTeamSelect');
+  const statusEl = document.getElementById('matchStatus');
+  const notesEl = document.getElementById('matchNotes');
+
+  if (!sportEl || !homeEl || !awayEl) return;
+
+  const sport = sportEl.value;
+  const homeId = homeEl.value;
+  const awayId = awayEl.value;
+  const date = dateEl ? dateEl.value : '';
+  const time = timeEl ? timeEl.value : '';
+  const temp = tempEl ? (parseInt(tempEl.value) || 25) : 25;
+  const status = statusEl ? statusEl.value : 'Scheduled';
+  let notes = notesEl ? notesEl.value.trim() : '';
 
   if (!sport || !homeId || !awayId) { alert('Please select Sport, Home Team and Away Team.'); return; }
   if (homeId === awayId) { alert('Home and Away teams cannot be the same.'); return; }
@@ -373,8 +382,10 @@ function startMatch() {
 
   let finalStatus = status;
   if (temp >= 40) {
-    document.getElementById('heatTemp').textContent = temp;
-    document.getElementById('heatOverlay').classList.remove('hidden');
+    const heatTempEl = document.getElementById('heatTemp');
+    const heatOverlayEl = document.getElementById('heatOverlay');
+    if (heatTempEl) heatTempEl.textContent = temp;
+    if (heatOverlayEl) heatOverlayEl.classList.remove('hidden');
     finalStatus = 'Cancelled';
     notes = `Cancelled due to Heat Policy. ${notes}`.trim();
   }
@@ -382,17 +393,17 @@ function startMatch() {
   state.match = {
     match_id: matchId, date, time, weather_temp_c: temp, sport_type: sport,
     home_team_id: homeId, away_team_id: awayId,
-    homeTeamName: homeTeam.name, awayTeamName: awayTeam.name,
+    homeTeamName: homeTeam ? homeTeam.name : 'Home', awayTeamName: awayTeam ? awayTeam.name : 'Away',
     homeScoreState: SPORTS[sport].initScore(), awayScoreState: SPORTS[sport].initScore(),
     status: finalStatus, notes: notes
   };
 
-  document.getElementById('homeName').textContent = homeTeam.name;
-  document.getElementById('awayName').textContent = awayTeam.name;
-  document.getElementById('sportChip').textContent = SPORTS[sport].label;
+  const hn = document.getElementById('homeName'); if(hn) hn.textContent = state.match.homeTeamName;
+  const an = document.getElementById('awayName'); if(an) an.textContent = state.match.awayTeamName;
+  const sc = document.getElementById('sportChip'); if(sc) sc.textContent = SPORTS[sport].label;
   
-  document.querySelector('.card--setup').classList.add('hidden');
-  document.getElementById('livePanel').classList.remove('hidden');
+  const setupCard = document.querySelector('.card--setup'); if(setupCard) setupCard.classList.add('hidden');
+  const lp = document.getElementById('livePanel'); if(lp) lp.classList.remove('hidden');
 
   updateScoreboardDisplay();
   refreshCanteenSelectDropdown();
@@ -443,10 +454,10 @@ function updateScoreboardDisplay() {
   if (!state.match) return;
   const config = SPORTS[state.match.sport_type];
   
-  document.getElementById('homeScoreMain').textContent = config.displayMain(state.match.homeScoreState);
-  document.getElementById('homeScoreDetail').textContent = config.displayDetail(state.match.homeScoreState);
-  document.getElementById('awayScoreMain').textContent = config.displayMain(state.match.awayScoreState);
-  document.getElementById('awayScoreDetail').textContent = config.displayDetail(state.match.awayScoreState);
+  const hsm = document.getElementById('homeScoreMain'); if(hsm) hsm.textContent = config.displayMain(state.match.homeScoreState);
+  const hsd = document.getElementById('homeScoreDetail'); if(hsd) hsd.textContent = config.displayDetail(state.match.homeScoreState);
+  const asm = document.getElementById('awayScoreMain'); if(asm) asm.textContent = config.displayMain(state.match.awayScoreState);
+  const asd = document.getElementById('awayScoreDetail'); if(asd) asd.textContent = config.displayDetail(state.match.awayScoreState);
 }
 
 function saveMatch() {
@@ -493,9 +504,9 @@ function saveMatch() {
 
 function resetMatch() {
   state.match = null;
-  document.getElementById('livePanel').classList.add('hidden');
-  document.querySelector('.card--setup').classList.remove('hidden');
-  if(document.getElementById('matchNotes')) document.getElementById('matchNotes').value = '';
+  const lp = document.getElementById('livePanel'); if(lp) lp.classList.add('hidden');
+  const sc = document.querySelector('.card--setup'); if(sc) sc.classList.remove('hidden');
+  const mn = document.getElementById('matchNotes'); if(mn) mn.value = '';
   setDefaults();
   renderHistoryTable();
 }
@@ -575,50 +586,54 @@ function clearAllData() {
   }
 }
 
+/* ──────────────────────────────────────────────────────────────
+   🛡️ ULTRA-DEFENSIVE EVENT BINDING SYSTEM
+   (Prevents any null element from crashing the script)
+────────────────────────────────────────────────────────────── */
+function safeBind(id, event, callback) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener(event, callback);
+  }
+}
+
 function initEventListeners() {
-  document.getElementById('startMatchBtn').addEventListener('click', (e) => { e.preventDefault(); startMatch(); });
-  document.getElementById('resetMatchBtn').addEventListener('click', (e) => { e.preventDefault(); resetMatch(); });
-  document.getElementById('saveMatchBtn').addEventListener('click', (e) => { e.preventDefault(); saveMatch(); });
+  safeBind('startMatchBtn', 'click', (e) => { e.preventDefault(); startMatch(); });
+  safeBind('resetMatchBtn', 'click', (e) => { e.preventDefault(); resetMatch(); });
+  safeBind('saveMatchBtn', 'click', (e) => { e.preventDefault(); saveMatch(); });
+  safeBind('logDropdownSaleBtn', 'click', (e) => { e.preventDefault(); handleDropdownSale(); });
+  safeBind('addTeamBtn', 'click', (e) => { e.preventDefault(); addTeam(); });
+  safeBind('addProductBtn', 'click', (e) => { e.preventDefault(); addProduct(); });
   
-  document.getElementById('logDropdownSaleBtn').addEventListener('click', (e) => { e.preventDefault(); handleDropdownSale(); });
-  
+  safeBind('exportMatchesBtn', 'click', exportMatches);
+  safeBind('exportSalesBtn', 'click', exportSales);
+  safeBind('exportTeamsBtn', 'click', exportTeams);
+  safeBind('exportProductsBtn', 'click', exportProducts);
+  safeBind('clearDataBtn', 'click', clearAllData);
+
+  const sportSelect = document.getElementById('sportSelect');
+  if (sportSelect) {
+    sportSelect.addEventListener('change', refreshTeamDropdowns);
+  }
+
   const heatOkBtn = document.getElementById('heatOkBtn');
   if (heatOkBtn) {
     heatOkBtn.addEventListener('click', () => {
-      document.getElementById('heatOverlay').classList.add('hidden');
+      const ho = document.getElementById('heatOverlay');
+      if (ho) ho.classList.add('hidden');
       saveMatch();
     });
   }
 
-  document.getElementById('addTeamBtn').addEventListener('click', (e) => { e.preventDefault(); addTeam(); });
-
-  // 🛡️ 智能拦截雷达：通过 ID 绑定
-  const addProductBtn = document.getElementById('addProductBtn');
-  if (addProductBtn) {
-    addProductBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      addProduct();
-    });
-  }
-
-  // 🛡️ 全局双重防御：无论你的添加按钮是在 <form> 里还是叫什么名字，只要有人点击了 Canteen 里的提交，一律拦截并不允许刷新
+  // 防刷新雷达：拦截可能存在的 form 提交
   document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      // 如果触发的是产品表单，则执行产品添加
-      if (form.querySelector('#productName') || document.getElementById('productName')?.value) {
+      if (document.getElementById('productName')?.value) {
         addProduct();
       }
     });
   });
-
-  document.getElementById('exportMatchesBtn').addEventListener('click', exportMatches);
-  document.getElementById('exportSalesBtn').addEventListener('click', exportSales);
-  document.getElementById('exportTeamsBtn').addEventListener('click', exportTeams);
-  document.getElementById('exportProductsBtn').addEventListener('click', exportProducts);
-  document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
-
-  document.getElementById('sportSelect').addEventListener('change', refreshTeamDropdowns);
 }
 
 function init() {
