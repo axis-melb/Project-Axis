@@ -250,13 +250,13 @@ window.addProduct = function() {
   const prods = LS.getProducts();
   
   const existingIndex = prods.findIndex(p => 
-    p.name.toLowerCase() === name.toLowerCase() && 
-    (p.size || '').toLowerCase() === size.toLowerCase()
+    String(p.name || '').trim().toLowerCase() === String(name || '').trim().toLowerCase() && 
+    String(p.size || '').trim().toLowerCase() === String(size || '').trim().toLowerCase()
   );
 
   if (existingIndex !== -1) {
-    prods[existingIndex].initialStock = (prods[existingIndex].initialStock || 0) + initStock;
-    prods[existingIndex].currentStock = (prods[existingIndex].currentStock || 0) + initStock;
+    prods[existingIndex].initialStock = parseInt(prods[existingIndex].initialStock || 0, 10) + initStock;
+    prods[existingIndex].currentStock = parseInt(prods[existingIndex].currentStock || 0, 10) + initStock;
     if (cost > 0) prods[existingIndex].cost = cost;
     if (retail > 0) prods[existingIndex].retail = retail;
     showToast(`Updated existing ${name} stock by +${initStock}.`, 'success');
