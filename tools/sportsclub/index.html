@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AUSCLUBPRO · TOOL.004 — Project Axis</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="https://projectaxis.com.au/style.css">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f2;
+    --fg: #111110;
+    --muted: #999896;
+    --border: #d8d6d2;
+    --black: #111110;
+    --mono: 'Space Mono', monospace;
+    --body: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-weight: 300;
+    line-height: 1.6;
+    font-size: 14px;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    z-index: 100;
+  }
+  .mono { font-family: var(--mono); }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .section-label:hover { color: var(--fg); }
+  .desktop-nav { display: flex; gap: 32px; align-items: center; }
+
+  .cn-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    color: var(--fg);
+    text-decoration: none;
+    transition: all 0.2s;
+    margin-left: 24px;
+    display: inline-block;
+  }
+  .cn-btn:hover {
+    border-color: var(--fg);
+    background: rgba(0,0,0,0.03);
+  }
+
+  .mobile-nav-btn { display: none; background: none; border: none; cursor: pointer; color: var(--fg); width: 24px; height: 24px; }
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    padding: 20px 32px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    position: fixed;
+    top: 52px; left: 0; right: 0;
+    z-index: 99;
+  }
+  .mobile-menu.open { display: flex; gap: 16px; }
+
+  /* BREADCRUMB */
+  .back-bar {
+    margin-top: 52px;
+    padding: 16px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .back-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--fg); }
+  .back-sep { color: var(--border); font-size: 10px; }
+  .back-current {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 72px 40px 56px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: end;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    font-family: var(--mono);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .hero-sub {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 380px;
+  }
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: end;
+    padding-bottom: 4px;
+  }
+  .hero-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 8px;
+  }
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    background: var(--fg);
+    color: var(--bg);
+    border: 1px solid var(--fg);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--fg);
+  }
+  .btn-secondary {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .btn-secondary:hover {
+    border-color: var(--fg);
+  }
+
+  /* TICKER */
+  .ticker {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-block;
+    animation: ticker 28s linear infinite;
+  }
+  .ticker-item {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 48px;
+  }
+  .ticker-dot { color: var(--border); margin-right: 48px; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTION */
+  section {
+    border-bottom: 1px solid var(--border);
+  }
+  .section-header {
+    padding: 40px 40px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+
+  /* WHY */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .why-col {
+    padding: 40px;
+  }
+  .why-col:first-child {
+    border-right: 1px solid var(--border);
+  }
+  .why-col-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .why-problem-list, .why-solution-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .why-problem-list li, .why-solution-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .why-problem-list li { color: var(--muted); }
+  .why-problem-list li::before {
+    content: '×';
+    font-family: var(--mono);
+    color: var(--border);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .why-solution-list li { color: var(--fg); }
+  .why-solution-list li::before {
+    content: '→';
+    font-family: var(--mono);
+    color: var(--fg);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border);
+  }
+  .feature-cell {
+    padding: 36px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .feature-cell:last-child { border-right: none; }
+  .feature-num {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .feature-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .feature-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* SCREENSHOTS */
+  .screenshots-section {
+    padding: 0 40px 40px;
+    border-top: 1px solid var(--border);
+  }
+  .screenshots-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 0;
+  }
+  .screenshot-cell {
+    background: var(--bg);
+    aspect-ratio: 16/10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .screenshot-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .screenshot-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 10px 14px;
+    background: rgba(245,244,242,0.92);
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ROADMAP */
+  .roadmap-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .roadmap-col {
+    padding: 40px;
+  }
+  .roadmap-col:first-child {
+    border-right: 1px solid var(--border);
+  }
+  .roadmap-col-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .roadmap-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .roadmap-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--fg);
+  }
+  .roadmap-list li::before {
+    content: '→';
+    font-family: var(--mono);
+    color: var(--fg);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .roadmap-list li.muted { color: var(--muted); }
+  .roadmap-list li.muted::before { color: var(--border); content: '·'; }
+
+  /* SETUP STEPS */
+  .steps-grid {
+    border-top: 1px solid var(--border);
+  }
+  .step-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+    min-height: 100px;
+  }
+  .step-row:last-child { border-bottom: none; }
+  .step-num-cell {
+    padding: 32px 40px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+  .step-content {
+    padding: 32px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .step-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .step-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .step-note {
+    padding: 32px 40px;
+    display: flex;
+    align-items: flex-start;
+  }
+  .step-note-inner {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: var(--border);
+    line-height: 1.8;
+    text-transform: uppercase;
+  }
+
+  /* EXPORT */
+  .export-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .export-left {
+    padding: 40px;
+    border-right: 1px solid var(--border);
+  }
+  .export-right {
+    padding: 40px;
+  }
+  .csv-preview {
+    background: #1a1a18;
+    color: #c8c5be;
+    padding: 24px;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.8;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  .csv-header { color: #888684; }
+  .csv-val { color: #e8e5de; }
+  .csv-str { color: #aab89e; }
+  .csv-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .desktop-nav { display: none; }
+    .mobile-nav-btn { display: block; }
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 48px 20px 40px;
+      gap: 32px;
+    }
+    .why-grid { grid-template-columns: 1fr; }
+    .why-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .features-grid { grid-template-columns: 1fr; }
+    .feature-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .step-row { grid-template-columns: 48px 1fr; }
+    .step-note { display: none; }
+    .step-num-cell, .step-content { padding: 24px 20px; }
+    .export-grid { grid-template-columns: 1fr; }
+    .export-left { border-right: none; border-bottom: 1px solid var(--border); }
+    .export-left, .export-right { padding: 28px 20px; }
+    .section-header { padding: 32px 20px 0; }
+    .screenshots-section { padding: 0 20px 32px; }
+    .screenshots-grid { grid-template-columns: 1fr 1fr; }
+    .why-col, .roadmap-col { padding: 28px 20px; }
+    .roadmap-grid { grid-template-columns: 1fr; }
+    .roadmap-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .back-bar { padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px; height: 100%;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:100%;">
+      <a href="https://projectaxis.com.au/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg);text-decoration:none;">PROJECT AXIS</a>
+      <div style="display:flex; align-items:center;">
+        <div class="desktop-nav">
+          <a href="https://projectaxis.com.au/#lab" class="section-label">LAB</a>
+          <a href="https://projectaxis.com.au/#log" class="section-label">LOG</a>
+          <a href="https://projectaxis.com.au/#system" class="section-label">SYSTEM</a>
+          <a href="#access" class="section-label">ACCESS</a>
+        </div>
+        <a href="./cn" class="cn-btn">CN</a>
+        <button class="mobile-nav-btn" id="mobile-menu-btn" style="margin-left: 16px;">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="https://projectaxis.com.au/#lab" class="section-label">LAB</a>
+    <a href="https://projectaxis.com.au/#log" class="section-label">LOG</a>
+    <a href="https://projectaxis.com.au/#system" class="section-label">SYSTEM</a>
+    <a href="#access" class="section-label">ACCESS</a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="back-bar">
+  <a href="https://projectaxis.com.au/#lab" class="back-link">← LAB</a>
+  <span class="back-sep">/</span>
+  <span class="back-current">AUSCLUBPRO</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">TOOL.004 / SPORTS CLUB CONSOLE // BY PROJECT AXIS</div>
+    <h1 class="hero-title">AUSCLUB<br>PRO</h1>
+    <p class="hero-sub">A free, private-by-design sports club management tool. Live scoreboard, team registry, canteen sales tracking — all running locally in your browser. No subscriptions, no cloud, no data extraction.</p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-tag-row">
+      <span class="tag">HTML · LOCAL ONLY</span>
+      <span class="tag">NO REGISTRATION</span>
+      <span class="tag">ZERO DATA EXTRACTION</span>
+      <span class="tag">EXPORT CSV</span>
+      <span class="tag">AFL · SOCCER · NETBALL</span>
+    </div>
+    <div class="cta-row">
+      <a href="./app.js" class="btn-primary" target="_blank">OPEN TOOL →</a>
+      <a href="#roadmap" class="btn-secondary">CLOUD VERSION ↓</a>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">LIVE SCOREBOARD</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">TEAM REGISTRY</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">CANTEEN SALES</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">MATCH HISTORY</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">EXPORT CSV</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">AFL · SOCCER · NETBALL</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">NO ACCOUNT</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">NO TRACKING</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">LIVE SCOREBOARD</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">TEAM REGISTRY</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">CANTEEN SALES</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">MATCH HISTORY</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">EXPORT CSV</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">AFL · SOCCER · NETBALL</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">NO ACCOUNT</span><span class="ticker-dot">·</span>
+    <span class="ticker-item">NO TRACKING</span><span class="ticker-dot">·</span>
+  </div>
+</div>
+
+<!-- WHY THIS EXISTS -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§01</span>
+    <span class="section-title">WHY THIS EXISTS</span>
+  </div>
+  <div class="why-grid">
+    <div class="why-col">
+      <div class="why-col-label">THE ORIGIN</div>
+      <div style="margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.03); border-left: 2px solid var(--fg);">
+        <p style="font-size: 14px; font-weight: 500; color: var(--fg); margin-bottom: 8px;">
+          A conversation with my neighbour — their local club was juggling a whiteboard for scores and a cash tin for canteen. No app fit both problems at once without a paid plan or mandatory cloud account.
+        </p>
+      </div>
+      <ul class="why-problem-list">
+        <li>Existing club management apps cost money or push you onto a subscription model</li>
+        <li>Scoreboard apps and canteen apps are always separate — no integration</li>
+        <li>Cloud-based systems require admin accounts and upload your club's data to third-party servers</li>
+        <li>Overkill for a small local club that just needs a scoreboard and a drinks tally</li>
+      </ul>
+    </div>
+    <div class="why-col">
+      <div class="why-col-label">THE SOLUTION</div>
+      <ul class="why-solution-list">
+        <li>Completely free. Open in any browser, use immediately. No sign-up required.</li>
+        <li>Scoreboard and canteen in one tool — designed together, not bolted together.</li>
+        <li>All data lives in your browser's localStorage. Your club's data is your club's data.</li>
+        <li>Covers Australian sports out of the box: AFL, Soccer, Netball, Cricket, Basketball, and more.</li>
+        <li>Export everything to CSV at any time — full match history and canteen sales records.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§02</span>
+    <span class="section-title">WHAT IT DOES</span>
+  </div>
+  <div class="features-grid">
+    <div class="feature-cell">
+      <div class="feature-num">F.001</div>
+      <div class="feature-title">LIVE SCOREBOARD</div>
+      <p class="feature-desc">Set up a match in seconds — select sport, date, time, temperature, home team and away team. Track live scores with one tap. Supports Completed, In Progress, and Cancelled match states.</p>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-num">F.002</div>
+      <div class="feature-title">TEAM REGISTRY</div>
+      <p class="feature-desc">Maintain a master list of teams with auto-assigned SKU codes (T001, T002…). Each team stores its name, sport type, and suburb. Teams are available across all matches — register once, use forever.</p>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-num">F.003</div>
+      <div class="feature-title">CANTEEN SALES</div>
+      <p class="feature-desc">Build a product catalogue with cost, retail price, and stock levels. During a match, log canteen sales per product. Margin is calculated automatically. Stock updates in real time as items are sold.</p>
+    </div>
+  </div>
+  <div class="features-grid" style="border-top: 1px solid var(--border);">
+    <div class="feature-cell">
+      <div class="feature-num">F.004</div>
+      <div class="feature-title">MATCH HISTORY</div>
+      <p class="feature-desc">Every match you record is stored and visible in the History tab — date, sport, teams, score, temperature, and status. Full canteen sales history is logged per match for reconciliation at day's end.</p>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-num">F.005</div>
+      <div class="feature-title">DATA EXPORT (CSV)</div>
+      <p class="feature-desc">Export your full match history and canteen sales records to CSV at any time. Open in Excel, Google Sheets, or any spreadsheet tool. Your records, your format, your device.</p>
+    </div>
+    <div class="feature-cell">
+      <div class="feature-num">F.006</div>
+      <div class="feature-title">ZERO DEPENDENCIES</div>
+      <p class="feature-desc">A single HTML file plus a stylesheet and a script. No frameworks to install, no server to run, no internet connection required after the first load. Works on any modern browser — desktop or mobile.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENSHOTS -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§03</span>
+    <span class="section-title">INTERFACE</span>
+  </div>
+  <div class="screenshots-section">
+    <div class="screenshots-grid">
+      <div class="screenshot-cell">
+        <img src="./screenshots/scoreboard.png" alt="Live Match Scoreboard" />
+        <div class="screenshot-caption">01 — LIVE SCOREBOARD</div>
+      </div>
+      <div class="screenshot-cell">
+        <img src="./screenshots/teams.png" alt="Team Master Data" />
+        <div class="screenshot-caption">02 — TEAM REGISTRY</div>
+      </div>
+      <div class="screenshot-cell">
+        <img src="./screenshots/canteen.png" alt="Canteen Products" />
+        <div class="screenshot-caption">03 — CANTEEN SALES</div>
+      </div>
+      <div class="screenshot-cell">
+        <img src="./screenshots/history.png" alt="Match and Sales History" />
+        <div class="screenshot-caption">04 — MATCH HISTORY</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GETTING STARTED -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§04</span>
+    <span class="section-title">GETTING STARTED</span>
+  </div>
+  <div class="steps-grid">
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">01</span></div>
+      <div class="step-content">
+        <div class="step-title">OPEN THE TOOL</div>
+        <p class="step-desc">Click "Open Tool" above. The app loads instantly in your browser — no install, no login, no download. Bookmark it for quick access on match day.</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">Works on any<br>modern browser<br>· Chrome · Safari<br>· Firefox</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">02</span></div>
+      <div class="step-content">
+        <div class="step-title">REGISTER YOUR TEAMS</div>
+        <p class="step-desc">Go to the Teams tab. Add your home team and any opposition teams you expect to face this season. Each team gets a unique SKU and is available in the Scoreboard dropdown from that point on.</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">Teams saved<br>to localStorage<br>automatically</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">03</span></div>
+      <div class="step-content">
+        <div class="step-title">SET UP YOUR CANTEEN</div>
+        <p class="step-desc">Go to the Canteen tab. Add your products — drinks, snacks, whatever you sell. Enter cost price, retail price, and opening stock. The margin is calculated for you automatically.</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">Stock levels<br>update live<br>as you sell</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">04</span></div>
+      <div class="step-content">
+        <div class="step-title">START A MATCH</div>
+        <p class="step-desc">On the Scoreboard tab, choose your sport, date, home and away teams, then hit Start Match. Update the score as the game progresses. Log canteen sales in parallel — all tied to the same match record.</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">Score + canteen<br>linked to the<br>same match ID</span>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num-cell"><span class="step-num">05</span></div>
+      <div class="step-content">
+        <div class="step-title">REVIEW & EXPORT</div>
+        <p class="step-desc">After the match, head to the History tab to review results and canteen totals. Use the Data tab to export everything to CSV — ready for your end-of-season report or committee meeting.</p>
+      </div>
+      <div class="step-note">
+        <span class="step-note-inner">CSV opens in<br>Excel · Sheets<br>or Numbers</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- YOUR DATA -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§05</span>
+    <span class="section-title">YOUR DATA</span>
+  </div>
+  <div class="export-grid">
+    <div class="export-left">
+      <p style="font-size:13px; color:var(--muted); line-height:1.7;">
+        All data is stored in your browser's <code>localStorage</code>. Nothing is sent to any server. To move data between devices or create a backup, use the built-in CSV export.
+      </p>
+      <ul style="margin-top: 20px; list-style: none; display: flex; flex-direction: column; gap: 18px; font-size: 13px; color: var(--fg); padding: 0;">
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>Use the <strong>Data tab</strong> to export your full match history and canteen sales records as CSV at any time.</span>
+          </div>
+        </li>
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>Clearing your browser cache will erase stored data — export regularly to keep a safe copy.</span>
+          </div>
+        </li>
+        <li style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; gap: 10px;">
+            <span style="color:var(--muted);">→</span>
+            <span>Completely private. Your club's data is never shared with third parties.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="export-right">
+      <div class="csv-label">EXPORT FORMAT PREVIEW (CSV)</div>
+      <div class="csv-preview">
+<span class="csv-header">match_id,date,sport,home,away,score,status</span><br>
+<span class="csv-str">M001,2026-05-08,Soccer,</span><br>
+<span class="csv-str">&nbsp;Collingwood pie,Clayton Cat,</span><br>
+<span class="csv-val">&nbsp;6-2,Completed</span><br>
+<br>
+<span class="csv-header">sales_id,match_id,product,qty</span><br>
+<span class="csv-str">S001,M001,Cola (375),</span><span class="csv-val">4</span><br>
+<span class="csv-str">S002,M001,Sprite (375),</span><span class="csv-val">2</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="section-header">
+    <span class="section-num">§06</span>
+    <span class="section-title">LOCAL VS CLOUD</span>
+  </div>
+  <div class="roadmap-grid">
+    <div class="roadmap-col">
+      <div class="roadmap-col-label">THIS VERSION — LOCAL (FREE)</div>
+      <ul class="roadmap-list">
+        <li>Runs entirely in your browser — no server needed</li>
+        <li>Complete privacy — zero data leaves your device</li>
+        <li>Works offline after first load</li>
+        <li>Export data to CSV at any time</li>
+        <li class="muted">Single device only — data doesn't sync across phones or tablets</li>
+        <li class="muted">No simultaneous multi-user access</li>
+      </ul>
+    </div>
+    <div class="roadmap-col">
+      <div class="roadmap-col-label">COMING — CLOUD VERSION (IN RESEARCH)</div>
+      <ul class="roadmap-list">
+        <li>Multiple volunteers can update scores and log canteen sales at the same time</li>
+        <li>Real-time sync across phones, tablets, and desktop</li>
+        <li>Club-level admin accounts and role management</li>
+        <li class="muted">Requires a server — data stored in the cloud</li>
+        <li class="muted">Currently in research and design phase — no timeline yet</li>
+      </ul>
+      <div style="margin-top: 24px; padding: 16px; background: rgba(0,0,0,0.03); border-left: 2px solid var(--border);">
+        <p style="font-size: 12px; color: var(--muted); line-height: 1.7;">If privacy matters most to your club, this local version is the right choice. If your club needs multiple people updating data simultaneously on match day, the cloud version is what we're building next.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEEDBACK -->
+<section>
+  <div class="section-header">
+    <span class="section-num">§07</span>
+    <span class="section-title">FEEDBACK WELCOME</span>
+  </div>
+  <div style="padding: 0 40px 40px; border-top: 1px solid var(--border);">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; padding-top: 32px;">
+      <div>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 20px;">
+          AusClubPro is a free tool built for local Australian sports clubs. If you're using it, I'd genuinely like to know what's working, what's missing, and what sports or features should come next.
+        </p>
+        <p style="font-size: 13px; color: var(--muted); line-height: 1.8;">
+          This is a community tool — your feedback directly shapes what gets built. There's no roadmap committee here, just a developer who listens.
+        </p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 16px; justify-content: center;">
+        <div style="font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;">SUPPORTED SPORTS</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span class="tag">AFL</span>
+          <span class="tag">SOCCER</span>
+          <span class="tag">NETBALL</span>
+          <span class="tag">CRICKET</span>
+          <span class="tag">BASKETBALL</span>
+          <span class="tag">RUGBY</span>
+          <span class="tag">MORE COMING</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESS GATEWAY -->
+<section id="access" style="background:var(--black);position:relative;overflow:hidden;z-index:1; border-top: 1px solid var(--border);">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+
+  <div style="max-width:1200px;margin:0 auto;padding:80px 40px;position:relative;z-index:1;">
+
+    <div style="max-width: 600px; margin: 40px 0 60px 0; text-align: left;">
+      <h2 style="font-family: var(--mono); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; color: #fff;">SOURCE CODE & SUPPORT</h2>
+
+      <p style="font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 40px; line-height: 1.8;">
+        AusClubPro is free and open source. If it's saved your club time or trouble on match day, consider buying me a coffee — it helps fund the next update and keeps the tool going.
+      </p>
+
+      <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 30px;">
+        <a href="./app.js" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); text-decoration: none; transition: all 0.2s;">
+          OPEN TOOL ↗
+        </a>
+        <a href="https://buy.stripe.com/eVqaEXedSeuJeIUaQX0gw00" target="_blank" style="font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 28px; background: #fff; color: #000; border: 1px solid #fff; text-decoration: none; transition: all 0.2s; font-weight: bold;">
+          BUY ME A COFFEE ☕
+        </a>
+      </div>
+
+      <div style="margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left;">
+        <p style="margin-bottom: 8px; color: #fff;"><strong>DISCLAIMER:</strong></p>
+        <p>This tool is a free, open-source resource provided for personal and club use only. It does not constitute professional sports management, financial, or legal advice. Use at your own risk.</p>
+      </div>
+    </div>
+
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4);">
+        PROJECT AXIS — AX-2024.004 — TOOL LAYER
+      </div>
+      <div style="display: flex; gap: 24px;">
+        <a href="https://projectaxis.com.au/#lab" style="font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,0.4); transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+          ← BACK TO LAB
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if(mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('open');
+      });
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.remove('open');
+        });
+      });
+    }
+  });
+</script>
+
+<script src="https://projectaxis.com.au/main.js"></script>
+</body>
+</html>
