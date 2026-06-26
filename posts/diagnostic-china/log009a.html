@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The China Diagnostic Shortcut — PROJECT AXIS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --near-black: rgba(29, 29, 31, 1);
+    --line: rgba(29, 29, 31, 0.1);
+    --line-dark: rgba(29, 29, 31, 0.08);
+  }
+  body { font-family: 'Inter', sans-serif; color: var(--near-black); }
+  .mono { font-family: 'Space Mono', monospace; }
+  .post-body { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(29,29,31,0.82); max-width: 680px; }
+  .post-body p { margin-bottom: 1.6em; }
+  .post-body h3 { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--near-black); margin: 2.8em 0 1em; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .post-body blockquote { border-left: 2px solid var(--near-black); padding: 4px 0 4px 24px; margin: 2em 0; font-size: 14px; font-style: italic; color: rgba(29,29,31,0.65); line-height: 1.75; }
+  .post-tag { border: 1px solid var(--line-dark); padding: 4px 12px; font-size: 10px; letter-spacing: 0.2em; font-family: 'Space Mono', monospace; text-transform: uppercase; color: rgba(29,29,31,0.5); display: inline-block; }
+  .disclaimer-box { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.02); padding: 20px 24px; margin-top: 3em; }
+  .disclaimer-box p { font-size: 11px; color: rgba(29,29,31,0.4); margin: 0; margin-bottom: 6px; }
+  @media (min-width: 900px) { .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 80px; } }
+  .post-sidebar { position: sticky; top: 80px; }
+  .sidebar-block { padding: 20px 0; border-top: 1px solid var(--line-dark); }
+  .sidebar-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 6px; }
+  .sidebar-value { font-size: 12px; font-weight: 500; color: var(--near-black); }
+  .sidebar-value-sub { font-size: 11px; color: rgba(29,29,31,0.4); margin-top: 2px; }
+  .post-log-num { font-family: 'Space Mono', monospace; font-size: 80px; font-weight: 700; color: rgba(29,29,31,0.05); position: absolute; right: 0; top: -10px; }
+  .nav-between { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-top: 1px solid var(--line); margin-top: 3em; gap: 16px; }
+  .nav-between a { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(29,29,31,0.4); text-decoration: none; }
+  .nav-between a:hover { color: var(--near-black); }
+  .author-block { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.015); padding: 20px 24px; margin: 2.4em 0; }
+  .author-block-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .author-block p { font-size: 12px; color: rgba(29,29,31,0.55); margin-bottom: 0; line-height: 1.75; }
+  .post-figure { margin: 2.4em 0; border: 1px solid var(--line-dark); }
+  .post-figure img { width: 100%; display: block; }
+  .post-figure figcaption { padding: 10px 14px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(29,29,31,0.35); border-top: 1px solid var(--line-dark); line-height: 1.6; }
+  .esim-callout { border: 1px solid var(--line-dark); background: rgba(29,29,31,0.015); padding: 20px 24px; margin: 2em 0; }
+  .esim-callout-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(29,29,31,0.3); margin-bottom: 10px; }
+  .esim-callout p { font-size: 13px; color: rgba(29,29,31,0.6); margin-bottom: 0.8em; line-height: 1.75; }
+  .esim-callout p:last-child { margin-bottom: 0; }
+  .esim-callout a { color: rgba(29,29,31,0.75); text-decoration: underline; }
+</style>
+</head>
+<body class="bg-white">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--line)]">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:52px;">
+      <a href="/" class="mono" style="font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:inherit;text-decoration:none;">PROJECT AXIS</a>
+      <!-- CN version placeholder — add link when ready -->
+    </div>
+  </div>
+</nav>
+
+<section style="max-width:1200px;margin:0 auto;padding:120px 32px 60px;position:relative;">
+  <div style="margin-bottom:48px;">
+    <a href="/#log" class="mono" style="text-decoration:none;color:rgba(29,29,31,0.4);font-size:10px;letter-spacing:0.3em;">← BACK TO LOG</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap;">
+    <span class="mono" style="font-size:10px;letter-spacing:0.35em;color:rgba(29,29,31,0.35);">LOG.009-A</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">2026-06-26</span>
+    <span class="mono" style="font-size:10px;letter-spacing:0.25em;color:rgba(29,29,31,0.35);">HEALTH / TRAVEL // BY PROJECT AXIS</span>
+  </div>
+
+  <div style="position:relative;">
+    <div class="post-log-num">009</div>
+    <h1 style="font-size:clamp(28px,5vw,52px);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;line-height:1.1;max-width:800px;">
+      The China<br>Diagnostic<br>Shortcut
+    </h1>
+    <p style="font-size:16px;color:rgba(29,29,31,0.6);margin-top:10px;font-weight:400;">Why flying to Shenzhen for a medical scan might be the most rational health decision you make this year.</p>
+    <p style="font-size:14px;color:rgba(29,29,31,0.45);margin-top:6px;">The machine is the same. The wait is not.</p>
+    <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="post-tag">Health</span>
+      <span class="post-tag">Travel</span>
+      <span class="post-tag">China</span>
+      <span class="post-tag">Expat</span>
+      <span class="post-tag">Medical</span>
+      <span class="post-tag">Diagnostics</span>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:0 32px 120px;position:relative;">
+  <div class="post-layout">
+    <article>
+      <div class="post-body">
+
+        <h3>The Slow Medicine Problem</h3>
+
+        <p>Living in Melbourne for nearly twenty years, I got used to the rhythm of what I'd call slow medicine. You feel a bit off. You book a GP appointment for next week. They refer you out. Then you wait. It's quiet, private, and usually subsidised. But it is slow in a way that's easy to forget is a choice — until something forces the comparison.</p>
+
+        <p>A sudden eye issue while travelling did that for me. It pushed me into China's public hospital system without much warning, and what I found there completely changed how I think about managing health across borders.</p>
+
+        <p>If you've ever stared at a 12-month waiting list just to get a routine MRI, this is worth reading.</p>
+
+        <h3>The Two-Minute Factory</h3>
+
+        <p>Let's be honest about what China's medical system is: an industrial assembly line. I needed an orbital scan. I didn't want to wait months in Melbourne, so I booked a slot at a public hospital in Shenzhen. The consultation cost roughly 33 RMB — under seven Australian dollars. The doctor I saw was efficient and direct about his scope: orbital work wasn't his specialty, but he could order the scan I described. He was, in effect, a human interface for the system's test-ordering function. Not unkind — just precisely scoped.</p>
+
+        <p>The eye exam itself took two minutes. The atmosphere was chaotic in the way that high-volume public health always is. Nobody holds your hand.</p>
+
+        <p>But here is where it gets genuinely interesting: the technology and turnaround are world-class.</p>
+
+        <p>An enhanced orbital MRI — with contrast dye — cost roughly 500 RMB. That is about 100 Australian dollars. In Australia, the equivalent out-of-pocket cost is several hundred dollars and several weeks of waiting. Through the public system, you're looking at closer to a year. I walked into the imaging department at 1:50 PM. By that evening, a high-resolution digital report was on my phone.</p>
+
+        <!-- MRI IMAGE SLOT -->
+        <figure class="post-figure">
+          <img src="YOUR_MRI_IMAGE_PATH_HERE.jpg" alt="Enhanced orbital MRI scan — Shenzhen public hospital" />
+          <figcaption>Enhanced orbital MRI (MR眼部直接增强) — Shenzhen public hospital. Full digital report received same day. All anatomical labels in English.</figcaption>
+        </figure>
+
+        <h3>Why the Scans Work Back Home</h3>
+
+        <p>When I opened the digital folder containing my MRI films and cross-sections, something stood out. Every anatomical label on the imaging file was in English. Medical imaging language is universal. Whether the machine is in Shanghai, New York, or Melbourne, a radiologist reads the same visual data. The equipment is the same equipment.</p>
+
+        <p>This creates a straightforward arbitrage. Go to China, use their high-speed, cost-efficient system to get MRIs, CT scans, or extensive blood panels done within 48 hours. Pack those digital files. Fly home. Hand them to your local specialist. You bypass the months of waiting just to reach a diagnosis — and arrive at your follow-up appointment already informed.</p>
+
+        <blockquote>
+          The machine is the same. What changes is the queue, the cost, and the calendar.
+        </blockquote>
+
+        <p>China does have real limitations in other areas — importing certain Western medications, for instance, is genuinely complicated, and this isn't a post about treatment. But for pure diagnostics, the output is internationally readable and the speed is in a different category entirely.</p>
+
+        <h3>The Invisible Wall</h3>
+
+        <p>So why isn't every expat doing this? Because without local infrastructure, the system is genuinely hostile to outsiders.</p>
+
+        <p>China's hospitals are fully digitalised. Registration, appointment booking, result retrieval — all of it runs through apps and mini-programs that require a local phone number, an active WeChat account, and the ability to navigate interfaces that were not designed with foreign users in mind. I watched an elderly couple at the clinic that day looking completely lost because they couldn't get past the QR code registration step.</p>
+
+        <p>There is, I think, a real business opportunity sitting in that gap: a bilingual escort service for medical tourists. Someone who meets you at the border, handles digital registration, navigates the hospital flow, ensures safety protocols are followed — metal screening before MRI, allergy checks before contrast — and hands you your results in a format your doctor back home can use. For older expats or anyone unfamiliar with the system, it would be genuinely valuable.</p>
+
+        <h3>Two Things to Sort Before You Go</h3>
+
+        <p>If you want to try this route, there are two practical problems to solve before you arrive.</p>
+
+        <p>The first is hospital selection. Not all hospitals handle foreign patients with the same ease. My recommendation, based on this experience, is to look at the University of Hong Kong — Shenzhen Hospital. It operates on a more Western-oriented triage model and routinely issues official English-language reports, which makes the handover to your doctor at home considerably smoother.</p>
+
+        <p>The second is connectivity — and this one matters more than it sounds.</p>
+
+        <p>Standard roaming and local Wi-Fi inside mainland China will block access to almost everything you rely on: Google Maps for navigation between hospital buildings, WhatsApp to coordinate with family, and the Western-facing sites you use to research what you're looking at. At the same time, you still need to access the hospital's own apps, which run locally.</p>
+
+        <p>The solution I used was an eSIM that routes through a Singapore IP. It keeps your Western apps functional, bypasses the firewall, and still lets you connect to local hospital systems. I sourced mine from <a href="https://shop.roammelb.com" style="color:rgba(29,29,31,0.75);text-decoration:underline;">RoamMelb</a>, an Australian-run Airalo reseller. It's cheap, activates on arrival, and you discard it when you leave.</p>
+
+        <!-- ESIM IP SCREENSHOT SLOT -->
+        <figure class="post-figure">
+          <img src="YOUR_ESIM_IP_SCREENSHOT_PATH_HERE.jpg" alt="eSIM IP detection — Singapore exit node while in Shenzhen" />
+          <figcaption>eSIM active in Shenzhen — Singapore IP visible. Full access to Google, WhatsApp, and Western sites while connected to local hospital apps simultaneously.</figcaption>
+        </figure>
+
+        <div class="esim-callout">
+          <div class="esim-callout-label">Practical Note — Connectivity</div>
+          <p>The eSIM I used roams through a Singapore exit node, which means your IP appears offshore from the perspective of China's firewall. Western apps work normally. Local apps work normally. You carry one device and one SIM.</p>
+          <p>Available at <a href="https://shop.roammelb.com">shop.roammelb.com</a> — Asia and China Mainland plans in stock. Use code <strong>[YOUR CODE]</strong> for a discount on your first order.</p>
+        </div>
+
+        <h3>The Actual Takeaway</h3>
+
+        <p>China's healthcare system was not built for bedside manner or privacy. The consultation is short, the environment is chaotic, and the administrative system assumes you are local.</p>
+
+        <p>But if you approach it as a high-speed diagnostic engine, it is genuinely powerful — and for anyone sitting on a long waiting list back home, that reframe is worth something.</p>
+
+        <p>The imaging quality is the same. The cost is a fraction. The turnaround is 48 hours instead of 12 months. If something needs investigating and the queue at home is not moving, taking control of your own diagnostic timeline is a reasonable decision.</p>
+
+        <blockquote>
+          You don't have to wait for the system to notice you. Go get the data. Bring it back. Then get treated.
+        </blockquote>
+
+        <p>The results travel. The queue does not.</p>
+
+        <div class="author-block" style="margin-top:2.8em;">
+          <div class="author-block-label">About the Author</div>
+          <p>The author is a Registered Building Surveyor (Victoria), based across Melbourne, Hong Kong, and Shenzhen. This account reflects a personal experience navigating the mainland China public hospital system for diagnostic imaging in 2026.</p>
+        </div>
+
+        <div class="nav-between">
+          <a href="https://projectaxis.com.au/posts/budget-2026/log008a">← LOG.008-A: WHO DOES THE BUDGET HELP?</a>
+          <span style="color:rgba(29,29,31,0.2);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;">NEXT — COMING SOON →</span>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:2.4em 0;" />
+
+        <div class="disclaimer-box">
+          <div class="sidebar-label" style="margin-bottom:10px;">DISCLAIMER</div>
+          <p>The views expressed are solely those of the author in a personal capacity and reflect one individual's experience navigating the mainland China public hospital system. This does not constitute medical, financial, or legal advice. Medical decisions should be made in consultation with qualified healthcare professionals. Hospital systems, costs, and procedures are subject to change.</p>
+        </div>
+
+        <div style="margin-top: 40px; border-top: 1px solid var(--line-dark); padding-top: 20px;">
+          <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(29,29,31,0.5);margin-bottom:4px;">Written by</div>
+          <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--near-black);margin-bottom:12px;">Project Axis Solutions</div>
+          <div style="font-size:10px;color:rgba(29,29,31,0.3);letter-spacing:0.05em;">© 2026 Project Axis Solutions. All rights reserved.</div>
+        </div>
+
+      </div>
+    </article>
+
+    <aside class="post-sidebar">
+      <div class="sidebar-block">
+        <div class="sidebar-label">PUBLISHED</div>
+        <div class="sidebar-value">2026-06-26</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">CATEGORY</div>
+        <div class="sidebar-value">HEALTH / TRAVEL</div>
+        <div class="sidebar-value-sub">Expat & cross-border</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">TYPE</div>
+        <div class="sidebar-value">Standalone</div>
+        <div class="sidebar-value-sub">Personal account</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">READ TIME</div>
+        <div class="sidebar-value">~ 5 MIN</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">ABOUT THE AUTHOR</div>
+        <div class="sidebar-value-sub" style="font-size:10px;line-height:1.7;">VIC Registered Building Surveyor<br>Based across Melbourne, HK & Shenzhen<br>Construction & development practitioner</div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">RELATED</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <a href="https://projectaxis.com.au/posts/budget-2026/log008a" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">LOG.008-A — WHO DOES THE BUDGET HELP?</a>
+          <a href="https://projectaxis.com.au/posts/prefab-housing/log003a" class="mono" style="font-size:9px;color:rgba(29,29,31,0.4);letter-spacing:0.1em;text-decoration:none;">LOG.003-A — WHO OWNS THE QUALITY?</a>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <div class="sidebar-label">TAGS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <span class="post-tag">Health</span>
+          <span class="post-tag">China</span>
+          <span class="post-tag">Expat</span>
+          <span class="post-tag">Travel</span>
+        </div>
+      </div>
+      <div class="sidebar-block" style="border:1px solid var(--line-dark);padding:16px;margin-top:8px;">
+        <div class="sidebar-label" style="margin-bottom:8px;">Travelling to China?</div>
+        <div style="font-size:11px;color:rgba(29,29,31,0.55);line-height:1.7;margin-bottom:10px;">eSIM with Singapore IP — works inside mainland China. Access Google, WhatsApp, and local apps simultaneously.</div>
+        <a href="https://shop.roammelb.com" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--near-black);text-decoration:none;border:1px solid var(--line-dark);padding:6px 10px;display:inline-block;">SHOP.ROAMMELB.COM →</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"73976c8d5bae4cfdb5e3edd4efa0f352","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
