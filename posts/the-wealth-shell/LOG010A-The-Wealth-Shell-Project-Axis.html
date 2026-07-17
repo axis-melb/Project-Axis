@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOG.010-A — The Wealth Shell | Project Axis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --near-black: rgba(29,29,31,1);
+      --line: rgba(29,29,31,0.1);
+      --line-dark: rgba(29,29,31,0.08);
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--near-black);
+      background: #fafafa;
+    }
+    .mono { font-family: 'Space Mono', monospace; }
+    .post-body {
+      font-size: 15px;
+      line-height: 1.85;
+      color: rgba(29,29,31,0.82);
+    }
+    .post-body h3 {
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .post-body p {
+      margin-bottom: 1.25rem;
+    }
+    .post-body blockquote {
+      border-left: 2px solid var(--near-black);
+      padding-left: 1.25rem;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: rgba(29,29,31,0.72);
+    }
+    .post-body a {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .post-body ul, .post-body ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .post-body li {
+      margin-bottom: 0.5rem;
+    }
+    .post-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    .sidebar-block {
+      background: white;
+      border: 1px solid var(--line);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .sidebar-block h4 {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+    }
+    .sidebar-block p, .sidebar-block li {
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .author-block {
+      background: var(--line-dark);
+      padding: 1.5rem;
+      margin: 3rem 0;
+      border-left: 3px solid var(--near-black);
+    }
+    .author-block h4 {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .post-figure {
+      border: 1px solid var(--line);
+      padding: 1rem;
+      margin: 2rem 0;
+      background: white;
+    }
+    .post-figure figcaption {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      margin-top: 0.75rem;
+      color: rgba(29,29,31,0.62);
+    }
+    .disclaimer-box {
+      background: #fffbea;
+      border-left: 3px solid #f59e0b;
+      padding: 1.25rem;
+      margin: 2rem 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .nav-between {
+      display: flex;
+      justify-content: space-between;
+      margin: 3rem 0;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+    .nav-between a {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .post-log-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 72px;
+      font-weight: 700;
+      line-height: 1;
+      color: rgba(29,29,31,0.06);
+      margin-bottom: 1rem;
+    }
+    .partner-callout {
+      background: #f0f9ff;
+      border: 1px solid #0ea5e9;
+      padding: 1rem;
+      margin-top: 1.5rem;
+    }
+    .partner-callout h5 {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+      color: #0284c7;
+    }
+    .partner-callout p {
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+    .partner-callout a {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      background: #0ea5e9;
+      color: white;
+      text-decoration: none;
+      border-radius: 3px;
+    }
+    .top-disclaimer {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      font-size: 13px;
+      line-height: 1.6;
+      border-radius: 4px;
+    }
+    @media (max-width: 1024px) {
+      .post-layout { flex-direction: column; }
+      .post-sidebar { position: static !important; margin-top: 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="mono text-sm font-bold tracking-wide">PROJECT AXIS</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="max-w-5xl mx-auto px-6 pt-32 pb-16">
+    
+    <!-- TOP DISCLAIMER -->
+    <div class="top-disclaimer">
+      <strong>DISCLAIMER:</strong> This article reflects personal observations based on the author's commerce and cross-border experience. It does not constitute financial, tax, or legal advice. All tax positions must be verified with a qualified cross-border tax accountant based on your specific circumstances.
+    </div>
+
+    <div class="post-log-num">010</div>
+    <div class="mono text-xs uppercase tracking-wide mb-4" style="color: rgba(29,29,31,0.5);">
+      LOG.010-A &nbsp;·&nbsp; 2026-07-17 &nbsp;·&nbsp; FINANCE / EXPAT &nbsp;·&nbsp; BY PROJECT AXIS
+    </div>
+    <h1 class="text-5xl md:text-6xl font-bold uppercase leading-tight mb-6">
+      THE WEALTH SHELL
+    </h1>
+    <p class="text-lg md:text-xl" style="color: rgba(29,29,31,0.72); max-width: 680px;">
+      After May's tax reforms sent capital offshore, I started thinking about wealth the way I think about buildings — not as finishes, but as structural shells.
+    </p>
+    <div class="flex flex-wrap gap-2 mt-8">
+      <span class="post-tag">Finance</span>
+      <span class="post-tag">Tax</span>
+      <span class="post-tag">Hong Kong</span>
+      <span class="post-tag">Expat</span>
+      <span class="post-tag">Cross-Border</span>
+    </div>
+  </header>
+
+  <!-- TWO-COLUMN LAYOUT -->
+  <div class="max-w-7xl mx-auto px-6 pb-20 flex gap-12 post-layout">
+
+    <!-- MAIN ARTICLE -->
+    <article class="flex-1 post-body" style="max-width: 680px;">
+
+      <h3>The Exit Wave</h3>
+      <p>
+        In May 2026, when the Australian government tabled its capital gains overhaul, the conversations I overheard at a Hong Kong finance roundtable weren't panicked — they were clinical. People comparing jurisdictions the way I'd compare cladding systems. Singapore. Dubai. Hong Kong. Each with different fire ratings for wealth preservation.
+      </p>
+      <p>
+        What struck me wasn't the movement itself. It was how many people were doing it <em>reactively</em> — scrambling to relocate assets that should have been positioned years ago.
+      </p>
+
+      <h3>Buildings Don't Fail at the Paint Layer</h3>
+      <p>
+        When a project collapses, it's never because someone chose the wrong tile. Failure happens at the structural level — inadequate footings, improper load distribution, no redundancy in the frame.
+      </p>
+      <p>
+        Yet when it comes to wealth, most people operate entirely at the "finishes" layer. They obsess over which stock to pick, which fund manager to trust. The actual <em>structure</em> — how the asset is titled, where it's domiciled, who controls succession — gets almost no attention.
+      </p>
+      <p>
+        If you hold a cross-border footprint (Australian residency, Hong Kong business interests, family in multiple jurisdictions), you can't afford to think like a retail investor. You need to think like a project manager designing a long-horizon, multi-tiered asset shell.
+      </p>
+
+      <h3>The Three-Tier Shell</h3>
+      <p>
+        On any large construction project, cash flow is segregated by function. Each tranche has a timeline, a trigger, and a protection mechanism. Capital should work the same way.
+      </p>
+
+      <p><strong>Tier 1 — The Permanent Foundation</strong></p>
+      <p>
+        This is wealth you never intend to touch. It exists to transfer cleanly across generations — ideally outside probate, outside estate tax, and entirely clear of capital gains on maturity.
+      </p>
+      <p>
+        For this layer, I looked at whole-life insurance policies domiciled in Hong Kong. Section 118-300 of the Income Tax Assessment Act 1997 provides an explicit exemption: life insurance proceeds paid as a death benefit are generally exempt from Capital Gains Tax, provided the beneficiary is the original owner or acquired the policy for no consideration.
+      </p>
+      <p>
+        Translation: if structured correctly, the entire accumulated pool — premiums plus decades of compounded growth — can pass to the next generation completely tax-free in Australia. The offshore location (Hong Kong) adds a second layer: no capital gains tax on policy growth, no estate duty, clean transfer architecture.
+      </p>
+
+      <p><strong>Tier 2 — The 10-Year Compounder</strong></p>
+      <p>
+        This is your long-term growth engine. I structured this using a multicurrency savings policy with dual succession rights — meaning ownership and the "insured life" can rotate across generations without triggering an exit event.
+      </p>
+      <p>
+        The tax angle here is Section 26AH of the Income Tax Assessment Act 1936 — the "10-year rule" for insurance bonds. If you hold the policy for 10+ years without violating the 125% premium cap, the bonuses and growth paid under the policy become entirely tax-free upon withdrawal or maturity in Australia.
+      </p>
+      <p>
+        Because the policy is domiciled in Hong Kong (zero CGT environment), you get compounding without domestic erosion. After 10 years, you extract value in Australia without triggering income tax.
+      </p>
+
+      <p><strong>Tier 3 — Tactical Liquidity</strong></p>
+      <p>
+        Every building needs working capital. Tier 3 is your reactive cash — liquid equities, money market funds, short-term instruments you can access within 48 hours if something breaks.
+      </p>
+      <p>
+        I keep this layer on platforms like Futu or Moomoo. It earns steady returns, remains fully liquid, and yes, it bears normal Australian tax reporting obligations because it's active trading capital.
+      </p>
+
+      <h3>Asset Localization, Not Evasion</h3>
+      <p>
+        Here's what a Hong Kong-based wealth adviser explained to me: the goal isn't to "hide" wealth. The goal is <em>localization</em>.
+      </p>
+      <p>
+        When your core wealth sits in a premier international financial hub (Hong Kong, Singapore) while your day-to-day residency sits in Australia, you unlock an efficient operational model:
+      </p>
+      <ul>
+        <li>Your investments generate returns in Hong Kong. Those returns remain offshore — not because you're hiding them, but because there's no operational need to remit them back immediately.</li>
+        <li>You consume globally using credit or debit cards linked directly to your offshore accounts. Unless you're wiring six figures to purchase Australian property, your daily expenses flow directly from offshore capital without triggering cross-border transfers.</li>
+        <li>This is transparent and reportable. Australian tax residents must declare worldwide income — but <em>when</em> you bring capital onshore, <em>how</em> you structure its domicile, and <em>what</em> legal exemptions apply (like Section 118-300 or Section 26AH) determine the actual tax impact.</li>
+      </ul>
+      <p>
+        You're not evading. You're positioning assets in the right jurisdiction from day one, so that if you eventually transition out of Australia to become a non-resident, the wealth doesn't need to "move" — it was already there.
+      </p>
+
+      <h3>Why I'm Writing This Now</h3>
+      <p>
+        I'm not a tax agent. I'm not a financial planner. I'm a Registered Building Surveyor who has lived across Melbourne and Hong Kong for the better part of a decade, and I've watched too many people with cross-border lives operate with no structural plan.
+      </p>
+      <p>
+        When May's tax changes hit, I saw friends suddenly trying to relocate wealth in a panic. Some got trapped by exit taxes. Others had no idea which jurisdiction would even accept their residency application.
+      </p>
+      <p>
+        I didn't want that. So I built the shell early. I positioned Tier 1 and Tier 2 offshore years ago, long before any policy announcements. Now, if I stay in Australia, the structure works. If I leave, the structure still works.
+      </p>
+      <blockquote>
+        A wise builder plans the exit route before pouring the concrete.
+      </blockquote>
+
+      <div class="author-block">
+        <h4>About the Author</h4>
+        <p class="text-sm leading-relaxed" style="color: rgba(29,29,31,0.82);">
+          The author is a Registered Building Surveyor (Victoria) based across Melbourne and Hong Kong, with a background in commerce and supply chain management. This article reflects personal insights from a cross-border practitioner's perspective and does not constitute financial, tax, or legal advice.
+        </p>
+      </div>
+
+      <div class="nav-between">
+        <a href="/posts/china-medical/log009a">← LOG.009-A: THE CHINA DIAGNOSTIC SHORTCUT</a>
+        <a href="#">NEXT — COMING SOON →</a>
+      </div>
+
+      <div style="border-top: 1px solid var(--line); padding-top: 2rem; margin-top: 3rem;">
+        <div class="disclaimer-box">
+          <strong>DISCLAIMER</strong><br>
+          The author is a Registered Building Surveyor and construction management professional with a commerce background, not a financial planner, tax agent, or licensed investment adviser. This article reflects personal observations on cross-border wealth structures. It does not constitute financial, tax, or legal advice. Readers must consult a qualified cross-border tax accountant and conduct independent due diligence. Tax laws vary by jurisdiction and change frequently. Section 118-300 and Section 26AH references are current as of July 2026 but are subject to amendment.
+        </div>
+        <p class="text-xs mono mt-8" style="color: rgba(29,29,31,0.5);">
+          Written by Project Axis<br>
+          © 2026 Project Axis Solutions. All rights reserved.
+        </p>
+      </div>
+
+    </article>
+
+    <!-- SIDEBAR -->
+    <aside class="w-72 post-sidebar" style="position: sticky; top: 80px; align-self: start;">
+      
+      <div class="sidebar-block">
+        <h4>Published</h4>
+        <p>2026-07-17</p>
+      </div>
+
+      <div class="sidebar-block">
+        <h4>Category</h4>
+        <p>Finance / Expat</p>
+      </div>
+
+      <div class="sidebar-block">
+        <h4>Type</h4>
+        <p>Standalone<br>Personal insight</p>
+      </div>
+
+      <div class="sidebar-block">
+        <h4>Read Time</h4>
+        <p>~ 5 min</p>
+      </div>
+
+      <div class="sidebar-block">
+        <h4>About the Author</h4>
+        <p>
+          VIC Registered Building Surveyor<br>
+          Based across Melbourne & Hong Kong<br>
+          Construction & commerce background
+        </p>
+      </div>
+
+      <div class="sidebar-block">
+        <h4>Related</h4>
+        <ul style="list-style: none; margin: 0; padding: 0;">
+          <li style="margin-bottom: 0.5rem;">
+            <a href="/posts/budget-2026/log008a" style="font-size: 12px; text-decoration: none; border-bottom: 1px solid var(--line);">
+              LOG.008-A — WHO DOES THE BUDGET HELP?
+            </a>
+          </li>
+          <li>
+            <a href="/posts/china-medical/log009a" style="font-size: 12px; text-decoration: none; border-bottom: 1px solid var(--line);">
+              LOG.009-A — THE CHINA DIAGNOSTIC SHORTCUT
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-block">
+        <h4>Tags</h4>
+        <div>
+          <span class="post-tag">Finance</span>
+          <span class="post-tag">Tax</span>
+          <span class="post-tag">Hong Kong</span>
+          <span class="post-tag">Expat</span>
+          <span class="post-tag">Cross-Border</span>
+        </div>
+      </div>
+
+      <!-- PARTNER CALLOUT -->
+      <div class="partner-callout">
+        <h5>Cross-Border Structuring</h5>
+        <p>
+          Need guidance on offshore wealth architecture? The author consulted with a Hong Kong-based cross-border advisory firm.
+        </p>
+        <a href="#" target="_blank">LEARN MORE →</a>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "your-token-here"}'></script>
+
+</body>
+</html>
